@@ -1,19 +1,19 @@
-package com.example.smartalarm
+package com.example.smartalarm.ui.fragments
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
-import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
+import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
 
 
 class AlarmsFragment : Fragment() {
 
     lateinit var textViewList: ArrayList<TextView>
-    lateinit var alarmsFragmentViewModel : AlarmsFragmentViewModel
+    lateinit var viewModel : AlarmsFragmentViewModel
     lateinit var binding: FragmentAlarmsBinding
 
     override fun onCreateView(
@@ -21,8 +21,8 @@ class AlarmsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
         binding = FragmentAlarmsBinding.inflate(inflater, container, false)
-        alarmsFragmentViewModel = AlarmsFragmentViewModel()
 
         textViewList = ArrayList()
         with (textViewList) {
@@ -41,14 +41,14 @@ class AlarmsFragment : Fragment() {
             }
 
         setDaysNumAndMonth()
-        setDay(alarmsFragmentViewModel.getTodayNumInWeek() - 1)
+        setDay(viewModel.getTodayNumInWeek() - 1)
 
         binding.nextMonthButton.setOnClickListener{
-            alarmsFragmentViewModel.changeWeek(1)
+            viewModel.changeWeek(1)
             setDaysNumAndMonth()
         }
         binding.previousMonthButton.setOnClickListener{
-            alarmsFragmentViewModel.changeWeek(-1)
+            viewModel.changeWeek(-1)
             setDaysNumAndMonth()
         }
         return binding.root
@@ -57,14 +57,14 @@ class AlarmsFragment : Fragment() {
     private fun setDaysNumAndMonth() {
         for (i in 0..6) {
             textViewList[i].text =
-                alarmsFragmentViewModel.weekCalendarData.daysList[i].dayNumber.toString()
+                viewModel.weekCalendarData.daysList[i].dayNumber.toString()
         }
         setMonth()
         setDay(-1)
     }
 
     private fun setMonth() {
-        val listOfMonth = alarmsFragmentViewModel.weekCalendarData.monthList
+        val listOfMonth = viewModel.weekCalendarData.monthList
 
         binding.monthStartTextView.text = listOfMonth[0]
         binding.monthTextView.text = listOfMonth[1]
@@ -73,7 +73,7 @@ class AlarmsFragment : Fragment() {
 
     private fun setDay(numOfDayOfWeek : Int) {
         for (i in 0..6) {
-            with(alarmsFragmentViewModel.weekCalendarData.daysList[i]) {
+            with(viewModel.weekCalendarData.daysList[i]) {
                 if (today)
                     textViewList[i].setBackgroundResource(R.drawable.text_view_circle_blue)
                 else if (isWeekend)

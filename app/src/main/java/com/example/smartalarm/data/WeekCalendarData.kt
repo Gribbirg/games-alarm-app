@@ -1,4 +1,4 @@
-package com.example.smartalarm
+package com.example.smartalarm.data
 
 class WeekCalendarData {
     val daysList = ArrayList<DateUnit>()
@@ -6,13 +6,15 @@ class WeekCalendarData {
 
     class DateUnit(_dayNumber: Int,
                    _monthNumber: Int,
+                   _yearNumber: Int,
                    _today: Boolean = false,
                    _isWeekend: Boolean= false,
                    _isHoliday: Boolean = false
     ) {
 
-        var dayNumber = _dayNumber
-        var monthNumber = _monthNumber
+        val dayNumber = _dayNumber
+        val monthNumber = _monthNumber
+        val yearNumber = _yearNumber
         var today: Boolean = _today
         var isWeekend: Boolean= _isWeekend
         var isHoliday: Boolean = _isHoliday
@@ -37,10 +39,11 @@ class WeekCalendarData {
 
     fun addDate(_dayNumber: Int,
                 _monthNumber: Int,
+                _yearNumber: Int,
                 _today: Boolean = false,
                 _isWeekend: Boolean= false,
                 _isHoliday: Boolean = false)
     {
-        daysList.add(DateUnit(_dayNumber, _monthNumber, _today, _isWeekend, _isHoliday))
+        daysList.add(DateUnit(_dayNumber, _monthNumber, _yearNumber, _today, _isWeekend, _isHoliday))
     }
 }

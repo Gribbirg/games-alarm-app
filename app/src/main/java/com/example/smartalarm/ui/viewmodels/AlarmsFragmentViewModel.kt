@@ -1,7 +1,7 @@
-package com.example.smartalarm
+package com.example.smartalarm.ui.viewmodels
 
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import com.example.smartalarm.data.WeekCalendarData
 import java.util.*
 
 class AlarmsFragmentViewModel : ViewModel() {
@@ -36,7 +36,8 @@ class AlarmsFragmentViewModel : ViewModel() {
         do {
             weekCalendarData.addDate(
                 calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.MONTH) + 1
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.YEAR)
             )
             calendar.add(Calendar.DATE, 1)
         } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
@@ -46,8 +47,6 @@ class AlarmsFragmentViewModel : ViewModel() {
             daysList[5].isWeekend = true
             daysList[6].isWeekend = true
         }
-
-
 
         if (
             Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
