@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Alarms"
+        android:id="@+id/alarms"
+        android:icon="@drawable/ic_baseline_access_alarm_24"/>
+    <item android:title="Records"
+        android:id="@+id/records"
+        android:icon="@drawable/ic_baseline_emoji_events_24_cup"/>
+    <item android:title="Profile"
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_baseline_person_24"/>
+    <item android:title="Settings"
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_baseline_settings_24"/>
+</menu>

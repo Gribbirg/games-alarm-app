@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AlarmsFragment">
+
+    <Button
+        android:id="@+id/previousMonthButton"
+        android:background="@drawable/ic_baseline_arrow_back_24"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/nextMonthButton"
+        android:background="@drawable/ic_baseline_arrow_forward_24"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/monthStartTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/previousMonthButton"
+        app:layout_constraintBottom_toTopOf="@id/daysLayout"
+        android:layout_marginStart="5dp"
+        android:textSize="30sp"
+        tools:text="Январь"/>
+
+    <TextView
+        android:id="@+id/monthENDTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/nextMonthButton"
+        app:layout_constraintBottom_toTopOf="@id/daysLayout"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="30sp"
+        tools:text="Февраль"/>
+
+    <TextView
+        android:id="@+id/monthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/daysLayout"
+        android:layout_marginBottom="10dp"
+        android:textSize="30sp"
+        tools:text="Май"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/daysLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/monthStartTextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/monTextView"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            tools:text="18"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/text_view_circle"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tueTextView"/>
+
+        <TextView
+            android:id="@+id/tueTextView"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            tools:text="18"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/text_view_circle"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@id/monTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/wenTextView"/>
+
+        <TextView
+            android:id="@+id/wenTextView"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            tools:text="18"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/text_view_circle"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@id/tueTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/thuTextView"/>
+
+        <TextView
+            android:id="@+id/thuTextView"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            tools:text="18"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/text_view_circle"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@id/wenTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/friTextView"/>
+
+        <TextView
+            android:id="@+id/friTextView"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            tools:text="18"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/text_view_circle"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@id/thuTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/satTextView"/>
+
+        <TextView
+            android:id="@+id/satTextView"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            tools:text="18"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/text_view_circle"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@id/friTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/sunTextView"/>
+
+
+        <TextView
+            android:id="@+id/sunTextView"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            tools:text="18"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/text_view_circle"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@id/satTextView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
