@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.example.smartalarm.R
+import com.example.smartalarm.data.AlarmsDB
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
+import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModelFactory
 
 
 class AlarmsFragment : Fragment() {
@@ -21,7 +23,13 @@ class AlarmsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
+        binding = FragmentAlarmsBinding.inflate(inflater, container, false)
+
+        val application = requireNotNull(this.activity).application
+        val dao = AlarmsDB.getInstance(application).alarmsDao()
+        val viewModelFactory = AlarmsFragmentViewModelFactory(dao, application)
+
+        viewModel = ViewModelProvider(this, viewModelFactory)[AlarmsFragmentViewModel::class.java]
         binding = FragmentAlarmsBinding.inflate(inflater, container, false)
 
         textViewList = ArrayList()

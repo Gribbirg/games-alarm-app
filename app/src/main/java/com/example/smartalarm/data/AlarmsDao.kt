@@ -1,5 +1,6 @@
 package com.example.smartalarm.data
 
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Index
 import androidx.room.Insert
@@ -12,5 +13,5 @@ interface AlarmsDao {
     fun insertNewAlarmData(alarmSimpleData: AlarmSimpleData)
 
     @Query("SELECT * FROM alarm_table WHERE day_of_week = :dayOfWeek")
-    fun getAlarms(dayOfWeek: Int)
+    fun getAlarms(dayOfWeek: Int) : List<AlarmSimpleData>
 }

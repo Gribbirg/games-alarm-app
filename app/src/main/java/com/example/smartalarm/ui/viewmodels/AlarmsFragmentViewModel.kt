@@ -1,16 +1,50 @@
 package com.example.smartalarm.ui.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.smartalarm.data.AlarmSimpleData
+import com.example.smartalarm.data.AlarmsDB
+import com.example.smartalarm.data.AlarmsDao
 import com.example.smartalarm.data.WeekCalendarData
+import kotlinx.coroutines.*
 import java.util.*
 
-class AlarmsFragmentViewModel : ViewModel() {
+class AlarmsFragmentViewModel(
+    private val dao : AlarmsDao,
+    application: Application
+) : AndroidViewModel(application) {
+
+    private var job = Job()
+    private val uiScope = CoroutineScope(
+        Dispatchers.Main + job
+    )
+    private var alarmsList = MutableLiveData<List<AlarmSimpleData>>()
 
     private val currentCalendar = Calendar.getInstance()
     lateinit var weekCalendarData : WeekCalendarData
 
     init {
         updateWeek()
+        initializeAlarms()
+    }
+
+    private fun initializeAlarms() {
+        uiScope.launch {
+            alarmsList.value = getAlarmsFromDatabase(
+                currentCalendar.get(Calendar.DAY_OF_WEEK)
+            )
+        }
+    }
+
+    private suspend fun getAlarmsFromDatabase(dayOfWeek : Int) : List<AlarmSimpleData> {
+        return dao.getAlarms(dayOfWeek)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
     }
 
     fun changeWeek(next: Int) {
