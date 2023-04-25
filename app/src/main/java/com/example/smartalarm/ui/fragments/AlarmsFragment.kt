@@ -5,11 +5,12 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
-import com.example.smartalarm.data.AlarmsDB
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
+import com.example.smartalarm.ui.activities.MainActivity
+import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
-import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModelFactory
 
 
 class AlarmsFragment : Fragment() {
@@ -17,6 +18,7 @@ class AlarmsFragment : Fragment() {
     lateinit var textViewList: ArrayList<TextView>
     lateinit var viewModel : AlarmsFragmentViewModel
     lateinit var binding: FragmentAlarmsBinding
+    lateinit var recyclerViewAdapter: AlarmAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,12 +27,7 @@ class AlarmsFragment : Fragment() {
     ): View {
         binding = FragmentAlarmsBinding.inflate(inflater, container, false)
 
-        val application = requireNotNull(this.activity).application
-        val dao = AlarmsDB.getInstance(application).alarmsDao()
-        val viewModelFactory = AlarmsFragmentViewModelFactory(dao, application)
-
-        viewModel = ViewModelProvider(this, viewModelFactory)[AlarmsFragmentViewModel::class.java]
-        binding = FragmentAlarmsBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
 
         textViewList = ArrayList()
         with (textViewList) {
@@ -59,6 +56,20 @@ class AlarmsFragment : Fragment() {
             viewModel.changeWeek(-1)
             setDaysNumAndMonth()
         }
+
+
+        with(binding.alarmsRecyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = AlarmAdapter()
+        }
+
+
+        binding.addAlarmButton.setOnClickListener {
+            activity.let {
+                (it as MainActivity).setCurrentFragment(AddAlarmFragment())
+            }
+        }
+
         return binding.root
     }
 

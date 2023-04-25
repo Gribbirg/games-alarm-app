@@ -13,9 +13,9 @@ import com.example.smartalarm.ui.fragments.RecordsFragment
 import com.example.smartalarm.ui.fragments.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
-    
+
     private lateinit var navController: NavController
-    private lateinit var appBarConfiguration : AppBarConfiguration
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setCurrentFragment(fragment: Fragment) =
+    fun setCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.nav_host_fragment_container, fragment)
             commit()

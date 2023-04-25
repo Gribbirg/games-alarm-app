@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.data.AlarmData
+import com.example.smartalarm.data.AlarmSimpleData
 import com.example.smartalarm.databinding.AlarmItemBinding
 
-class AlarmAdapter(data : ArrayList<AlarmData>) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>(){
+class AlarmAdapter() : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>(){
 
-    var data : ArrayList<AlarmData>
+    var data = ArrayList<AlarmSimpleData>()
 
-    init {
+    fun setListData(data : ArrayList<AlarmSimpleData>) {
         this.data = data
     }
 
@@ -29,10 +30,10 @@ class AlarmAdapter(data : ArrayList<AlarmData>) : RecyclerView.Adapter<AlarmAdap
         val currencyAlarmData = data[position]
 
         with (holder.binding) {
-            alarmTimeTextView.text = currencyAlarmData.getTimeString()
+            alarmTimeTextView.text = "${currencyAlarmData.timeHour}:${currencyAlarmData.timeMinute}"
             alarmNameTextView.text = currencyAlarmData.name
             alarmOnOffSwitch.isChecked = true
-            recordTextView.text = currencyAlarmData.getRecordString()
+            recordTextView.text = "${currencyAlarmData.recordMinutes}:${currencyAlarmData.recordSeconds}"
         }
     }
 

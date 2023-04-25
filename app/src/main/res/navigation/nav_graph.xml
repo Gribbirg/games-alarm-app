@@ -3,8 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/alarmsFragment">
-
+    app:startDestination="@id/addAlarmFragment">
+    <fragment
+        android:id="@+id/addAlarmFragment"
+        android:name="com.example.smartalarm.ui.fragments.AddAlarmFragment"
+        android:label="fragment_add_alarm"
+        tools:layout="@layout/fragment_add_alarm" />
     <fragment
         android:id="@+id/alarmsFragment"
         android:name="com.example.smartalarm.ui.fragments.AlarmsFragment"

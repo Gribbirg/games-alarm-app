@@ -8,26 +8,22 @@ import androidx.room.RoomDatabase
 @Database(entities = [AlarmSimpleData::class], version = 1)
 abstract class AlarmsDB : RoomDatabase() {
 
-    abstract fun alarmsDao() : AlarmsDao
+    abstract fun alarmsDao(): AlarmsDao
 
     companion object {
 
         @Volatile
-        private var instance : AlarmsDB? = null
+        private var INSTANCE: AlarmsDB? = null
 
-        fun getInstance(context: Context): AlarmsDB {
-            synchronized(this) {
-                var instance = this.instance
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        AlarmsDB::class.java,
-                        "alarms_db"
-                    ).build()
-                    this.instance = instance
-                }
-                return instance
+        fun getInstance(context: Context): AlarmsDB? {
+            if (INSTANCE == null) {
+                INSTANCE = Room.databaseBuilder(
+                    context.applicationContext,
+                    AlarmsDB::class.java,
+                    "AlarmsDb"
+                ).build()
             }
+            return INSTANCE
         }
     }
 }

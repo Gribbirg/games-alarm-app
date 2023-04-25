@@ -6,46 +6,52 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.smartalarm.data.AlarmSimpleData
 import com.example.smartalarm.data.AlarmsDB
-import com.example.smartalarm.data.AlarmsDao
 import com.example.smartalarm.data.WeekCalendarData
-import kotlinx.coroutines.*
 import java.util.*
 
-class AlarmsFragmentViewModel(
-    private val dao : AlarmsDao,
-    application: Application
-) : AndroidViewModel(application) {
+class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var job = Job()
-    private val uiScope = CoroutineScope(
-        Dispatchers.Main + job
-    )
-    private var alarmsList = MutableLiveData<List<AlarmSimpleData>>()
+    lateinit var alarmsList: MutableLiveData<List<AlarmSimpleData>>
+    var currentDayOfWeek: Int
 
     private val currentCalendar = Calendar.getInstance()
-    lateinit var weekCalendarData : WeekCalendarData
+    lateinit var weekCalendarData: WeekCalendarData
 
     init {
         updateWeek()
-        initializeAlarms()
+        currentDayOfWeek = currentCalendar.get(Calendar.DAY_OF_WEEK)
+        alarmsList = MutableLiveData()
     }
 
-    private fun initializeAlarms() {
-        uiScope.launch {
-            alarmsList.value = getAlarmsFromDatabase(
-                currentCalendar.get(Calendar.DAY_OF_WEEK)
-            )
-        }
+    fun getAlarmsObservers(): MutableLiveData<List<AlarmSimpleData>> {
+        return alarmsList
     }
 
-    private suspend fun getAlarmsFromDatabase(dayOfWeek : Int) : List<AlarmSimpleData> {
-        return dao.getAlarms(dayOfWeek)
+    fun getAlarmsFromDb() {
+        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
+        val list = dao?.getAlarms()
+
+        alarmsList.postValue(list!!)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
+    fun insertAlarmToDb(alarm: AlarmSimpleData) {
+        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
+        dao?.insertNewAlarmData(alarm)
+        getAlarmsFromDb()
     }
+
+    fun updateAlarmToDb(alarm: AlarmSimpleData) {
+        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
+        dao?.updateAlarm(alarm)
+        getAlarmsFromDb()
+    }
+
+    fun deleteAlarmToDb(alarm: AlarmSimpleData) {
+        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
+        dao?.deleteAlarm(alarm)
+        getAlarmsFromDb()
+    }
+
 
     fun changeWeek(next: Int) {
         when (next) {
