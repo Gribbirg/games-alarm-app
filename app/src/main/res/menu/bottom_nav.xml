@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Alarms"
+    <item android:title="@string/alarms"
         android:id="@+id/alarmsFragment"
         android:icon="@drawable/ic_baseline_access_alarm_24"/>
-    <item android:title="Records"
+    <item android:title="@string/records"
         android:id="@+id/recordsFragment"
         android:icon="@drawable/ic_baseline_emoji_events_24_cup"/>
-    <item android:title="Profile"
+    <item android:title="@string/profile"
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_baseline_person_24"/>
-    <item android:title="Settings"
+    <item android:title="@string/settings"
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_baseline_settings_24"/>
 </menu>

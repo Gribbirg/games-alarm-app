@@ -6,15 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.viewmodels.AddAlarmFragmentViewModel
 import com.example.smartalarm.databinding.FragmentAddAlarmBinding
-import com.example.smartalarm.ui.activities.MainActivity
-import kotlinx.coroutines.launch
 
 class AddAlarmFragment : Fragment() {
 
@@ -30,15 +25,15 @@ class AddAlarmFragment : Fragment() {
 
         binding.addAlarmSaveButton.setOnClickListener {
 
-            lifecycleScope.launch {
-                viewModel.insertAlarmToDb(
-                    binding.hourEditText.text.toString().toInt(),
-                    binding.minuteEditText.text.toString().toInt(),
-                    requireArguments().getInt("currentDayNumber"),
-                    binding.nameEditText.text.toString()
-                )
-                onResume()
-            }
+//            lifecycleScope.launch {
+//                viewModel.insertAlarmToDb(
+//                    binding.hourEditText.text.toString().toInt(),
+//                    binding.minuteEditText.text.toString().toInt(),
+//                    requireArguments().getInt("currentDayNumber"),
+//                    binding.nameEditText.text.toString()
+//                )
+//                onResume()
+//            }
 
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_addAlarmFragment_to_alarmsFragment2)
