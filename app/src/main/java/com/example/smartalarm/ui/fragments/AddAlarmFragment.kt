@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import com.example.smartalarm.R
 import com.example.smartalarm.ui.viewmodels.AddAlarmFragmentViewModel
 import com.example.smartalarm.databinding.FragmentAddAlarmBinding
 import com.example.smartalarm.ui.activities.MainActivity
@@ -35,9 +38,8 @@ class AddAlarmFragment : Fragment() {
                 )
                 onResume()
             }
-            activity.let {
-                (it as MainActivity).setCurrentFragment(AlarmsFragment())
-            }
+
+            Navigation.findNavController(binding.root).navigate(R.id.action_addAlarmFragment_to_alarmsFragment2)
         }
 
         return binding.root

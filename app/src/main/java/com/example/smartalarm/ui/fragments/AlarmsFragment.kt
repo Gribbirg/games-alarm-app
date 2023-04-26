@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
@@ -21,7 +22,6 @@ class AlarmsFragment : Fragment() {
     private lateinit var textViewList: ArrayList<TextView>
     private lateinit var viewModel: AlarmsFragmentViewModel
     private lateinit var binding: FragmentAlarmsBinding
-    private lateinit var recyclerViewAdapter: AlarmAdapter
     private var currentDayNumber: Int? = null
 
     override fun onCreateView(
@@ -66,9 +66,7 @@ class AlarmsFragment : Fragment() {
 
         binding.addAlarmButton.setOnClickListener {
             if (currentDayNumber != null) {
-                activity.let {
-                    (it as MainActivity).setCurrentFragment(AddAlarmFragment())
-                }
+                Navigation.findNavController(binding.root).navigate(R.id.action_alarmsFragment_to_addAlarmFragment)
             } else
                 Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }
