@@ -9,12 +9,13 @@ import com.example.smartalarm.data.AlarmsDB
 import com.example.smartalarm.data.WeekCalendarData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.DayOfWeek
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
-    lateinit var alarmsList: MutableLiveData<ArrayList<AlarmSimpleData>>
+    var alarmsList: MutableLiveData<ArrayList<AlarmSimpleData>>
     var currentDayOfWeek: Int
 
     private val currentCalendar = Calendar.getInstance()
@@ -26,15 +27,18 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         alarmsList = MutableLiveData()
     }
 
-    fun getAlarmsObservers(): MutableLiveData<kotlin.collections.ArrayList<AlarmSimpleData>> {
-        return alarmsList
-    }
-
-
     suspend fun getAlarmsFromDb() = withContext(Dispatchers.IO) {
 
         val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
         val list = dao?.getAlarms()?.let { ArrayList(it) }
+
+        alarmsList.postValue(list!!)
+    }
+
+    suspend fun getAlarmsFromByDayOfWeek(dayOfWeek: Int) = withContext(Dispatchers.IO) {
+
+        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
+        val list = dao?.getAlarmsByDay(dayOfWeek)?.let { ArrayList(it) }
 
         alarmsList.postValue(list!!)
     }
@@ -50,7 +54,6 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
 //        dao?.deleteAlarm(alarm)
 //        getAlarmsFromDb()
 //    }
-
 
     fun changeWeek(next: Int) {
         when (next) {

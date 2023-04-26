@@ -50,6 +50,7 @@ class AlarmsFragment : Fragment() {
             textViewList[i].setOnClickListener {
                 currentDayNumber = i
                 setDay()
+                setRecyclerData()
             }
 
         setDaysNumAndMonth()
@@ -77,17 +78,7 @@ class AlarmsFragment : Fragment() {
                 Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }
 
-        viewModel.alarmsList.observe(viewLifecycleOwner) {
-            binding.alarmsRecyclerView.apply {
-                layoutManager = LinearLayoutManager(activity)
-                adapter = AlarmAdapter(it)
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.getAlarmsFromDb()
-            onResume()
-        }
+        setRecyclerData()
 
         return binding.root
     }
@@ -123,5 +114,20 @@ class AlarmsFragment : Fragment() {
         }
         if (currentDayNumber != null)
             textViewList[currentDayNumber!!].setBackgroundResource(R.drawable.text_view_circle_pressed)
+    }
+
+    private fun setRecyclerData() {
+        if (currentDayNumber != null) {
+            lifecycleScope.launch {
+                viewModel.getAlarmsFromByDayOfWeek(currentDayNumber!!)
+                onResume()
+            }
+        }
+        viewModel.alarmsList.observe(viewLifecycleOwner) {
+            binding.alarmsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = AlarmAdapter(it)
+            }
+        }
     }
 }
