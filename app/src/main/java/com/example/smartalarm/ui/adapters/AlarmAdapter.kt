@@ -2,18 +2,13 @@ package com.example.smartalarm.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smartalarm.data.AlarmData
 import com.example.smartalarm.data.AlarmSimpleData
 import com.example.smartalarm.databinding.AlarmItemBinding
 
-class AlarmAdapter() : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>(){
-
-    var data = ArrayList<AlarmSimpleData>()
-
-    fun setListData(data : ArrayList<AlarmSimpleData>) {
-        this.data = data
-    }
+class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>(){
 
     class AlarmViewHolder(val binding: AlarmItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -32,7 +27,7 @@ class AlarmAdapter() : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>(){
         with (holder.binding) {
             alarmTimeTextView.text = "${currencyAlarmData.timeHour}:${currencyAlarmData.timeMinute}"
             alarmNameTextView.text = currencyAlarmData.name
-            alarmOnOffSwitch.isChecked = true
+            alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
             recordTextView.text = "${currencyAlarmData.recordMinutes}:${currencyAlarmData.recordSeconds}"
         }
     }

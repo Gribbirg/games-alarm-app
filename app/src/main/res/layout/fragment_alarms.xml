@@ -6,168 +6,279 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.AlarmsFragment">
 
-    <Button
-        android:id="@+id/previousMonthButton"
-        android:background="@drawable/ic_baseline_arrow_back_24"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/nextMonthButton"
-        android:background="@drawable/ic_baseline_arrow_forward_24"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/monthStartTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/previousMonthButton"
-        app:layout_constraintBottom_toTopOf="@id/daysLayout"
-        android:layout_marginStart="5dp"
-        android:textSize="30sp"
-        tools:text="Январь"/>
-
-    <TextView
-        android:id="@+id/monthENDTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/nextMonthButton"
-        app:layout_constraintBottom_toTopOf="@id/daysLayout"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="30sp"
-        tools:text="Февраль"/>
-
-    <TextView
-        android:id="@+id/monthTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/daysLayout"
-        android:layout_marginBottom="10dp"
-        android:textSize="30sp"
-        tools:text="Май"/>
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/upLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/daysLayout"
+        android:layout_marginBottom="5dp">
+
+        <Button
+            android:id="@+id/previousWeekButton"
+            android:background="@drawable/ic_baseline_arrow_back_24"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <Button
+            android:id="@+id/nextWeekButton"
+            android:background="@drawable/ic_baseline_arrow_forward_24"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/monthStartTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/previousWeekButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="5dp"
+            android:textSize="30sp"
+            tools:text="Январь"/>
+
+        <TextView
+            android:id="@+id/monthENDTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toLeftOf="@id/nextWeekButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="5dp"
+            android:textSize="30sp"
+            tools:text="Февраль"/>
+
+        <TextView
+            android:id="@+id/monthTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="30sp"
+            tools:text="Май"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <LinearLayout
         android:id="@+id/daysLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/monthStartTextView"
+        app:layout_constraintTop_toBottomOf="@id/upLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="70"
+        android:background="@drawable/rounded_corners_grey"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp">
 
-        <TextView
-            android:id="@+id/monTextView"
-            android:layout_width="45dp"
+        <LinearLayout
+            android:id="@+id/monLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="18"
-            android:textSize="30sp"
+            android:layout_weight="10"
+            android:orientation="vertical"
             android:gravity="center"
-            android:background="@drawable/text_view_circle"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/tueTextView"/>
+            android:background="@drawable/rounded_corners_grey"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp">
 
-        <TextView
-            android:id="@+id/tueTextView"
-            android:layout_width="45dp"
+            <TextView
+                android:id="@+id/monTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                tools:text="18"/>
+
+            <TextView
+                android:id="@+id/monLegTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Пн"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tueLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="18"
-            android:textSize="30sp"
+            android:layout_weight="10"
+            android:orientation="vertical"
             android:gravity="center"
-            android:background="@drawable/text_view_circle"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toRightOf="@id/monTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/wenTextView"/>
+            android:background="@drawable/rounded_corners_grey"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp">
 
-        <TextView
-            android:id="@+id/wenTextView"
-            android:layout_width="45dp"
+            <TextView
+                android:id="@+id/tueTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                tools:text="18"/>
+
+            <TextView
+                android:id="@+id/tueLegTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Вт"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wedLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="18"
-            android:textSize="30sp"
+            android:layout_weight="10"
+            android:orientation="vertical"
             android:gravity="center"
-            android:background="@drawable/text_view_circle"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toRightOf="@id/tueTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/thuTextView"/>
+            android:background="@drawable/rounded_corners_grey"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp">
 
-        <TextView
-            android:id="@+id/thuTextView"
-            android:layout_width="45dp"
+            <TextView
+                android:id="@+id/wedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                tools:text="18"/>
+
+            <TextView
+                android:id="@+id/wedLegTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ср"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/thurLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="18"
-            android:textSize="30sp"
+            android:layout_weight="10"
+            android:orientation="vertical"
             android:gravity="center"
-            android:background="@drawable/text_view_circle"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toRightOf="@id/wenTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/friTextView"/>
+            android:background="@drawable/rounded_corners_grey"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp">
 
-        <TextView
-            android:id="@+id/friTextView"
-            android:layout_width="45dp"
+            <TextView
+                android:id="@+id/thurTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                tools:text="18"/>
+
+            <TextView
+                android:id="@+id/thurLegTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Чт"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/friLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="18"
-            android:textSize="30sp"
+            android:layout_weight="10"
+            android:orientation="vertical"
             android:gravity="center"
-            android:background="@drawable/text_view_circle"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toRightOf="@id/thuTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/satTextView"/>
+            android:background="@drawable/rounded_corners_grey"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp">
 
-        <TextView
-            android:id="@+id/satTextView"
-            android:layout_width="45dp"
+            <TextView
+                android:id="@+id/friTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                tools:text="18"/>
+
+            <TextView
+                android:id="@+id/friLegTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Пт"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/satLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="18"
-            android:textSize="30sp"
+            android:layout_weight="10"
+            android:orientation="vertical"
             android:gravity="center"
-            android:background="@drawable/text_view_circle"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toRightOf="@id/friTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/sunTextView"/>
+            android:background="@drawable/rounded_corners_grey"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp">
 
+            <TextView
+                android:id="@+id/satTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                tools:text="18"/>
 
-        <TextView
-            android:id="@+id/sunTextView"
-            android:layout_width="45dp"
+            <TextView
+                android:id="@+id/satLegTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Сб"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sunLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="18"
-            android:textSize="30sp"
+            android:layout_weight="10"
+            android:orientation="vertical"
             android:gravity="center"
-            android:background="@drawable/text_view_circle"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toRightOf="@id/satTextView"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:background="@drawable/rounded_corners_grey"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/sunTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                tools:text="18"/>
+
+            <TextView
+                android:id="@+id/sunLegTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Вс"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/infoLayout"
@@ -179,8 +290,8 @@
 
         <Button
             android:id="@+id/addAlarmButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:background="@drawable/ic_baseline_add_24"
@@ -191,9 +302,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alarmsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/infoLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

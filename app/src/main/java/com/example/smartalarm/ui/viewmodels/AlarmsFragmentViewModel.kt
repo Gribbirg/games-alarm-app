@@ -3,15 +3,19 @@ package com.example.smartalarm.ui.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+
 import com.example.smartalarm.data.AlarmSimpleData
 import com.example.smartalarm.data.AlarmsDB
 import com.example.smartalarm.data.WeekCalendarData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.time.DayOfWeek
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
-    lateinit var alarmsList: MutableLiveData<List<AlarmSimpleData>>
+    var alarmsList: MutableLiveData<ArrayList<AlarmSimpleData>>
     var currentDayOfWeek: Int
 
     private val currentCalendar = Calendar.getInstance()
@@ -23,35 +27,33 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         alarmsList = MutableLiveData()
     }
 
-    fun getAlarmsObservers(): MutableLiveData<List<AlarmSimpleData>> {
-        return alarmsList
-    }
+    suspend fun getAlarmsFromDb() = withContext(Dispatchers.IO) {
 
-    fun getAlarmsFromDb() {
         val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
-        val list = dao?.getAlarms()
+        val list = dao?.getAlarms()?.let { ArrayList(it) }
 
         alarmsList.postValue(list!!)
     }
 
-    fun insertAlarmToDb(alarm: AlarmSimpleData) {
+    suspend fun getAlarmsFromByDayOfWeek(dayOfWeek: Int) = withContext(Dispatchers.IO) {
+
         val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
-        dao?.insertNewAlarmData(alarm)
-        getAlarmsFromDb()
+        val list = dao?.getAlarmsByDay(dayOfWeek)?.let { ArrayList(it) }
+
+        alarmsList.postValue(list!!)
     }
 
-    fun updateAlarmToDb(alarm: AlarmSimpleData) {
-        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
-        dao?.updateAlarm(alarm)
-        getAlarmsFromDb()
-    }
-
-    fun deleteAlarmToDb(alarm: AlarmSimpleData) {
-        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
-        dao?.deleteAlarm(alarm)
-        getAlarmsFromDb()
-    }
-
+//    fun updateAlarmToDb(alarm: AlarmSimpleData) {
+//        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
+//        dao?.updateAlarm(alarm)
+//        getAlarmsFromDb()
+//    }
+//
+//    fun deleteAlarmToDb(alarm: AlarmSimpleData) {
+//        val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
+//        dao?.deleteAlarm(alarm)
+//        getAlarmsFromDb()
+//    }
 
     fun changeWeek(next: Int) {
         when (next) {

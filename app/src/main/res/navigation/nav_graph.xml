@@ -3,17 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/addAlarmFragment">
-    <fragment
-        android:id="@+id/addAlarmFragment"
-        android:name="com.example.smartalarm.ui.fragments.AddAlarmFragment"
-        android:label="fragment_add_alarm"
-        tools:layout="@layout/fragment_add_alarm" />
+    app:startDestination="@id/alarmsFragment">
     <fragment
         android:id="@+id/alarmsFragment"
         android:name="com.example.smartalarm.ui.fragments.AlarmsFragment"
         android:label="fragment_alarms"
-        tools:layout="@layout/fragment_alarms" />
+        tools:layout="@layout/fragment_alarms" >
+        <action
+            android:id="@+id/action_alarmsFragment_to_addAlarmFragment"
+            app:destination="@id/addAlarmFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.smartalarm.ui.fragments.ProfileFragment"
@@ -29,4 +28,13 @@
         android:name="com.example.smartalarm.ui.fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/addAlarmFragment"
+        android:name="com.example.smartalarm.ui.fragments.AddAlarmFragment"
+        android:label="fragment_add_alarm"
+        tools:layout="@layout/fragment_add_alarm" >
+        <action
+            android:id="@+id/action_addAlarmFragment_to_alarmsFragment2"
+            app:destination="@id/alarmsFragment" />
+    </fragment>
 </navigation>

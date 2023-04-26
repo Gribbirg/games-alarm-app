@@ -1,24 +1,30 @@
 package com.example.smartalarm.ui.fragments
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
-import com.example.smartalarm.ui.activities.MainActivity
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
+import kotlinx.coroutines.launch
 
 
 class AlarmsFragment : Fragment() {
 
-    lateinit var textViewList: ArrayList<TextView>
-    lateinit var viewModel : AlarmsFragmentViewModel
-    lateinit var binding: FragmentAlarmsBinding
-    lateinit var recyclerViewAdapter: AlarmAdapter
+    private lateinit var dateViewList: ArrayList<DateView>
+    private lateinit var viewModel: AlarmsFragmentViewModel
+    private lateinit var binding: FragmentAlarmsBinding
+    private var currentDayNumber: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,57 +35,73 @@ class AlarmsFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
 
-        textViewList = ArrayList()
-        with (textViewList) {
-            add(binding.monTextView)
-            add(binding.tueTextView)
-            add(binding.wenTextView)
-            add(binding.thuTextView)
-            add(binding.friTextView)
-            add(binding.satTextView)
-            add(binding.sunTextView)
+        val bundle = Bundle()
+
+        dateViewList = ArrayList()
+
+        with(dateViewList) {
+            add(DateView(binding.monLayout, binding.monTextView, binding.monLegTextView))
+            add(DateView(binding.tueLayout, binding.tueTextView, binding.tueLegTextView))
+            add(DateView(binding.wedLayout, binding.wedTextView, binding.wedLegTextView))
+            add(DateView(binding.thurLayout, binding.thurTextView, binding.thurLegTextView))
+            add(DateView(binding.friLayout, binding.friTextView, binding.friLegTextView))
+            add(DateView(binding.satLayout, binding.satTextView, binding.satLegTextView))
+            add(DateView(binding.sunLayout, binding.sunTextView, binding.sunLegTextView))
         }
 
         for (i in 0..6)
-            textViewList[i].setOnClickListener {
-                setDay(i)
+            dateViewList[i].layout.setOnClickListener {
+                currentDayNumber = i
+                setDay()
+                setRecyclerData()
             }
 
         setDaysNumAndMonth()
-        setDay(viewModel.getTodayNumInWeek() - 1)
+        currentDayNumber = viewModel.getTodayNumInWeek() - 1
+        setDay()
 
-        binding.nextMonthButton.setOnClickListener{
+        binding.nextWeekButton.setOnClickListener {
             viewModel.changeWeek(1)
             setDaysNumAndMonth()
         }
-        binding.previousMonthButton.setOnClickListener{
+        binding.previousWeekButton.setOnClickListener {
             viewModel.changeWeek(-1)
             setDaysNumAndMonth()
         }
 
 
-        with(binding.alarmsRecyclerView) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = AlarmAdapter()
-        }
-
-
         binding.addAlarmButton.setOnClickListener {
-            activity.let {
-                (it as MainActivity).setCurrentFragment(AddAlarmFragment())
-            }
+            if (currentDayNumber != null) {
+                bundle.putInt("currentDayNumber", currentDayNumber!!)
+                Navigation.findNavController(binding.root).navigate(
+                    R.id.action_alarmsFragment_to_addAlarmFragment,
+                    bundle
+                )
+            } else
+                Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }
+
+        setRecyclerData()
 
         return binding.root
     }
 
     private fun setDaysNumAndMonth() {
         for (i in 0..6) {
-            textViewList[i].text =
+            dateViewList[i].numTextView.text =
                 viewModel.weekCalendarData.daysList[i].dayNumber.toString()
+            with(viewModel.weekCalendarData.daysList[i]) {
+                if (today)
+                    dateViewList[i].setTextsColor(Color.parseColor("#0000FF"))
+                else if (isWeekend)
+                    dateViewList[i].setTextsColor(Color.parseColor("#FF0000"))
+                else
+                    dateViewList[i].setTextsColor(Color.parseColor("#525252"))
+            }
         }
+        currentDayNumber = null
         setMonth()
-        setDay(-1)
+        setDay()
     }
 
     private fun setMonth() {
@@ -90,18 +112,39 @@ class AlarmsFragment : Fragment() {
         binding.monthENDTextView.text = listOfMonth[2]
     }
 
-    private fun setDay(numOfDayOfWeek : Int) {
+
+    private fun setDay() {
         for (i in 0..6) {
-            with(viewModel.weekCalendarData.daysList[i]) {
-                if (today)
-                    textViewList[i].setBackgroundResource(R.drawable.text_view_circle_blue)
-                else if (isWeekend)
-                    textViewList[i].setBackgroundResource(R.drawable.text_view_circle_red)
-                else
-                    textViewList[i].setBackgroundResource(R.drawable.text_view_circle)
+            dateViewList[i].layout.setBackgroundResource(R.drawable.rounded_corners_grey)
+        }
+        if (currentDayNumber != null)
+            dateViewList[currentDayNumber!!].layout.setBackgroundResource(R.drawable.rounded_corners_green)
+    }
+
+    private fun setRecyclerData() {
+        if (currentDayNumber != null) {
+            lifecycleScope.launch {
+                viewModel.getAlarmsFromByDayOfWeek(currentDayNumber!!)
+                onResume()
             }
         }
-        if (numOfDayOfWeek != -1)
-            textViewList[numOfDayOfWeek].setBackgroundResource(R.drawable.text_view_circle_pressed)
+        viewModel.alarmsList.observe(viewLifecycleOwner) {
+            binding.alarmsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = AlarmAdapter(it)
+            }
+        }
+    }
+
+    data class DateView(
+        val layout: LinearLayout,
+        val numTextView: TextView,
+        val dayTextView: TextView
+    ) {
+        fun setTextsColor(color: Int) {
+            numTextView.setTextColor(color)
+            dayTextView.setTextColor(color)
+        }
     }
 }
+
