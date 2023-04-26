@@ -33,6 +33,8 @@ class AlarmsFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
 
+        val bundle = Bundle()
+
         textViewList = ArrayList()
         with(textViewList) {
             add(binding.monTextView)
@@ -66,7 +68,11 @@ class AlarmsFragment : Fragment() {
 
         binding.addAlarmButton.setOnClickListener {
             if (currentDayNumber != null) {
-                Navigation.findNavController(binding.root).navigate(R.id.action_alarmsFragment_to_addAlarmFragment)
+                bundle.putInt("currentDayNumber", currentDayNumber!!)
+                Navigation.findNavController(binding.root).navigate(
+                    R.id.action_alarmsFragment_to_addAlarmFragment,
+                    bundle
+                )
             } else
                 Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }

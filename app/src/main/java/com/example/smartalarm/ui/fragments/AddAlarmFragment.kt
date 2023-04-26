@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -33,13 +34,14 @@ class AddAlarmFragment : Fragment() {
                 viewModel.insertAlarmToDb(
                     binding.hourEditText.text.toString().toInt(),
                     binding.minuteEditText.text.toString().toInt(),
-                    0,
+                    requireArguments().getInt("currentDayNumber"),
                     binding.nameEditText.text.toString()
                 )
                 onResume()
             }
 
-            Navigation.findNavController(binding.root).navigate(R.id.action_addAlarmFragment_to_alarmsFragment2)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_addAlarmFragment_to_alarmsFragment2)
         }
 
         return binding.root
