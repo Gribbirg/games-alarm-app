@@ -6,6 +6,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "alarm_table")
 data class AlarmSimpleData(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id : Long = 0L,
+
     @ColumnInfo(name = "time_hour")
     var timeHour : Int,
 
@@ -26,8 +30,4 @@ data class AlarmSimpleData(
 
     @ColumnInfo(name = "is_on")
     var isOn : Boolean
-) {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id : Long = 0
-}
+) {}

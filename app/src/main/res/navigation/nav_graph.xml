@@ -13,7 +13,11 @@
         android:id="@+id/alarmsFragment"
         android:name="com.example.smartalarm.ui.fragments.AlarmsFragment"
         android:label="fragment_alarms"
-        tools:layout="@layout/fragment_alarms" />
+        tools:layout="@layout/fragment_alarms" >
+        <action
+            android:id="@+id/action_alarmsFragment_to_addAlarmFragment"
+            app:destination="@id/addAlarmFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.smartalarm.ui.fragments.ProfileFragment"

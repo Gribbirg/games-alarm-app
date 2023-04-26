@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.example.smartalarm.ui.viewmodels.AddAlarmFragmentViewModel
 import com.example.smartalarm.databinding.FragmentAddAlarmBinding
 import com.example.smartalarm.ui.activities.MainActivity
+import kotlinx.coroutines.launch
 
 class AddAlarmFragment : Fragment() {
 
@@ -23,6 +25,16 @@ class AddAlarmFragment : Fragment() {
         binding = FragmentAddAlarmBinding.inflate(inflater, container, false)
 
         binding.saveButton.setOnClickListener {
+
+            lifecycleScope.launch {
+                viewModel.insertAlarmToDb(
+                    binding.hourEditText.text.toString().toInt(),
+                    binding.minuteEditText.text.toString().toInt(),
+                    0,
+                    binding.nameEditText.text.toString()
+                )
+                onResume()
+            }
             activity.let {
                 (it as MainActivity).setCurrentFragment(AlarmsFragment())
             }
@@ -30,4 +42,5 @@ class AddAlarmFragment : Fragment() {
 
         return binding.root
     }
+
 }
