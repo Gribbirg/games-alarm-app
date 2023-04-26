@@ -1,40 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.AddAlarmFragment"
     android:orientation="vertical"
-    android:gravity="center">
+    tools:context=".ui.fragments.AddAlarmFragment">
 
-    <EditText
-        android:id="@+id/hourEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Enter hour"
-        android:gravity="center"/>
-
-    <EditText
-        android:id="@+id/minuteEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Enter minute"
-        android:gravity="center"/>
-
-    <EditText
-        android:id="@+id/nameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Enter name"
-        android:gravity="center"/>
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/addAlarmGoBackButton"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginStart="15sp"
+        android:layout_marginTop="15sp"
+        android:background="@drawable/ic_baseline_arrow_back_24"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TimePicker
+        android:id="@+id/addAlarmTimePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="140sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5sp"
+        android:timePickerMode="spinner" />
+
+    <TextView
+        android:id="@+id/addAlarmChosenAlarmDateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SAVE"
-        />
+        android:layout_marginStart="20sp"
+        android:layout_marginEnd="20sp"
+        android:layout_marginBottom="10sp"
+        android:textSize="21sp"
+        android:textStyle="italic"
+        tools:text="Завтра, 22 февраля" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <TextView
+            android:id="@+id/addAlarmDayOfWeekText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:textSize="21sp"
+            android:textStyle="italic"
+            tools:text="День недели:" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/addAlarmDaysToggleGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15sp"
+            app:selectionRequired="false"
+            app:singleSelection="true" >
+
+            <Button
+                android:id="@+id/addAlarmMondayButton"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:text="@string/monday" />
+
+            <Button
+                android:id="@+id/addAlarmTuesdayButton"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:text="@string/tuesday" />
+
+            <Button
+                android:id="@+id/addAlarmWednesdayButton"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:text="@string/wednesday" />
+
+            <Button
+                android:id="@+id/addAlarmThursdayButton"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:text="@string/thursday" />
+
+            <Button
+                android:id="@+id/addAlarmFridayButton"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:text="@string/friday" />
+
+            <Button
+                android:id="@+id/addAlarmSaturdayButton"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:text="@string/saturday" />
+
+            <Button
+                android:id="@+id/addAlarmSundayButton"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:text="@string/sunday" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <Switch
+            android:id="@+id/addAlarmMakeRepetitiveSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15sp"
+            android:layout_marginBottom="10sp"
+            android:text="@string/addAlarmMakeRepetitiveSwitch"
+            android:textSize="21sp"
+            android:textStyle="italic"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <EditText
+            android:id="@+id/addAlarmAlarmNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textStyle="italic"
+            android:textSize="21sp"
+            android:layout_marginHorizontal="15sp"
+            android:layout_marginBottom="5sp"
+            android:text="@string/addAlarmAlarmNameText"
+            android:autofillHints="Мой будильник" />
+
+
+        <Button
+            android:id="@+id/addAlarmChooseMelodyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addAlarmChooseMelodyButton"
+            android:layout_marginHorizontal="15sp"
+            android:layout_marginBottom="10sp"/>
+
+        <Switch
+            android:id="@+id/addAlarmSetBuzzSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15sp"
+            android:layout_marginBottom="10sp"
+            android:text="@string/addAlarmSetBuzzSwitch"
+            android:textSize="21sp"
+            android:textStyle="italic"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Switch
+            android:id="@+id/addAlarmGraduallyIncreaseVolumeSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15sp"
+            android:layout_marginBottom="10sp"
+            android:text="@string/addAlarmGraduallyIncreaseVolumeSwitch"
+            android:textSize="21sp"
+            android:textStyle="italic"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/addAlarmInformationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addAlarmInformationButton"
+            android:layout_marginHorizontal="15sp" />
+
+        <Button
+            android:id="@+id/addAlarmGamesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addAlarmGamesButton"
+            android:layout_marginHorizontal="15sp" />
+
+        <Button
+            android:id="@+id/addAlarmSaveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/addAlarmSaveButton" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -22,7 +22,7 @@ class AddAlarmFragment : Fragment() {
         viewModel = ViewModelProvider(this)[AddAlarmFragmentViewModel::class.java]
         binding = FragmentAddAlarmBinding.inflate(inflater, container, false)
 
-        binding.saveButton.setOnClickListener {
+        binding.addAlarmSaveButton.setOnClickListener {
             activity.let {
                 (it as MainActivity).setCurrentFragment(AlarmsFragment())
             }

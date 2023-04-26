@@ -11,6 +11,8 @@ import com.example.smartalarm.ui.fragments.AlarmsFragment
 import com.example.smartalarm.ui.fragments.ProfileFragment
 import com.example.smartalarm.ui.fragments.RecordsFragment
 import com.example.smartalarm.ui.fragments.SettingsFragment
+import android.app.AlarmManager
+
 
 class MainActivity : AppCompatActivity() {
 

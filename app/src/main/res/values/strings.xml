@@ -2,4 +2,19 @@
     <string name="app_name">SmartAlarm</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="monday">ПН</string>
+    <string name="tuesday">ВТ</string>
+    <string name="wednesday">СР</string>
+    <string name="thursday">ЧТ</string>
+    <string name="friday">ПТ</string>
+    <string name="saturday">СБ</string>
+    <string name="sunday">ВС</string>
+    <string name="addAlarmMakeRepetitiveSwitch">Сделать постоянным:</string>
+    <string name="addAlarmAlarmNameText">Название:</string>
+    <string name="addAlarmChooseMelodyButton">Мелодия будильника</string>
+    <string name="addAlarmSetBuzzSwitch">Вибрация:</string>
+    <string name="addAlarmGraduallyIncreaseVolumeSwitch">Повышать громкость:</string>
+    <string name="addAlarmInformationButton">Отображение общей информации</string>
+    <string name="addAlarmGamesButton">Список игр</string>
+    <string name="addAlarmSaveButton">SAVE</string>
 </resources>
