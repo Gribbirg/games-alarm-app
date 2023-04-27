@@ -102,6 +102,7 @@ class AlarmsFragment : Fragment() {
         currentDayNumber = null
         setMonth()
         setDay()
+        setRecyclerData()
     }
 
     private fun setMonth() {
@@ -127,11 +128,16 @@ class AlarmsFragment : Fragment() {
                 viewModel.getAlarmsFromByDayOfWeek(currentDayNumber!!)
                 onResume()
             }
-        }
-        viewModel.alarmsList.observe(viewLifecycleOwner) {
+            viewModel.alarmsList.observe(viewLifecycleOwner) {
+                binding.alarmsRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter = AlarmAdapter(it)
+                }
+            }
+        } else {
             binding.alarmsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = AlarmAdapter(it)
+                adapter = AlarmAdapter(ArrayList())
             }
         }
     }

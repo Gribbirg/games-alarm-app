@@ -50,12 +50,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15sp"
-                app:selectionRequired="false"
+                app:selectionRequired="true"
                 app:singleSelection="true">
 
                 <Button
                     android:id="@+id/addAlarmMondayButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -64,7 +64,7 @@
 
                 <Button
                     android:id="@+id/addAlarmTuesdayButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -73,7 +73,7 @@
 
                 <Button
                     android:id="@+id/addAlarmWednesdayButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -82,7 +82,7 @@
 
                 <Button
                     android:id="@+id/addAlarmThursdayButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -91,7 +91,7 @@
 
                 <Button
                     android:id="@+id/addAlarmFridayButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -100,7 +100,7 @@
 
                 <Button
                     android:id="@+id/addAlarmSaturdayButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -109,7 +109,7 @@
 
                 <Button
                     android:id="@+id/addAlarmSundayButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -127,7 +127,8 @@
                 android:text="@string/addAlarmMakeRepetitiveSwitch"
                 android:textSize="21sp"
                 android:textStyle="italic"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck"
+                android:checked="true"/>
 
             <EditText
                 android:id="@+id/addAlarmAlarmNameText"
