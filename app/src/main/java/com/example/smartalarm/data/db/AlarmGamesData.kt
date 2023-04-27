@@ -1,4 +1,4 @@
-package com.example.smartalarm.data
+package com.example.smartalarm.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

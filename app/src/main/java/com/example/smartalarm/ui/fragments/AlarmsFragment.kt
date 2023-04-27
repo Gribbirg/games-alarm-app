@@ -1,6 +1,5 @@
 package com.example.smartalarm.ui.fragments
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
@@ -24,7 +23,6 @@ class AlarmsFragment : Fragment() {
     private lateinit var dateViewList: ArrayList<DateView>
     private lateinit var viewModel: AlarmsFragmentViewModel
     private lateinit var binding: FragmentAlarmsBinding
-    private var currentDayNumber: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,13 +49,13 @@ class AlarmsFragment : Fragment() {
 
         for (i in 0..6)
             dateViewList[i].layout.setOnClickListener {
-                currentDayNumber = i
+                viewModel.currentDayOfWeek = i
                 setDay()
                 setRecyclerData()
             }
 
         setDaysNumAndMonth()
-        currentDayNumber = viewModel.getTodayNumInWeek() - 1
+        viewModel.updateToday()
         setDay()
 
         binding.nextWeekButton.setOnClickListener {
@@ -71,8 +69,8 @@ class AlarmsFragment : Fragment() {
 
 
         binding.addAlarmButton.setOnClickListener {
-            if (currentDayNumber != null) {
-                bundle.putInt("currentDayNumber", currentDayNumber!!)
+            if (viewModel.currentDayOfWeek != null) {
+                bundle.putInt("currentDayNumber", viewModel.currentDayOfWeek!!)
                 Navigation.findNavController(binding.root).navigate(
                     R.id.action_alarmsFragment_to_addAlarmFragment,
                     bundle
@@ -99,12 +97,11 @@ class AlarmsFragment : Fragment() {
                     dateViewList[i].setTextsColor(Color.parseColor("#525252"))
             }
         }
-        currentDayNumber = null
+        viewModel.currentDayOfWeek = null
         setMonth()
         setDay()
         setRecyclerData()
     }
-
     private fun setMonth() {
         val listOfMonth = viewModel.weekCalendarData.monthList
 
@@ -118,14 +115,14 @@ class AlarmsFragment : Fragment() {
         for (i in 0..6) {
             dateViewList[i].layout.setBackgroundResource(R.drawable.rounded_corners_grey)
         }
-        if (currentDayNumber != null)
-            dateViewList[currentDayNumber!!].layout.setBackgroundResource(R.drawable.rounded_corners_green)
+        if (viewModel.currentDayOfWeek != null)
+            dateViewList[viewModel.currentDayOfWeek!!].layout.setBackgroundResource(R.drawable.rounded_corners_green)
     }
 
     private fun setRecyclerData() {
-        if (currentDayNumber != null) {
+        if (viewModel.currentDayOfWeek != null) {
             lifecycleScope.launch {
-                viewModel.getAlarmsFromByDayOfWeek(currentDayNumber!!)
+                viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek!!)
                 onResume()
             }
             viewModel.alarmsList.observe(viewLifecycleOwner) {

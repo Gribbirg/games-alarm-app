@@ -2,10 +2,8 @@ package com.example.smartalarm.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.doOnLayout
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smartalarm.data.AlarmSimpleData
+import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.AlarmItemBinding
 
 class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) :

@@ -1,11 +1,9 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
-import android.os.CombinedVibration
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import com.example.smartalarm.data.AlarmSimpleData
-import com.example.smartalarm.data.AlarmsDB
+import com.example.smartalarm.data.db.AlarmSimpleData
+import com.example.smartalarm.data.db.AlarmsDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
