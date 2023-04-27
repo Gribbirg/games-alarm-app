@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isEmpty
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -102,6 +103,7 @@ class AlarmsFragment : Fragment() {
         setDay()
         setRecyclerData()
     }
+
     private fun setMonth() {
         val listOfMonth = viewModel.weekCalendarData.monthList
 
@@ -130,12 +132,18 @@ class AlarmsFragment : Fragment() {
                     layoutManager = LinearLayoutManager(activity)
                     adapter = AlarmAdapter(it)
                 }
+                binding.noAlarmsTextView.visibility =
+                    if (it.isEmpty())
+                        View.VISIBLE
+                    else
+                        View.INVISIBLE
             }
         } else {
             binding.alarmsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = AlarmAdapter(ArrayList())
             }
+            binding.noAlarmsTextView.visibility = View.INVISIBLE
         }
     }
 

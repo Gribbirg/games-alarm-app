@@ -315,6 +315,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/infoLayout" />
+        app:layout_constraintTop_toBottomOf="@id/infoLayout"
+        />
+
+    <TextView
+        android:id="@+id/noAlarmsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="@string/noAlarmsToAdd"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="40dp"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
