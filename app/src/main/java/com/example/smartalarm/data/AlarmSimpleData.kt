@@ -10,6 +10,9 @@ data class AlarmSimpleData(
     @ColumnInfo(name = "id")
     var id : Long = 0L,
 
+    @ColumnInfo(name = "name")
+    var name : String,
+
     @ColumnInfo(name = "time_hour")
     var timeHour : Int,
 
@@ -19,15 +22,21 @@ data class AlarmSimpleData(
     @ColumnInfo(name = "day_of_week")
     var dayOfWeek : Int,
 
-    @ColumnInfo(name = "record_minutes")
-    var recordMinutes : Int,
+    @ColumnInfo(name = "activate_date")
+    var activateDate: String?,
 
-    @ColumnInfo(name = "record_seconds")
-    var recordSeconds : Int,
+    @ColumnInfo(name = "record_score")
+    var recordScore: Int = -1,
 
-    @ColumnInfo(name = "name")
-    var name : String,
+    @ColumnInfo(name = "record_time")
+    var recordSeconds : String = "no",
+
+    @ColumnInfo(name = "vibration")
+    var isVibration: Boolean,
+
+    @ColumnInfo(name = "rising_volume")
+    var isRisingVolume : Boolean,
 
     @ColumnInfo(name = "is_on")
-    var isOn : Boolean
+    var isOn : Boolean = true
 ) {}

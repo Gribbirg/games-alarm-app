@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.data.AlarmSimpleData
 import com.example.smartalarm.databinding.AlarmItemBinding
 
-class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>(){
+class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) :
+    RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     class AlarmViewHolder(val binding: AlarmItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -24,11 +25,15 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) : RecyclerView.Adapter<
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
         val currencyAlarmData = data[position]
 
-        with (holder.binding) {
+        with(holder.binding) {
             alarmTimeTextView.text = "${currencyAlarmData.timeHour}:${currencyAlarmData.timeMinute}"
             alarmNameTextView.text = currencyAlarmData.name
             alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
-            recordTextView.text = "${currencyAlarmData.recordMinutes}:${currencyAlarmData.recordSeconds}"
+            if (currencyAlarmData.recordSeconds != "no")
+                recordTextView.text = "${currencyAlarmData.recordSeconds.toInt() / 60}:" +
+                        "${currencyAlarmData.recordSeconds.toInt() % 60}"
+            else
+                recordTextView.text = "Нет данных"
         }
     }
 

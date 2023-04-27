@@ -5,7 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [AlarmSimpleData::class], version = 1)
+@Database(
+    entities = [
+        AlarmSimpleData::class,
+        AlarmInfoData::class,
+        AlarmGamesData::class
+    ], version = 2
+)
 abstract class AlarmsDB : RoomDatabase() {
 
     abstract fun alarmsDao(): AlarmsDao
@@ -21,7 +27,9 @@ abstract class AlarmsDB : RoomDatabase() {
                     context.applicationContext,
                     AlarmsDB::class.java,
                     "AlarmsDb"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
             }
             return INSTANCE
         }

@@ -1,13 +1,18 @@
 package com.example.smartalarm.data
 
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 
 @Dao
 interface AlarmsDao {
 
-    @Insert
+    @Insert(entity = AlarmSimpleData::class)
     fun insertNewAlarmData(alarmSimpleData: AlarmSimpleData)
+
+    @Insert(entity = AlarmInfoData::class)
+    fun insertNewAlarmInfoData(alarmInfoData: AlarmInfoData)
+
+    @Insert(entity = AlarmGamesData::class)
+    fun insertNewAlarmGamesData(alarmGamesData: AlarmGamesData)
 
     @Query("SELECT * FROM alarm_table ORDER BY time_hour, time_minute ASC")
     fun getAlarms() : List<AlarmSimpleData>
@@ -15,9 +20,9 @@ interface AlarmsDao {
     @Query("SELECT * FROM alarm_table WHERE day_of_week = :dayOfWeek ORDER BY time_hour, time_minute ASC")
     fun getAlarmsByDay(dayOfWeek: Int) : List<AlarmSimpleData>
 
-    @Update
+    @Update(entity = AlarmSimpleData::class)
     fun updateAlarm(alarm : AlarmSimpleData)
 
-    @Delete
+    @Delete(entity = AlarmSimpleData::class)
     fun deleteAlarm(alarm: AlarmSimpleData)
 }
