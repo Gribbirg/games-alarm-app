@@ -25,17 +25,19 @@ class AddAlarmFragment : Fragment() {
         viewModel = ViewModelProvider(this)[AddAlarmFragmentViewModel::class.java]
         binding = FragmentAddAlarmBinding.inflate(inflater, container, false)
 
-        with(binding.addAlarmDaysToggleGroup) {
+        binding.addAlarmDaysToggleGroup.check(
             when (arguments?.getInt("currentDayNumber")!!) {
-                0 -> check(R.id.addAlarmMondayButton)
-                1 -> check(R.id.addAlarmTuesdayButton)
-                2 -> check(R.id.addAlarmWednesdayButton)
-                3 -> check(R.id.addAlarmThursdayButton)
-                4 -> check(R.id.addAlarmFridayButton)
-                5 -> check(R.id.addAlarmSaturdayButton)
-                6 -> check(R.id.addAlarmSundayButton)
+                0 -> R.id.addAlarmMondayButton
+                1 -> R.id.addAlarmTuesdayButton
+                2 -> R.id.addAlarmWednesdayButton
+                3 -> R.id.addAlarmThursdayButton
+                4 -> R.id.addAlarmFridayButton
+                5 -> R.id.addAlarmSaturdayButton
+                6 -> R.id.addAlarmSundayButton
+                else -> 0
             }
-        }
+        )
+
 
         binding.addAlarmSaveButton.setOnClickListener {
             lifecycleScope.launch {

@@ -29,9 +29,9 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) :
             alarmTimeTextView.text = "${currencyAlarmData.timeHour}:${currencyAlarmData.timeMinute}"
             alarmNameTextView.text = currencyAlarmData.name
             alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
-            if (currencyAlarmData.recordSeconds != "no")
-                recordTextView.text = "${currencyAlarmData.recordSeconds.toInt() / 60}:" +
-                        "${currencyAlarmData.recordSeconds.toInt() % 60}"
+            if (currencyAlarmData.recordSeconds != null)
+                recordTextView.text = "${currencyAlarmData.recordSeconds!!.toInt() / 60}:" +
+                        "${currencyAlarmData.recordSeconds!!.toInt() % 60}"
             else
                 recordTextView.text = "Нет данных"
         }

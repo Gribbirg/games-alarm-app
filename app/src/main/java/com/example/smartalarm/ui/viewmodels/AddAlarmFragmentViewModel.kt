@@ -23,10 +23,12 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
             timeHour = timeHour,
             timeMinute = timeMinute,
             dayOfWeek = dayOfWeek,
-            name =  name,
+            name = name.ifEmpty { "Будильник" },
             activateDate = activateDate,
             isVibration = isVibration,
-            isRisingVolume = isRisingVolume
+            isRisingVolume = isRisingVolume,
+            recordScore = null,
+            recordSeconds = null
         )
         val dao = AlarmsDB.getInstance(getApplication())?.alarmsDao()
         dao?.insertNewAlarmData(alarm)

@@ -136,10 +136,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15sp"
                 android:layout_marginBottom="5sp"
-                android:autofillHints="Мой будильник"
+                android:autofillHints="Будильник"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="@string/addAlarmAlarmNameText"
+                android:hint="@string/addAlarmAlarmNameText"
                 android:textSize="21sp"
                 android:textStyle="italic" />
 

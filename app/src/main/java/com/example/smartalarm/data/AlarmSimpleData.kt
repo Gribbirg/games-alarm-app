@@ -26,10 +26,10 @@ data class AlarmSimpleData(
     var activateDate: String?,
 
     @ColumnInfo(name = "record_score")
-    var recordScore: Int = -1,
+    var recordScore: Int?,
 
     @ColumnInfo(name = "record_time")
-    var recordSeconds : String = "no",
+    var recordSeconds : String?,
 
     @ColumnInfo(name = "vibration")
     var isVibration: Boolean,
