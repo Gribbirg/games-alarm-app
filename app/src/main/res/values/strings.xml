@@ -22,4 +22,5 @@
     <string name="profile">Профиль</string>
     <string name="settings">Настройки</string>
     <string name="noAlarmsToAdd">Будильников нет!\nЧтобы добавить новый будильник, нажмите +</string>
+    <string name="dayOfWeek">День недели:</string>
 </resources>

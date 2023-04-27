@@ -24,7 +24,10 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) :
         val currencyAlarmData = data[position]
 
         with(holder.binding) {
-            alarmTimeTextView.text = "${currencyAlarmData.timeHour}:${currencyAlarmData.timeMinute}"
+            alarmTimeTextView.text = if (currencyAlarmData.timeMinute >= 10)
+                "${currencyAlarmData.timeHour}:${currencyAlarmData.timeMinute}"
+            else
+                "${currencyAlarmData.timeHour}:0${currencyAlarmData.timeMinute}"
             alarmNameTextView.text = currencyAlarmData.name
             alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
             if (currencyAlarmData.recordSeconds != null)

@@ -7,7 +7,6 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isEmpty
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -72,6 +71,8 @@ class AlarmsFragment : Fragment() {
         binding.addAlarmButton.setOnClickListener {
             if (viewModel.currentDayOfWeek != null) {
                 bundle.putInt("currentDayNumber", viewModel.currentDayOfWeek!!)
+                bundle.putStringArrayList("infoCurrentDay", viewModel.getCurrentDateStringForAllWeek())
+                bundle.putStringArrayList("infoCurrentDayOfWeek", viewModel.getDateOfWeekStringForAllWeek())
                 Navigation.findNavController(binding.root).navigate(
                     R.id.action_alarmsFragment_to_addAlarmFragment,
                     bundle
@@ -119,6 +120,7 @@ class AlarmsFragment : Fragment() {
         }
         if (viewModel.currentDayOfWeek != null)
             dateViewList[viewModel.currentDayOfWeek!!].layout.setBackgroundResource(R.drawable.rounded_corners_green)
+        binding.infoTextView.text = viewModel.getInfoLine()
     }
 
     private fun setRecyclerData() {
@@ -132,17 +134,23 @@ class AlarmsFragment : Fragment() {
                     layoutManager = LinearLayoutManager(activity)
                     adapter = AlarmAdapter(it)
                 }
-                binding.noAlarmsTextView.visibility =
-                    if (it.isEmpty())
-                        View.VISIBLE
-                    else
-                        View.INVISIBLE
+                setNoAlarmsViewsVisibility(it.isEmpty())
             }
         } else {
             binding.alarmsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = AlarmAdapter(ArrayList())
             }
+            setNoAlarmsViewsVisibility(false)
+        }
+    }
+
+    private fun setNoAlarmsViewsVisibility(isVisible: Boolean) {
+        if (isVisible) {
+            binding.noAlarmsImageView.visibility = View.VISIBLE
+            binding.noAlarmsTextView.visibility = View.VISIBLE
+        } else {
+            binding.noAlarmsImageView.visibility = View.INVISIBLE
             binding.noAlarmsTextView.visibility = View.INVISIBLE
         }
     }

@@ -8,6 +8,8 @@ import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.CalendarRepository
+import com.example.smartalarm.data.repositories.getDayOfWeekNameVinit
+import com.example.smartalarm.data.repositories.getMontNameVinit
 import com.example.smartalarm.data.repositories.getTodayNumInWeek
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,8 +36,46 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     fun updateToday() {
         currentDayOfWeek = getTodayNumInWeek()
     }
+
     fun changeWeek(next: Int) {
         calendarRepository.changeWeek(next)
         weekCalendarData = calendarRepository.getWeek()
     }
+
+    fun getInfoLine() =
+        if (currentDayOfWeek == null)
+            "Выберите день"
+        else
+            "Будильники на ${getCurrentDateOfWeekString(currentDayOfWeek!!)},\n${
+                getCurrentDateString(
+                    currentDayOfWeek!!
+                )
+            }:"
+
+    fun getCurrentDateString(dayOfWeek: Int) =
+        weekCalendarData.daysList[dayOfWeek].dayNumber.toString() + " " +
+                getMontNameVinit(weekCalendarData.daysList[dayOfWeek].monthNumber)
+
+    fun getCurrentDateOfWeekString(dayOfWeek: Int) =
+        if (weekCalendarData.daysList[dayOfWeek].today)
+            "сегодня"
+        else if (calendarRepository.isTomorrow(dayOfWeek))
+            "завтра"
+        else
+            getDayOfWeekNameVinit(dayOfWeek)
+
+    fun getCurrentDateStringForAllWeek(): ArrayList<String> {
+        val list = ArrayList<String>()
+        for (i in 0..6)
+            list.add(getCurrentDateString(i))
+        return list
+    }
+
+    fun getDateOfWeekStringForAllWeek(): ArrayList<String> {
+        val list = ArrayList<String>()
+        for (i in 0..6)
+            list.add(getCurrentDateOfWeekString(i))
+        return list
+    }
+
 }

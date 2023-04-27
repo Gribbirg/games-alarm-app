@@ -38,6 +38,10 @@ class AddAlarmFragment : Fragment() {
             }
         )
 
+        binding.addAlarmDaysToggleGroup.addOnButtonCheckedListener { _, _, _ ->
+            setInfoText()
+        }
+
 
         binding.addAlarmSaveButton.setOnClickListener {
             lifecycleScope.launch {
@@ -68,6 +72,25 @@ class AddAlarmFragment : Fragment() {
                 .navigate(R.id.action_addAlarmFragment_to_alarmsFragment2)
         }
 
+        setInfoText()
+
         return binding.root
+    }
+
+    fun setInfoText() {
+        val buttonNum = when (binding.addAlarmDaysToggleGroup.checkedButtonId) {
+            R.id.addAlarmMondayButton -> 0
+            R.id.addAlarmTuesdayButton -> 1
+            R.id.addAlarmWednesdayButton -> 2
+            R.id.addAlarmThursdayButton -> 3
+            R.id.addAlarmFridayButton -> 4
+            R.id.addAlarmSaturdayButton -> 5
+            R.id.addAlarmSundayButton -> 6
+            else -> -1
+        }
+        binding.addAlarmChosenAlarmDateText.text =
+            "Будильник на ${
+                arguments?.getStringArrayList("infoCurrentDayOfWeek")?.get(buttonNum)
+            } , ${arguments?.getStringArrayList("infoCurrentDay")?.get(buttonNum)}"
     }
 }

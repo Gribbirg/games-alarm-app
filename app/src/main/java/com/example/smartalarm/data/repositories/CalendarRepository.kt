@@ -10,6 +10,29 @@ class CalendarRepository {
         currentCalendar.add(Calendar.WEEK_OF_YEAR, next)
     }
 
+    fun isToday() = currentCalendar == Calendar.getInstance()
+    fun isTomorrow(dayOfWeek: Int): Boolean {
+
+        val calendar = currentCalendar
+        while (calendar.get(Calendar.DAY_OF_WEEK) != 1)
+            calendar.add(Calendar.DATE, -1)
+        while ((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 != dayOfWeek) {
+            calendar.add(Calendar.DATE, 1)
+        }
+        calendar.add(Calendar.DATE, -1)
+        return calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                && calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+    }
+
+    fun getMonthOfDay(dayOfWeek: Int): Int {
+        val calendar = currentCalendar
+        while (calendar.get(Calendar.DAY_OF_WEEK) != 1)
+            calendar.add(Calendar.DATE, -1)
+        while ((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 != dayOfWeek) {
+            calendar.add(Calendar.DATE, 1)
+        }
+        return calendar.get(Calendar.MONTH)
+    }
 
     fun getWeek(): WeekCalendarData {
         val calendar = currentCalendar
@@ -26,7 +49,7 @@ class CalendarRepository {
             )
             calendar.add(Calendar.DATE, 1)
         } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
-        calendar.add(Calendar.DATE, -1)
+        calendar.add(Calendar.DATE, -3)
 
         with(weekCalendarData) {
             daysList[5].isWeekend = true
@@ -60,6 +83,32 @@ class CalendarRepository {
 }
 
 fun getTodayNumInWeek(): Int {
-    val num = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
-    return if (num == 1) 6 else num - 2
+    return (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) + 5) % 7
+}
+
+fun getMontNameVinit(monthNum: Int) = when (monthNum) {
+    1 -> "января"
+    2 -> "февраля"
+    3 -> "марта"
+    4 -> "апреля"
+    5 -> "мая"
+    6 -> "июня"
+    7 -> "июля"
+    8 -> "августа"
+    9 -> "сентября"
+    10 -> "октября"
+    11 -> "ноября"
+    12 -> "декабря"
+    else -> ""
+}
+
+fun getDayOfWeekNameVinit(dayOfWeek: Int) = when (dayOfWeek) {
+    0 -> "понедельник"
+    1 -> "вторник"
+    2 -> "среду"
+    3 -> "четверг"
+    4 -> "пятницу"
+    5 -> "субботу"
+    6 -> "воскресенье"
+    else -> ""
 }
