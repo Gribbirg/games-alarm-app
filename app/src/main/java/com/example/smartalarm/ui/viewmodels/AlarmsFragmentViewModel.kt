@@ -88,7 +88,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun changeWeek(next: Int) {
-        currentDayOfWeek = 0
+        currentDayOfWeek = null
         alarmsList.postValue(ArrayList())
         calendarRepository.changeWeek(next)
         weekCalendarData = calendarRepository.getWeek()

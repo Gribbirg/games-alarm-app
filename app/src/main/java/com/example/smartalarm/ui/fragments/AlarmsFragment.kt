@@ -60,13 +60,11 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             viewModel.changeWeek(1)
             setDaysNumAndMonth()
             getEarliestAlarms()
-//            setRecyclerData()
         }
         binding.previousWeekButton.setOnClickListener {
             viewModel.changeWeek(-1)
             setDaysNumAndMonth()
             getEarliestAlarms()
-//            setRecyclerData()
         }
 
 
@@ -124,11 +122,9 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                     dateViewList[i].setTextsColor(Color.parseColor("#525252"))
             }
         }
-        if (resetIsNeeded)
-            viewModel.currentDayOfWeek = null
         setMonth()
         setDay()
-//        setRecyclerData()
+        setRecyclerData()
     }
 
     private fun setMonth() {
@@ -154,26 +150,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek)
         }
     }
-//        if (viewModel.currentDayOfWeek != null) {
-//            lifecycleScope.launch {
-//                viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek!!)
-//                onResume()
-//            }
-//            viewModel.alarmsList.observe(viewLifecycleOwner) {
-//                binding.alarmsRecyclerView.apply {
-//                    layoutManager = LinearLayoutManager(activity)
-//                    adapter = AlarmAdapter(it, this@AlarmsFragment)
-//                }
-//                setNoAlarmsViewsVisibility(it.isEmpty())
-//            }
-//        } else {
-//            binding.alarmsRecyclerView.apply {
-//                layoutManager = LinearLayoutManager(activity)
-//                adapter = AlarmAdapter(ArrayList(), this@AlarmsFragment)
-//            }
-//            setNoAlarmsViewsVisibility(false)
-//        }
-//    }
 
     private fun setNoAlarmsViewsVisibility(isVisible: Boolean) {
         if (isVisible) {
@@ -217,7 +193,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     override fun onOnOffSwitchClickListener(alarm: AlarmSimpleData) {
         lifecycleScope.launch {
             viewModel.setAlarmStateInDb(alarm)
-            viewModel.getEarliestAlarmsForAllWeek()
+            getEarliestAlarms()
         }
     }
 
@@ -229,6 +205,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         lifecycleScope.launch {
             viewModel.deleteAlarmFromDb(alarm)
             setRecyclerData()
+            getEarliestAlarms()
         }
     }
 }
