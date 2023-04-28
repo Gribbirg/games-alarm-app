@@ -113,6 +113,14 @@
                 android:layout_height="wrap_content"
                 android:text="Пн"
                 android:textSize="15sp"
+                />
+
+            <TextView
+                android:id="@+id/monFirstAlarmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="9:00"
+                android:textSize="14sp"
                 android:layout_marginBottom="5sp"/>
 
         </LinearLayout>
@@ -143,6 +151,14 @@
                 android:textSize="15sp"
                 android:layout_marginBottom="5sp" />
 
+            <TextView
+                android:id="@+id/tueFirstAlarmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="9:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="5sp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -153,6 +169,7 @@
             android:layout_marginBottom="4dp"
             android:layout_weight="10"
             android:background="@drawable/rounded_corners_grey"
+            tools:background="@drawable/rounded_corners_green"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -170,6 +187,14 @@
                 android:text="Ср"
                 android:textSize="15sp"
                 android:layout_marginBottom="5sp" />
+
+            <TextView
+                android:id="@+id/wedFirstAlarmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="9:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="5sp"/>
 
         </LinearLayout>
 
@@ -199,6 +224,14 @@
                 android:textSize="15sp"
                 android:layout_marginBottom="5sp" />
 
+            <TextView
+                android:id="@+id/thurFirstAlarmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="9:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="5sp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -226,6 +259,14 @@
                 android:text="Пт"
                 android:textSize="15sp"
                 android:layout_marginBottom="5sp" />
+
+            <TextView
+                android:id="@+id/friFirstAlarmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="9:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="5sp"/>
 
         </LinearLayout>
 
@@ -255,6 +296,14 @@
                 android:textSize="15sp"
                 android:layout_marginBottom="5sp" />
 
+            <TextView
+                android:id="@+id/satFirstAlarmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="9:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="5sp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -283,6 +332,14 @@
                 android:text="Вс"
                 android:textSize="15sp"
                 android:layout_marginBottom="5sp" />
+
+            <TextView
+                android:id="@+id/sunFirstAlarmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="9:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="5sp"/>
 
         </LinearLayout>
 

@@ -23,6 +23,9 @@ interface AlarmsDao {
     @Query("SELECT * FROM alarm_table WHERE id = :id")
     fun getAlarmById(id: Long): AlarmSimpleData
 
+    @Query("SELECT * FROM alarm_table WHERE day_of_week = :dayOfWeek ORDER BY time_hour, time_minute ASC LIMIT 1")
+    fun getEarliestAlarm(dayOfWeek: Int): AlarmSimpleData
+
     @Update(entity = AlarmSimpleData::class)
     fun updateAlarm(alarm: AlarmSimpleData)
 

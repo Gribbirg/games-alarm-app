@@ -1,5 +1,6 @@
 package com.example.smartalarm.data.repositories
 
+import android.widget.ArrayAdapter
 import com.example.smartalarm.data.WeekCalendarData
 import java.util.Calendar
 
@@ -13,7 +14,6 @@ class CalendarRepository {
     fun isToday() = currentCalendar == Calendar.getInstance()
 
     fun isAhead(dayOfWeek: Int, howMuchAhead: Int): Boolean {
-        var test5 = currentCalendar.get(Calendar.DAY_OF_WEEK)
         val calendar = currentCalendar
         while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
             calendar.add(Calendar.DATE, -1)
@@ -22,11 +22,8 @@ class CalendarRepository {
         }
 
         calendar.add(Calendar.DATE, -howMuchAhead)
-        val saveData =  calendar.get(Calendar.DATE)
+        val saveData = calendar.get(Calendar.DATE)
         calendar.add(Calendar.DATE, howMuchAhead)
-        var test1 = currentCalendar.get(Calendar.DAY_OF_YEAR)
-        var test2 = calendar.get(Calendar.DAY_OF_YEAR)
-        var test3 = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         return saveData == Calendar.getInstance().get(Calendar.DATE) &&
                 currentCalendar.get(Calendar.YEAR) == getCurrentYear()
 
@@ -88,6 +85,38 @@ class CalendarRepository {
 
         return weekCalendarData
     }
+
+    fun getDateOfCurrentWeekString(dayOfWeek: Int): String {
+        val calendar = currentCalendar
+        while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
+            calendar.add(Calendar.DATE, -1)
+        while ((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 != dayOfWeek) {
+            calendar.add(Calendar.DATE, 1)
+        }
+        return "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +
+                "${currentCalendar.get(Calendar.MONTH) + 1}." +
+                "${currentCalendar.get(Calendar.YEAR)}"
+    }
+
+    fun getDatesForCurrentWeek(): ArrayList<String> {
+        val list = ArrayList<String>()
+        while (currentCalendar.get(Calendar.DAY_OF_WEEK) != 2)
+            currentCalendar.add(Calendar.DATE, -1)
+
+        do {
+            list.add(
+                "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +
+                        "${currentCalendar.get(Calendar.MONTH) + 1}." +
+                        "${currentCalendar.get(Calendar.YEAR)}"
+            )
+
+            currentCalendar.add(Calendar.DATE, 1)
+        } while (currentCalendar.get(Calendar.DAY_OF_WEEK) != 2)
+        currentCalendar.add(Calendar.DATE, -1)
+
+        return list
+    }
+
     fun getWeekOfDay(weekOfYear: Int, year: Int): WeekCalendarData {
 
         while (currentCalendar.get(Calendar.YEAR) > year)

@@ -86,7 +86,7 @@ class AddAlarmFragment : Fragment() {
                     if (binding.addAlarmMakeRepetitiveSwitch.isChecked)
                         null
                     else
-                        "0.0.0"
+                        arguments?.getStringArrayList("datesOfWeek")?.get(getNumOfCheckedButton())
                 )
                 onResume()
             }

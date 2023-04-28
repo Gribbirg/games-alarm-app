@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
         AlarmSimpleData::class,
         AlarmInfoData::class,
         AlarmGamesData::class
-    ], version = 3
+    ], version = 4
 )
 abstract class AlarmsDB : RoomDatabase() {
 

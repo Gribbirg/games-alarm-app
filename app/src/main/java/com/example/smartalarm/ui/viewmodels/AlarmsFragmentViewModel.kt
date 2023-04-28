@@ -24,14 +24,26 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     var weekCalendarData = calendarRepository.getWeek()
 
     var alarmsList: MutableLiveData<ArrayList<AlarmSimpleData>> = MutableLiveData()
+    var earliestAlarmsList: MutableLiveData<ArrayList<AlarmSimpleData?>> = MutableLiveData()
+
     private val alarmDbRepository = AlarmDbRepository(
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
 
-    suspend fun getAlarmsFromDbByDayOfWeek(dayOfWeek: Int) = withContext(Dispatchers.IO) {
-        alarmsList.postValue(
-            ArrayList(alarmDbRepository.getAlarmsFromDbByDayOfWeek(dayOfWeek))
-        )
+    suspend fun getAlarmsFromDbByDayOfWeek(dayOfWeek: Int?) = withContext(Dispatchers.IO) {
+        if (dayOfWeek == null) alarmsList.postValue(ArrayList())
+        else {
+            alarmsList.postValue(
+                alarmDbRepository.getAlarmsFromDbByDayOfWeek(
+                    dayOfWeek,
+                    calendarRepository.getDateOfCurrentWeekString(dayOfWeek)
+                )
+            )
+        }
+    }
+
+    suspend fun getEarliestAlarmsForAllWeek() = withContext(Dispatchers.IO) {
+        earliestAlarmsList.postValue(alarmDbRepository.getEarliestAlarmsFromDb(calendarRepository.getDatesForCurrentWeek()))
     }
 
     suspend fun setAlarmStateInDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
@@ -40,6 +52,16 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         alarmDbRepository.deleteAlarmFromDb(alarm)
+    }
+
+    fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
+        val list = ArrayList<String>()
+        for (alarm in alarmsList)
+            list.add(
+                if (alarm == null) ""
+                else "${alarm.timeHour}:${alarm.timeMinute}"
+            )
+        return list
     }
 
     fun updateToday() {
@@ -58,6 +80,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
             )
             putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
             putStringArrayList("infoCurrentDayOfWeek", getDateOfWeekStringForAllWeek())
+            putStringArrayList("datesOfWeek", calendarRepository.getDatesForCurrentWeek())
             putBoolean("isNew", id == null)
             if (id != null) putLong("alarmId", id)
         }
@@ -65,6 +88,8 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun changeWeek(next: Int) {
+        currentDayOfWeek = 0
+        alarmsList.postValue(ArrayList())
         calendarRepository.changeWeek(next)
         weekCalendarData = calendarRepository.getWeek()
     }

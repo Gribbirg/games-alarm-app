@@ -8,6 +8,7 @@ import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.motion.widget.OnSwipe
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -17,6 +18,7 @@ import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -57,10 +59,14 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         binding.nextWeekButton.setOnClickListener {
             viewModel.changeWeek(1)
             setDaysNumAndMonth()
+            getEarliestAlarms()
+//            setRecyclerData()
         }
         binding.previousWeekButton.setOnClickListener {
             viewModel.changeWeek(-1)
             setDaysNumAndMonth()
+            getEarliestAlarms()
+//            setRecyclerData()
         }
 
 
@@ -71,11 +77,34 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                 Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }
 
+
         val dayInfo = arguments?.getIntegerArrayList("currentDay")
         if (dayInfo != null) {
             viewModel.setDate(dayInfo)
         }
 
+        viewModel.earliestAlarmsList.observe(viewLifecycleOwner) {
+            val timesString = viewModel.timesToString(it)
+            with(binding) {
+                monFirstAlarmTextView.text = timesString[0]
+                tueFirstAlarmTextView.text = timesString[1]
+                wedFirstAlarmTextView.text = timesString[2]
+                thurFirstAlarmTextView.text = timesString[3]
+                friFirstAlarmTextView.text = timesString[4]
+                satFirstAlarmTextView.text = timesString[5]
+                sunFirstAlarmTextView.text = timesString[6]
+            }
+        }
+
+        viewModel.alarmsList.observe(viewLifecycleOwner) {
+            binding.alarmsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = AlarmAdapter(it, this@AlarmsFragment)
+            }
+            setNoAlarmsViewsVisibility(it.isEmpty())
+        }
+
+        getEarliestAlarms()
         setDaysNumAndMonth(false)
         setDay()
         setRecyclerData()
@@ -99,7 +128,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             viewModel.currentDayOfWeek = null
         setMonth()
         setDay()
-        setRecyclerData()
+//        setRecyclerData()
     }
 
     private fun setMonth() {
@@ -121,26 +150,30 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     }
 
     private fun setRecyclerData() {
-        if (viewModel.currentDayOfWeek != null) {
-            lifecycleScope.launch {
-                viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek!!)
-                onResume()
-            }
-            viewModel.alarmsList.observe(viewLifecycleOwner) {
-                binding.alarmsRecyclerView.apply {
-                    layoutManager = LinearLayoutManager(activity)
-                    adapter = AlarmAdapter(it, this@AlarmsFragment)
-                }
-                setNoAlarmsViewsVisibility(it.isEmpty())
-            }
-        } else {
-            binding.alarmsRecyclerView.apply {
-                layoutManager = LinearLayoutManager(activity)
-                adapter = AlarmAdapter(ArrayList(), this@AlarmsFragment)
-            }
-            setNoAlarmsViewsVisibility(false)
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek)
         }
     }
+//        if (viewModel.currentDayOfWeek != null) {
+//            lifecycleScope.launch {
+//                viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek!!)
+//                onResume()
+//            }
+//            viewModel.alarmsList.observe(viewLifecycleOwner) {
+//                binding.alarmsRecyclerView.apply {
+//                    layoutManager = LinearLayoutManager(activity)
+//                    adapter = AlarmAdapter(it, this@AlarmsFragment)
+//                }
+//                setNoAlarmsViewsVisibility(it.isEmpty())
+//            }
+//        } else {
+//            binding.alarmsRecyclerView.apply {
+//                layoutManager = LinearLayoutManager(activity)
+//                adapter = AlarmAdapter(ArrayList(), this@AlarmsFragment)
+//            }
+//            setNoAlarmsViewsVisibility(false)
+//        }
+//    }
 
     private fun setNoAlarmsViewsVisibility(isVisible: Boolean) {
         if (isVisible) {
@@ -175,9 +208,16 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             )
     }
 
+    private fun getEarliestAlarms() {
+        lifecycleScope.launch {
+            viewModel.getEarliestAlarmsForAllWeek()
+        }
+    }
+
     override fun onOnOffSwitchClickListener(alarm: AlarmSimpleData) {
         lifecycleScope.launch {
             viewModel.setAlarmStateInDb(alarm)
+            viewModel.getEarliestAlarmsForAllWeek()
         }
     }
 
