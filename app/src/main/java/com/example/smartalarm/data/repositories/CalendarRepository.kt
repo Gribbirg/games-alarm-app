@@ -12,7 +12,6 @@ class CalendarRepository {
 
     fun isToday() = currentCalendar == Calendar.getInstance()
 
-
     fun isAhead(dayOfWeek: Int, howMuchAhead: Int): Boolean {
         var test5 = currentCalendar.get(Calendar.DAY_OF_WEEK)
         val calendar = currentCalendar
@@ -45,7 +44,7 @@ class CalendarRepository {
 
     fun getWeek(): WeekCalendarData {
         val calendar = currentCalendar
-        val weekCalendarData = WeekCalendarData()
+        val weekCalendarData = WeekCalendarData(currentCalendar.get(Calendar.WEEK_OF_YEAR))
 
         while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
             calendar.add(Calendar.DATE, -1)
@@ -88,6 +87,20 @@ class CalendarRepository {
         }
 
         return weekCalendarData
+    }
+    fun getWeekOfDay(weekOfYear: Int, year: Int): WeekCalendarData {
+
+        while (currentCalendar.get(Calendar.YEAR) > year)
+            currentCalendar.add(Calendar.YEAR, -1)
+        while (currentCalendar.get(Calendar.YEAR) < year)
+            currentCalendar.add(Calendar.YEAR, 1)
+
+        while (currentCalendar.get(Calendar.WEEK_OF_YEAR) > weekOfYear)
+            currentCalendar.add(Calendar.WEEK_OF_YEAR, -1)
+        while (currentCalendar.get(Calendar.WEEK_OF_YEAR) < weekOfYear)
+            currentCalendar.add(Calendar.WEEK_OF_YEAR, 1)
+
+        return getWeek()
     }
 }
 

@@ -6,20 +6,31 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.viewmodels.AddAlarmFragmentViewModel
 import com.example.smartalarm.databinding.FragmentAddAlarmBinding
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
 class AddAlarmFragment : Fragment() {
 
     private lateinit var viewModel: AddAlarmFragmentViewModel
     lateinit var binding: FragmentAddAlarmBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navToAlarmFragment()
+                }
+            })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +40,7 @@ class AddAlarmFragment : Fragment() {
         binding = FragmentAddAlarmBinding.inflate(inflater, container, false)
 
         binding.addAlarmDaysToggleGroup.check(
-            when (arguments?.getInt("currentDayNumber")!!) {
+            when (arguments?.getIntegerArrayList("currentDay")!![0]) {
                 0 -> R.id.addAlarmMondayButton
                 1 -> R.id.addAlarmTuesdayButton
                 2 -> R.id.addAlarmWednesdayButton
@@ -69,16 +80,7 @@ class AddAlarmFragment : Fragment() {
                 viewModel.insertOrUpdateAlarmToDb(
                     binding.addAlarmTimePicker.hour,
                     binding.addAlarmTimePicker.minute,
-                    when (binding.addAlarmDaysToggleGroup.checkedButtonId) {
-                        R.id.addAlarmMondayButton -> 0
-                        R.id.addAlarmTuesdayButton -> 1
-                        R.id.addAlarmWednesdayButton -> 2
-                        R.id.addAlarmThursdayButton -> 3
-                        R.id.addAlarmFridayButton -> 4
-                        R.id.addAlarmSaturdayButton -> 5
-                        R.id.addAlarmSundayButton -> 6
-                        else -> -1
-                    },
+                    getNumOfCheckedButton(),
                     binding.addAlarmAlarmNameText.text.toString(),
                     binding.addAlarmSetBuzzSwitch.isChecked,
                     binding.addAlarmGraduallyIncreaseVolumeSwitch.isChecked,
@@ -89,8 +91,7 @@ class AddAlarmFragment : Fragment() {
                 )
                 onResume()
             }
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_addAlarmFragment_to_alarmsFragment2)
+            navToAlarmFragment(getNumOfCheckedButton())
         }
 
         setInfoText()
@@ -99,19 +100,38 @@ class AddAlarmFragment : Fragment() {
     }
 
     private fun setInfoText() {
-        val buttonNum = when (binding.addAlarmDaysToggleGroup.checkedButtonId) {
-            R.id.addAlarmMondayButton -> 0
-            R.id.addAlarmTuesdayButton -> 1
-            R.id.addAlarmWednesdayButton -> 2
-            R.id.addAlarmThursdayButton -> 3
-            R.id.addAlarmFridayButton -> 4
-            R.id.addAlarmSaturdayButton -> 5
-            R.id.addAlarmSundayButton -> 6
-            else -> -1
-        }
+        val buttonNum = getNumOfCheckedButton()
         binding.addAlarmChosenAlarmDateText.text =
             "Будильник на ${
                 arguments?.getStringArrayList("infoCurrentDayOfWeek")?.get(buttonNum)
             } , ${arguments?.getStringArrayList("infoCurrentDay")?.get(buttonNum)}"
+    }
+
+    private fun getNumOfCheckedButton() = when (binding.addAlarmDaysToggleGroup.checkedButtonId) {
+        R.id.addAlarmMondayButton -> 0
+        R.id.addAlarmTuesdayButton -> 1
+        R.id.addAlarmWednesdayButton -> 2
+        R.id.addAlarmThursdayButton -> 3
+        R.id.addAlarmFridayButton -> 4
+        R.id.addAlarmSaturdayButton -> 5
+        R.id.addAlarmSundayButton -> 6
+        else -> -1
+    }
+
+    private fun navToAlarmFragment(dayOfWeek: Int = arguments?.getIntegerArrayList("currentDay")!![0]) {
+        val bundle = Bundle()
+        bundle.putIntegerArrayList(
+            "currentDay", arrayListOf(
+                dayOfWeek,
+                arguments?.getIntegerArrayList("currentDay")!![1],
+                arguments?.getIntegerArrayList("currentDay")!![2],
+            )
+        )
+
+        Navigation.findNavController(binding.root)
+            .navigate(
+                R.id.action_addAlarmFragment_to_alarmsFragment2,
+                bundle
+            )
     }
 }

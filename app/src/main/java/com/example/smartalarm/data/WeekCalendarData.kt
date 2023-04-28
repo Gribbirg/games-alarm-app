@@ -1,8 +1,9 @@
 package com.example.smartalarm.data
 
-class WeekCalendarData {
+class WeekCalendarData(val weekOfYear: Int) {
     val daysList = ArrayList<DateUnit>()
     val monthList = ArrayList<String>()
+
 
     class DateUnit(var dayNumber: Int,
                    var monthNumber: Int,

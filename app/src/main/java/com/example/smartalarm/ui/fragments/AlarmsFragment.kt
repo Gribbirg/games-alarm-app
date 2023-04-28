@@ -54,10 +54,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                 setRecyclerData()
             }
 
-        setDaysNumAndMonth()
-        viewModel.updateToday()
-        setDay()
-
         binding.nextWeekButton.setOnClickListener {
             viewModel.changeWeek(1)
             setDaysNumAndMonth()
@@ -75,12 +71,18 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                 Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }
 
-        setRecyclerData()
+        val dayInfo = arguments?.getIntegerArrayList("currentDay")
+        if (dayInfo != null) {
+            viewModel.setDate(dayInfo)
+        }
 
+        setDaysNumAndMonth(false)
+        setDay()
+        setRecyclerData()
         return binding.root
     }
 
-    private fun setDaysNumAndMonth() {
+    private fun setDaysNumAndMonth(resetIsNeeded: Boolean = true) {
         for (i in 0..6) {
             dateViewList[i].numTextView.text =
                 viewModel.weekCalendarData.daysList[i].dayNumber.toString()
@@ -93,7 +95,8 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                     dateViewList[i].setTextsColor(Color.parseColor("#525252"))
             }
         }
-        viewModel.currentDayOfWeek = null
+        if (resetIsNeeded)
+            viewModel.currentDayOfWeek = null
         setMonth()
         setDay()
         setRecyclerData()

@@ -46,10 +46,16 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         currentDayOfWeek = getTodayNumInWeek()
     }
 
-    fun addInfoInformationToBundle(currentBundle: Bundle?, id: Long? = null) : Bundle {
+    fun addInfoInformationToBundle(currentBundle: Bundle?, id: Long? = null): Bundle {
         val resultBundle = currentBundle ?: Bundle()
         with(resultBundle) {
-            putInt("currentDayNumber", currentDayOfWeek!!)
+            putIntegerArrayList(
+                "currentDay", arrayListOf(
+                    currentDayOfWeek!!,
+                    weekCalendarData.weekOfYear,
+                    weekCalendarData.daysList[currentDayOfWeek!!].yearNumber
+                )
+            )
             putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
             putStringArrayList("infoCurrentDayOfWeek", getDateOfWeekStringForAllWeek())
             putBoolean("isNew", id == null)
@@ -61,6 +67,11 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     fun changeWeek(next: Int) {
         calendarRepository.changeWeek(next)
         weekCalendarData = calendarRepository.getWeek()
+    }
+
+    fun setDate(dayInfo: ArrayList<Int>) {
+        currentDayOfWeek = dayInfo[0]
+        weekCalendarData = calendarRepository.getWeekOfDay(dayInfo[1], dayInfo[2])
     }
 
     fun getInfoLine() =
@@ -100,5 +111,4 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
             list.add(getCurrentDateOfWeekString(i))
         return list
     }
-
 }
