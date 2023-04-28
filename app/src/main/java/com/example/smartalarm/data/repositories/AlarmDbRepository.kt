@@ -11,8 +11,23 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext alarmsDao.getAlarmsByDay(dayOfWeek)
         }
 
-    suspend fun updateAlarmInDb(alarm : AlarmSimpleData) =
+    suspend fun getAlarmFromDb(id: Long): AlarmSimpleData =
+        withContext(Dispatchers.IO) {
+            return@withContext alarmsDao.getAlarmById(id)
+        }
+
+    suspend fun insertAlarmToDb(alarm: AlarmSimpleData) =
+        withContext(Dispatchers.IO) {
+            alarmsDao.insertNewAlarmData(alarm)
+        }
+
+    suspend fun updateAlarmInDb(alarm: AlarmSimpleData) =
         withContext(Dispatchers.IO) {
             alarmsDao.updateAlarm(alarm)
+        }
+
+    suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) =
+        withContext(Dispatchers.IO) {
+            alarmsDao.deleteAlarm(alarm)
         }
 }

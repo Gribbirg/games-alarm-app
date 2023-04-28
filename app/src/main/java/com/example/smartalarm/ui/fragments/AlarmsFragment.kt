@@ -35,8 +35,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
         viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
 
-        val bundle = Bundle()
-
         dateViewList = ArrayList()
 
         with(dateViewList) {
@@ -71,15 +69,9 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
 
         binding.addAlarmButton.setOnClickListener {
-            if (viewModel.currentDayOfWeek != null) {
-                bundle.putInt("currentDayNumber", viewModel.currentDayOfWeek!!)
-                bundle.putStringArrayList("infoCurrentDay", viewModel.getCurrentDateStringForAllWeek())
-                bundle.putStringArrayList("infoCurrentDayOfWeek", viewModel.getDateOfWeekStringForAllWeek())
-                Navigation.findNavController(binding.root).navigate(
-                    R.id.action_alarmsFragment_to_addAlarmFragment,
-                    bundle
-                )
-            } else
+            if (viewModel.currentDayOfWeek != null)
+                navToAddAlarmFragment(viewModel.addInfoInformationToBundle(null))
+            else
                 Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }
 
@@ -168,16 +160,33 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         }
     }
 
+    private fun navToAddAlarmFragment(bundle: Bundle?) {
+        if (bundle == null)
+            Navigation.findNavController(binding.root).navigate(
+                R.id.action_alarmsFragment_to_addAlarmFragment,
+            )
+        else
+            Navigation.findNavController(binding.root).navigate(
+                R.id.action_alarmsFragment_to_addAlarmFragment,
+                bundle
+            )
+    }
+
     override fun onOnOffSwitchClickListener(alarm: AlarmSimpleData) {
         lifecycleScope.launch {
             viewModel.setAlarmStateInDb(alarm)
         }
     }
 
-    override fun showPopMenu(alarm: AlarmSimpleData) {
-        val menu = PopupMenu(context, view)
-        menu.inflate(R.menu.menu_alarm_unit)
-        menu.show()
+    override fun openEditMenu(alarm: AlarmSimpleData) {
+        navToAddAlarmFragment(viewModel.addInfoInformationToBundle(null, alarm.id))
+    }
+
+    override fun deleteAlarm(alarm: AlarmSimpleData) {
+        lifecycleScope.launch {
+            viewModel.deleteAlarmFromDb(alarm)
+            setRecyclerData()
+        }
     }
 }
 

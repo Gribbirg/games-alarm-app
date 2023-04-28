@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.viewmodels.AddAlarmFragmentViewModel
 import com.example.smartalarm.databinding.FragmentAddAlarmBinding
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
 class AddAlarmFragment : Fragment() {
@@ -42,10 +45,28 @@ class AddAlarmFragment : Fragment() {
             setInfoText()
         }
 
+        if (!arguments?.getBoolean("isNew")!!) {
+            lifecycleScope.launch {
+                whenStarted {
+                    viewModel.currentAlarm = viewModel.getAlarm(arguments?.getLong("alarmId")!!)
+                    with(binding) {
+                        addAlarmTimePicker.hour = viewModel.currentAlarm!!.timeHour
+                        addAlarmTimePicker.minute = viewModel.currentAlarm!!.timeMinute
+                        addAlarmMakeRepetitiveSwitch.isChecked =
+                            viewModel.currentAlarm!!.activateDate == null
+                        addAlarmAlarmNameText.setText(viewModel.currentAlarm!!.name)
+                        addAlarmSetBuzzSwitch.isChecked = viewModel.currentAlarm!!.isVibration
+                        addAlarmGraduallyIncreaseVolumeSwitch.isChecked =
+                            viewModel.currentAlarm!!.isRisingVolume
+                    }
+                }
+            }
+
+        }
 
         binding.addAlarmSaveButton.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.insertAlarmToDb(
+                viewModel.insertOrUpdateAlarmToDb(
                     binding.addAlarmTimePicker.hour,
                     binding.addAlarmTimePicker.minute,
                     when (binding.addAlarmDaysToggleGroup.checkedButtonId) {
@@ -77,7 +98,7 @@ class AddAlarmFragment : Fragment() {
         return binding.root
     }
 
-    fun setInfoText() {
+    private fun setInfoText() {
         val buttonNum = when (binding.addAlarmDaysToggleGroup.checkedButtonId) {
             R.id.addAlarmMondayButton -> 0
             R.id.addAlarmTuesdayButton -> 1

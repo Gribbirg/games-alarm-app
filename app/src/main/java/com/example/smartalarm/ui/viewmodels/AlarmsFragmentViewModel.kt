@@ -1,6 +1,7 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
+import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 
@@ -37,8 +38,24 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         alarmDbRepository.updateAlarmInDb(alarm)
     }
 
+    suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
+        alarmDbRepository.deleteAlarmFromDb(alarm)
+    }
+
     fun updateToday() {
         currentDayOfWeek = getTodayNumInWeek()
+    }
+
+    fun addInfoInformationToBundle(currentBundle: Bundle?, id: Long? = null) : Bundle {
+        val resultBundle = currentBundle ?: Bundle()
+        with(resultBundle) {
+            putInt("currentDayNumber", currentDayOfWeek!!)
+            putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
+            putStringArrayList("infoCurrentDayOfWeek", getDateOfWeekStringForAllWeek())
+            putBoolean("isNew", id == null)
+            if (id != null) putLong("alarmId", id)
+        }
+        return resultBundle
     }
 
     fun changeWeek(next: Int) {
