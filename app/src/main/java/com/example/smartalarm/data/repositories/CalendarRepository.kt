@@ -11,6 +11,8 @@ class CalendarRepository {
     }
 
     fun isToday() = currentCalendar == Calendar.getInstance()
+
+
     fun isAhead(dayOfWeek: Int, howMuchAhead: Int): Boolean {
         var test5 = currentCalendar.get(Calendar.DAY_OF_WEEK)
         val calendar = currentCalendar
@@ -26,7 +28,8 @@ class CalendarRepository {
         var test1 = currentCalendar.get(Calendar.DAY_OF_YEAR)
         var test2 = calendar.get(Calendar.DAY_OF_YEAR)
         var test3 = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-        return saveData == Calendar.getInstance().get(Calendar.DATE)
+        return saveData == Calendar.getInstance().get(Calendar.DATE) &&
+                currentCalendar.get(Calendar.YEAR) == getCurrentYear()
 
     }
 
@@ -63,9 +66,9 @@ class CalendarRepository {
         }
 
         if (
-            Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
-            ==
-            calendar.get(Calendar.WEEK_OF_YEAR)
+            Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) ==
+            calendar.get(Calendar.WEEK_OF_YEAR) &&
+            calendar.get(Calendar.YEAR) == getCurrentYear()
         )
             weekCalendarData.daysList[getTodayNumInWeek()].today = true
 
@@ -118,3 +121,5 @@ fun getDayOfWeekNameVinit(dayOfWeek: Int) = when (dayOfWeek) {
     6 -> "воскресенье"
     else -> ""
 }
+
+fun getCurrentYear() = Calendar.getInstance().get(Calendar.YEAR)

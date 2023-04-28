@@ -4,20 +4,13 @@ class WeekCalendarData {
     val daysList = ArrayList<DateUnit>()
     val monthList = ArrayList<String>()
 
-    class DateUnit(_dayNumber: Int,
-                   _monthNumber: Int,
-                   _yearNumber: Int,
-                   _today: Boolean = false,
-                   _isWeekend: Boolean= false,
-                   _isHoliday: Boolean = false
+    class DateUnit(var dayNumber: Int,
+                   var monthNumber: Int,
+                   var yearNumber: Int,
+                   var today: Boolean = false,
+                   var isWeekend: Boolean= false,
+                   var isHoliday: Boolean = false
     ) {
-
-        val dayNumber = _dayNumber
-        val monthNumber = _monthNumber
-        val yearNumber = _yearNumber
-        var today: Boolean = _today
-        var isWeekend: Boolean= _isWeekend
-        var isHoliday: Boolean = _isHoliday
 
         fun getMonthName() : String =
             when (monthNumber) {
