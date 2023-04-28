@@ -12,13 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
+import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
 import kotlinx.coroutines.launch
 
 
-class AlarmsFragment : Fragment() {
+class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
     private lateinit var dateViewList: ArrayList<DateView>
     private lateinit var viewModel: AlarmsFragmentViewModel
@@ -132,14 +133,14 @@ class AlarmsFragment : Fragment() {
             viewModel.alarmsList.observe(viewLifecycleOwner) {
                 binding.alarmsRecyclerView.apply {
                     layoutManager = LinearLayoutManager(activity)
-                    adapter = AlarmAdapter(it)
+                    adapter = AlarmAdapter(it, this@AlarmsFragment)
                 }
                 setNoAlarmsViewsVisibility(it.isEmpty())
             }
         } else {
             binding.alarmsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = AlarmAdapter(ArrayList())
+                adapter = AlarmAdapter(ArrayList(), this@AlarmsFragment)
             }
             setNoAlarmsViewsVisibility(false)
         }
@@ -163,6 +164,12 @@ class AlarmsFragment : Fragment() {
         fun setTextsColor(color: Int) {
             numTextView.setTextColor(color)
             dayTextView.setTextColor(color)
+        }
+    }
+
+    override fun onOnOffSwitchClickListener(alarm: AlarmSimpleData) {
+        lifecycleScope.launch {
+            viewModel.setAlarmStateInDb(alarm)
         }
     }
 }

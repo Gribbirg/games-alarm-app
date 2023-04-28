@@ -10,4 +10,9 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
         withContext(Dispatchers.IO) {
             return@withContext alarmsDao.getAlarmsByDay(dayOfWeek)
         }
+
+    suspend fun updateAlarmInDb(alarm : AlarmSimpleData) =
+        withContext(Dispatchers.IO) {
+            alarmsDao.updateAlarm(alarm)
+        }
 }

@@ -33,6 +33,10 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         )
     }
 
+    suspend fun setAlarmStateInDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
+        alarmDbRepository.updateAlarmInDb(alarm)
+    }
+
     fun updateToday() {
         currentDayOfWeek = getTodayNumInWeek()
     }

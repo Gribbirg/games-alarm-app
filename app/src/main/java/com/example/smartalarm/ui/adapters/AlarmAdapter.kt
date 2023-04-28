@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.data.db.AlarmSimpleData
+import com.example.smartalarm.data.db.AlarmsDB
+import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.databinding.AlarmItemBinding
 
-class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) :
+class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmClickListener) :
     RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
-    class AlarmViewHolder(val binding: AlarmItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class AlarmViewHolder(val binding: AlarmItemBinding, val listener: OnAlarmClickListener) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
         val binding = AlarmItemBinding.inflate(
@@ -17,7 +19,7 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) :
             parent,
             false
         )
-        return AlarmViewHolder(binding)
+        return AlarmViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
@@ -29,16 +31,26 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>) :
             else
                 "${currencyAlarmData.timeHour}:0${currencyAlarmData.timeMinute}"
             alarmNameTextView.text = currencyAlarmData.name
-            alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
+
             if (currencyAlarmData.recordSeconds != null)
                 recordTextView.text = "${currencyAlarmData.recordSeconds!!.toInt() / 60}:" +
                         "${currencyAlarmData.recordSeconds!!.toInt() % 60}"
             else
                 recordTextView.text = "Нет данных"
+
+            alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
+            alarmOnOffSwitch.setOnClickListener {
+                currencyAlarmData.isOn = alarmOnOffSwitch.isChecked
+                holder.listener.onOnOffSwitchClickListener(currencyAlarmData)
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return data.size
+    }
+
+    interface OnAlarmClickListener {
+        fun onOnOffSwitchClickListener(alarm: AlarmSimpleData)
     }
 }
