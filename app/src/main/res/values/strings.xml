@@ -16,7 +16,7 @@
     <string name="addAlarmGraduallyIncreaseVolumeSwitch">Повышать громкость:</string>
     <string name="addAlarmInformationButton">Отображение общей информации</string>
     <string name="addAlarmGamesButton">Список игр</string>
-    <string name="addAlarmSaveButton">SAVE</string>
+    <string name="addAlarmSaveButton">СОХРАНИТЬ</string>
     <string name="alarms">Будильники</string>
     <string name="records">Рекорды</string>
     <string name="profile">Профиль</string>

@@ -2,6 +2,7 @@ package com.example.smartalarm.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
@@ -11,7 +12,8 @@ import com.example.smartalarm.databinding.AlarmItemBinding
 class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmClickListener) :
     RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
-    class AlarmViewHolder(val binding: AlarmItemBinding, val listener: OnAlarmClickListener) : RecyclerView.ViewHolder(binding.root)
+    class AlarmViewHolder(val binding: AlarmItemBinding, val listener: OnAlarmClickListener) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
         val binding = AlarmItemBinding.inflate(
@@ -43,6 +45,10 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmCl
                 currencyAlarmData.isOn = alarmOnOffSwitch.isChecked
                 holder.listener.onOnOffSwitchClickListener(currencyAlarmData)
             }
+
+            menuButton.setOnClickListener {
+                holder.listener.showPopMenu(currencyAlarmData)
+            }
         }
     }
 
@@ -52,5 +58,6 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmCl
 
     interface OnAlarmClickListener {
         fun onOnOffSwitchClickListener(alarm: AlarmSimpleData)
+        fun showPopMenu(alarm: AlarmSimpleData)
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
@@ -171,6 +172,12 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         lifecycleScope.launch {
             viewModel.setAlarmStateInDb(alarm)
         }
+    }
+
+    override fun showPopMenu(alarm: AlarmSimpleData) {
+        val menu = PopupMenu(context, view)
+        menu.inflate(R.menu.menu_alarm_unit)
+        menu.show()
     }
 }
 
