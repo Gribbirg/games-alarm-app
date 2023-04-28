@@ -72,7 +72,6 @@ class AddAlarmFragment : Fragment() {
                     }
                 }
             }
-
         }
 
         binding.addAlarmSaveButton.setOnClickListener {

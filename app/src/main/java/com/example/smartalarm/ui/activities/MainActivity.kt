@@ -32,15 +32,15 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.fragment)
             ?.findNavController()
 
-        val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.alarmsFragment,
-            R.id.recordsFragment,
-            R.id.profileFragment,
-            R.id.settingsFragment
-        ))
+//        val appBarConfiguration = AppBarConfiguration(setOf(
+//            R.id.alarmsFragment,
+//            R.id.recordsFragment,
+//            R.id.profileFragment,
+//            R.id.settingsFragment
+//        ))
+//
+//        setupActionBarWithNavController(navController!!, appBarConfiguration)
 
-        setupActionBarWithNavController(navController!!, appBarConfiguration)
-
-        binding.bottomNavigationView.setupWithNavController(navController)
+        binding.bottomNavigationView.setupWithNavController(navController!!)
     }
 }
