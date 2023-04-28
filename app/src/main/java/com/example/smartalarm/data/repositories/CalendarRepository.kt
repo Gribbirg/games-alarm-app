@@ -11,17 +11,23 @@ class CalendarRepository {
     }
 
     fun isToday() = currentCalendar == Calendar.getInstance()
-    fun isTomorrow(dayOfWeek: Int): Boolean {
-
+    fun isAhead(dayOfWeek: Int, howMuchAhead: Int): Boolean {
+        var test5 = currentCalendar.get(Calendar.DAY_OF_WEEK)
         val calendar = currentCalendar
-        while (calendar.get(Calendar.DAY_OF_WEEK) != 1)
+        while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
             calendar.add(Calendar.DATE, -1)
         while ((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 != dayOfWeek) {
             calendar.add(Calendar.DATE, 1)
         }
-        calendar.add(Calendar.DATE, -1)
-        return calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                && calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+
+        calendar.add(Calendar.DATE, -howMuchAhead)
+        val saveData =  calendar.get(Calendar.DATE)
+        calendar.add(Calendar.DATE, howMuchAhead)
+        var test1 = currentCalendar.get(Calendar.DAY_OF_YEAR)
+        var test2 = calendar.get(Calendar.DAY_OF_YEAR)
+        var test3 = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        return saveData == Calendar.getInstance().get(Calendar.DATE)
+
     }
 
     fun getMonthOfDay(dayOfWeek: Int): Int {
@@ -49,7 +55,7 @@ class CalendarRepository {
             )
             calendar.add(Calendar.DATE, 1)
         } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
-        calendar.add(Calendar.DATE, -3)
+        calendar.add(Calendar.DATE, -1)
 
         with(weekCalendarData) {
             daysList[5].isWeekend = true

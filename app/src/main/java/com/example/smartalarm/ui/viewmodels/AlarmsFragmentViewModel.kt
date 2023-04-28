@@ -59,8 +59,10 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     fun getCurrentDateOfWeekString(dayOfWeek: Int) =
         if (weekCalendarData.daysList[dayOfWeek].today)
             "сегодня"
-        else if (calendarRepository.isTomorrow(dayOfWeek))
+        else if (calendarRepository.isAhead(dayOfWeek, 1))
             "завтра"
+        else if (calendarRepository.isAhead(dayOfWeek, 2))
+            "послезавтра"
         else
             getDayOfWeekNameVinit(dayOfWeek)
 
