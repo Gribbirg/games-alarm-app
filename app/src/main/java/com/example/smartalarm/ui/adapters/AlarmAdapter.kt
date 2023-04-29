@@ -47,11 +47,8 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmCl
                 recordTextView.text = "Нет данных"
 
             if (currencyAlarmData.activateDate != null) {
-                holder
-                    .binding
-                    .alarmMaterialCardView
-                    .setBackgroundColor(Color.parseColor("#e3e3e3"))
-                holder.binding.recordTextView.visibility = View.GONE
+                    alarmMaterialCardView.setBackgroundColor(Color.parseColor("#e3e3e3"))
+                recordTextView.visibility = View.GONE
             }
 
             alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
@@ -59,6 +56,9 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmCl
                 currencyAlarmData.isOn = alarmOnOffSwitch.isChecked
                 holder.listener.onOnOffSwitchClickListener(currencyAlarmData)
             }
+
+            if (currencyAlarmData.isVibration) vibrationImageView.visibility = View.VISIBLE
+            if (currencyAlarmData.isRisingVolume) volumeUpImageView.visibility = View.VISIBLE
 
             menuButton.setOnClickListener {
                 val menu = PopupMenu(holder.binding.root.context, it)
