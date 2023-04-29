@@ -1,5 +1,6 @@
 package com.example.smartalarm.data.repositories
 
+import android.util.Log
 import android.widget.ArrayAdapter
 import com.example.smartalarm.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
@@ -7,6 +8,7 @@ import java.util.Calendar
 
 class CalendarRepository {
     private val currentCalendar = Calendar.getInstance()
+
 
     fun changeWeek(next: Int) {
         currentCalendar.add(Calendar.WEEK_OF_YEAR, next)
@@ -97,25 +99,6 @@ class CalendarRepository {
         return "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +
                 "${currentCalendar.get(Calendar.MONTH) + 1}." +
                 "${currentCalendar.get(Calendar.YEAR)}"
-    }
-
-    fun getDatesForCurrentWeek(): ArrayList<String> {
-        val list = ArrayList<String>()
-        while (currentCalendar.get(Calendar.DAY_OF_WEEK) != 2)
-            currentCalendar.add(Calendar.DATE, -1)
-
-        do {
-            list.add(
-                "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +
-                        "${currentCalendar.get(Calendar.MONTH) + 1}." +
-                        "${currentCalendar.get(Calendar.YEAR)}"
-            )
-
-            currentCalendar.add(Calendar.DATE, 1)
-        } while (currentCalendar.get(Calendar.DAY_OF_WEEK) != 2)
-        currentCalendar.add(Calendar.DATE, -1)
-
-        return list
     }
 
     fun getWeekOfDay(weekOfYear: Int, year: Int): WeekCalendarData {

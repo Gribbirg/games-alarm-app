@@ -1,5 +1,6 @@
 package com.example.smartalarm.data.repositories
 
+import android.util.Log
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDao
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,7 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             val list = ArrayList<AlarmSimpleData?>()
             var listDay: ArrayList<AlarmSimpleData>
             var alarm: AlarmSimpleData?
+
             for (i in 0..6) {
                 alarm = alarmsDao.getEarliestAlarm(i)
                 if (alarm == null || (alarm.activateDate == null || alarm.activateDate == currentDate[i]) && alarm.isOn)

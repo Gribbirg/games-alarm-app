@@ -4,7 +4,6 @@ class WeekCalendarData(val weekOfYear: Int) {
     val daysList = ArrayList<DateUnit>()
     val monthList = ArrayList<String>()
 
-
     class DateUnit(var dayNumber: Int,
                    var monthNumber: Int,
                    var yearNumber: Int,
@@ -29,6 +28,10 @@ class WeekCalendarData(val weekOfYear: Int) {
                 12 -> "Декабрь"
                 else -> ""
             }
+
+        override fun toString(): String {
+            return "${dayNumber}.${monthNumber}.${yearNumber}"
+        }
     }
 
     fun addDate(_dayNumber: Int,
@@ -39,5 +42,12 @@ class WeekCalendarData(val weekOfYear: Int) {
                 _isHoliday: Boolean = false)
     {
         daysList.add(DateUnit(_dayNumber, _monthNumber, _yearNumber, _today, _isWeekend, _isHoliday))
+    }
+
+    fun toStringArray(): ArrayList<String> {
+        val res = ArrayList<String>()
+        for (date in daysList)
+            res.add(date.toString())
+        return res
     }
 }

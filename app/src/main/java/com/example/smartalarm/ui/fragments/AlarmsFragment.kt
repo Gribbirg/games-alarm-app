@@ -186,7 +186,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
     private fun getEarliestAlarms() {
         lifecycleScope.launch {
-            viewModel.getEarliestAlarmsForAllWeek()
+             viewModel.getEarliestAlarmsForAllWeek()
         }
     }
 
@@ -202,7 +202,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     }
 
     override fun deleteAlarm(alarm: AlarmSimpleData) {
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             viewModel.deleteAlarmFromDb(alarm)
             setRecyclerData()
             getEarliestAlarms()

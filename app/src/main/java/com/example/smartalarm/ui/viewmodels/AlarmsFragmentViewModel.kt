@@ -30,6 +30,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
 
+
     suspend fun getAlarmsFromDbByDayOfWeek(dayOfWeek: Int?) = withContext(Dispatchers.IO) {
         if (dayOfWeek == null) alarmsList.postValue(ArrayList())
         else {
@@ -43,7 +44,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     suspend fun getEarliestAlarmsForAllWeek() = withContext(Dispatchers.IO) {
-        earliestAlarmsList.postValue(alarmDbRepository.getEarliestAlarmsFromDb(calendarRepository.getDatesForCurrentWeek()))
+        earliestAlarmsList.postValue(alarmDbRepository.getEarliestAlarmsFromDb(weekCalendarData.toStringArray()))
     }
 
     suspend fun setAlarmStateInDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
@@ -74,7 +75,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
             )
             putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
             putStringArrayList("infoCurrentDayOfWeek", getDateOfWeekStringForAllWeek())
-            putStringArrayList("datesOfWeek", calendarRepository.getDatesForCurrentWeek())
+            putStringArrayList("datesOfWeek", weekCalendarData.toStringArray())
             putBoolean("isNew", id == null)
             if (id != null) putLong("alarmId", id)
         }
