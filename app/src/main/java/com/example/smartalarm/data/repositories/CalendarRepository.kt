@@ -2,6 +2,7 @@ package com.example.smartalarm.data.repositories
 
 import android.widget.ArrayAdapter
 import com.example.smartalarm.data.WeekCalendarData
+import com.example.smartalarm.data.db.AlarmSimpleData
 import java.util.Calendar
 
 class CalendarRepository {
@@ -165,3 +166,14 @@ fun getDayOfWeekNameVinit(dayOfWeek: Int) = when (dayOfWeek) {
 }
 
 fun getCurrentYear() = Calendar.getInstance().get(Calendar.YEAR)
+
+fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
+    val list = ArrayList<String>()
+    for (alarm in alarmsList)
+        list.add(
+            if (alarm == null) ""
+            else if (alarm.timeMinute < 10) "${alarm.timeHour}:0${alarm.timeMinute}"
+            else "${alarm.timeHour}:${alarm.timeMinute}"
+        )
+    return list
+}

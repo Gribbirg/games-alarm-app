@@ -2,6 +2,7 @@ package com.example.smartalarm.ui.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -45,11 +46,13 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmCl
             else
                 recordTextView.text = "Нет данных"
 
-            if (currencyAlarmData.activateDate != null)
+            if (currencyAlarmData.activateDate != null) {
                 holder
                     .binding
                     .alarmMaterialCardView
                     .setBackgroundColor(Color.parseColor("#e3e3e3"))
+                holder.binding.recordTextView.visibility = View.GONE
+            }
 
             alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
             alarmOnOffSwitch.setOnClickListener {

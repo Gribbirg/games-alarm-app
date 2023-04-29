@@ -55,13 +55,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
-        val list = ArrayList<String>()
-        for (alarm in alarmsList)
-            list.add(
-                if (alarm == null) ""
-                else "${alarm.timeHour}:${alarm.timeMinute}"
-            )
-        return list
+        return com.example.smartalarm.data.repositories.timesToString(alarmsList)
     }
 
     fun updateToday() {
