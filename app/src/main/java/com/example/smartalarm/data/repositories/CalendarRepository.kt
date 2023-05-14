@@ -6,6 +6,23 @@ import com.example.smartalarm.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import java.util.Calendar
 
+val holidays: ArrayList<ArrayList<Int>> = arrayListOf(
+    arrayListOf(0, 2),
+    arrayListOf(0, 3),
+    arrayListOf(0, 4),
+    arrayListOf(0, 5),
+    arrayListOf(0, 6),
+    arrayListOf(1, 23),
+    arrayListOf(1, 24),
+    arrayListOf(2, 8),
+    arrayListOf(2, 8),
+    arrayListOf(4, 1),
+    arrayListOf(4, 8),
+    arrayListOf(4, 9),
+    arrayListOf(5, 12),
+    arrayListOf(10, 6)
+)
+
 class CalendarRepository {
     private val currentCalendar = Calendar.getInstance()
 
@@ -55,6 +72,17 @@ class CalendarRepository {
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.YEAR)
             )
+
+            for (holiday in holidays) {
+
+                if (
+                    holiday[0] == calendar.get(Calendar.MONTH) &&
+                    holiday[1] == calendar.get(Calendar.DAY_OF_MONTH)
+                )
+                    weekCalendarData.daysList[weekCalendarData.getListLen() - 1].isHoliday = true
+
+            }
+
             calendar.add(Calendar.DATE, 1)
         } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
         calendar.add(Calendar.DATE, -1)

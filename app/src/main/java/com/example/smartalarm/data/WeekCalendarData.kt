@@ -44,6 +44,8 @@ class WeekCalendarData(val weekOfYear: Int) {
         daysList.add(DateUnit(_dayNumber, _monthNumber, _yearNumber, _today, _isWeekend, _isHoliday))
     }
 
+    fun getListLen() = daysList.size
+
     fun toStringArray(): ArrayList<String> {
         val res = ArrayList<String>()
         for (date in daysList)

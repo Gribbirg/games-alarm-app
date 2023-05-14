@@ -103,13 +103,13 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         }
 
         getEarliestAlarms()
-        setDaysNumAndMonth(false)
+        setDaysNumAndMonth()
         setDay()
         setRecyclerData()
         return binding.root
     }
 
-    private fun setDaysNumAndMonth(resetIsNeeded: Boolean = true) {
+    private fun setDaysNumAndMonth() {
         for (i in 0..6) {
             dateViewList[i].numTextView.text =
                 viewModel.weekCalendarData.daysList[i].dayNumber.toString()
@@ -118,6 +118,8 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                     dateViewList[i].setTextsColor(Color.parseColor("#0000FF"))
                 else if (isWeekend)
                     dateViewList[i].setTextsColor(Color.parseColor("#FF0000"))
+                else if (isHoliday)
+                    dateViewList[i].setTextsColor(Color.parseColor("#C00000"))
                 else
                     dateViewList[i].setTextsColor(Color.parseColor("#525252"))
             }
