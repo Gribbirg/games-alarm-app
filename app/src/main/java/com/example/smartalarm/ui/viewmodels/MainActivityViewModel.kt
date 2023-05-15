@@ -10,6 +10,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         return !isCompleted && checkForHoliday() != 0
     }
 
+    fun resetAlertNeed() : Boolean {
+        return checkForHoliday() == 0
+    }
+
     fun getHolidayText() : String =
         when (checkForHoliday()) {
             1 -> "Завтра"

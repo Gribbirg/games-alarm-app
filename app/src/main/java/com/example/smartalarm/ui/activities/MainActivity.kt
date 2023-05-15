@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             AlertDialog.Builder(binding.root.context)
                 .setTitle("Скоро праздник!")
                 .setMessage("${viewModel.getHolidayText()} праздник, не забудьте изменить будильники")
-                .setPositiveButton("Да") { dialog, _ -> dialog.dismiss()}
+                .setPositiveButton("Ок") { dialog, _ -> dialog.dismiss()}
                 .setNegativeButton("Больше не показывать") {dialog, _ ->
                     sharedPreference.edit().apply {
                         putBoolean("is_complete", true)
@@ -58,6 +58,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 .create()
                 .show()
+        }
+
+        if (viewModel.resetAlertNeed()) {
+            sharedPreference.edit().apply {
+                remove("is_complete")
+                apply()
+            }
         }
     }
 }
