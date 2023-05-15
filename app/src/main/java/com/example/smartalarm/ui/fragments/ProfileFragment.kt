@@ -59,6 +59,8 @@ class ProfileFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK)
                 handleResults(GoogleSignIn.getSignedInAccountFromIntent(result.data))
+//            else
+//                Toast.makeText(context, result.resultCode.toString(), Toast.LENGTH_SHORT).show()
         }
 
     private fun singIn() {
