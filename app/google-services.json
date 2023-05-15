@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "659007915598",
+    "project_id": "smartalarm-ccdbb",
+    "storage_bucket": "smartalarm-ccdbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659007915598:android:6ba35fd89d5b7126b7251f",
+        "android_client_info": {
+          "package_name": "com.example.smartalarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659007915598-6iu5nkad81jh3jbigrvi58fj2gqsim8d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartalarm",
+            "certificate_hash": "b8aec96930830a1879c6b62b591f83ada599432e"
+          }
+        },
+        {
+          "client_id": "659007915598-e4f028h8v41d5pqtmbdb5154lqidjboh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVIXeKhBS2hdyuoTYIzCvC-CNvaqZWsek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659007915598-daqavjjpcbvu4d24oo8792h9esra160h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
