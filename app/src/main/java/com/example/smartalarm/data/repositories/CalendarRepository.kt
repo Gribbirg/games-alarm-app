@@ -19,13 +19,13 @@ val holidays: ArrayList<ArrayList<Int>> = arrayListOf(
     arrayListOf(4, 1),
     arrayListOf(4, 8),
     arrayListOf(4, 9),
+    arrayListOf(4, 17),
     arrayListOf(5, 12),
     arrayListOf(10, 6)
 )
 
 class CalendarRepository {
     private val currentCalendar = Calendar.getInstance()
-
 
     fun changeWeek(next: Int) {
         currentCalendar.add(Calendar.WEEK_OF_YEAR, next)
@@ -187,4 +187,21 @@ fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
             else "${alarm.timeHour}:${alarm.timeMinute}"
         )
     return list
+}
+
+fun checkForHoliday() : Int {
+    val calendar = Calendar.getInstance()
+    for (i in 1..2) {
+        for (holiday in holidays) {
+
+            if (
+                holiday[0] == calendar.get(Calendar.MONTH) &&
+                holiday[1] == calendar.get(Calendar.DAY_OF_MONTH)
+            )
+                return i
+
+            calendar.add(Calendar.DATE, 1)
+        }
+    }
+    return 0
 }

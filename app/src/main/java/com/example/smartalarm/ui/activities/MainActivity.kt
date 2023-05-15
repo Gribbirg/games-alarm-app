@@ -17,6 +17,10 @@ import com.example.smartalarm.ui.fragments.ProfileFragment
 import com.example.smartalarm.ui.fragments.RecordsFragment
 import com.example.smartalarm.ui.fragments.SettingsFragment
 import android.app.AlarmManager
+import android.content.Context
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
+import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
+        val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -32,15 +37,27 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.fragment)
             ?.findNavController()
 
-//        val appBarConfiguration = AppBarConfiguration(setOf(
-//            R.id.alarmsFragment,
-//            R.id.recordsFragment,
-//            R.id.profileFragment,
-//            R.id.settingsFragment
-//        ))
-//
-//        setupActionBarWithNavController(navController!!, appBarConfiguration)
-
         binding.bottomNavigationView.setupWithNavController(navController!!)
+
+        val sharedPreference = getSharedPreferences("holiday_is_complete", Context.MODE_PRIVATE)
+
+        val holidayIsComplete = sharedPreference.getBoolean("is_complete", false)
+
+        if (viewModel.holidayAlertNeed(holidayIsComplete)) {
+
+            AlertDialog.Builder(binding.root.context)
+                .setTitle("Скоро праздник!")
+                .setMessage("${viewModel.getHolidayText()} праздник, не забудьте изменить будильники")
+                .setPositiveButton("Да") { dialog, _ -> dialog.dismiss()}
+                .setNegativeButton("Больше не показывать") {dialog, _ ->
+                    sharedPreference.edit().apply {
+                        putBoolean("is_complete", true)
+                        apply()
+                    }
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
     }
 }
