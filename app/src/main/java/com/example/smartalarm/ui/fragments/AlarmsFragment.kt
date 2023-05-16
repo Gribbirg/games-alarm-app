@@ -34,7 +34,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAlarmsBinding.inflate(inflater, container, false)
-
         viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
 
         dateViewList = ArrayList()

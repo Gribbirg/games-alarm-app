@@ -1,6 +1,9 @@
 package com.example.smartalarm.ui.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,8 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.smartalarm.R
+import com.example.smartalarm.data.AccountData
 import com.example.smartalarm.databinding.FragmentProfileBinding
+import com.example.smartalarm.ui.viewmodels.ProfileFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -20,6 +27,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
+    private lateinit var viewModel: ProfileFragmentViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -28,28 +36,41 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[ProfileFragmentViewModel::class.java]
 
         auth = FirebaseAuth.getInstance()
 
-        val googleSignInOptions = GoogleSignInOptions
-            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+        googleSignInClient = GoogleSignIn.getClient(
+            requireActivity(),
+            GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        )
 
-        googleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions)
-
-        binding.authButton.setOnClickListener { singIn() }
-
-        binding.exitButton.setOnClickListener {
-            auth.signOut()
-            googleSignInClient.signOut()
-            setViewAccountData()
+        binding.authButton.setOnClickListener {
+            if (binding.authButton.text == "ВОЙТИ")
+                singIn()
+            else {
+                AlertDialog.Builder(context)
+                    .setTitle("Выход из аккаунта")
+                    .setIcon(R.drawable.baseline_warning_24)
+                    .setMessage("Вы уверены, что хотите выйти из аккаунта?")
+                    .setPositiveButton("Да") { dialog, _ ->
+                        singOut()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Нет") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                    .show()
+            }
         }
 
-        with(auth.currentUser) {
-            if (this != null)
-                setViewAccountData(auth.currentUser?.displayName!!)
+        viewModel.currentUser.observe(viewLifecycleOwner) {
+            setViewAccountData(it)
         }
 
         return binding.root
@@ -58,35 +79,50 @@ class ProfileFragment : Fragment() {
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK)
-                handleResults(GoogleSignIn.getSignedInAccountFromIntent(result.data))
-//            else
-//                Toast.makeText(context, result.resultCode.toString(), Toast.LENGTH_SHORT).show()
+                viewModel.handleAuthResult(
+                    GoogleSignIn.getSignedInAccountFromIntent(
+                        result.data
+                    )
+                )
+            else
+                Toast.makeText(context, result.resultCode.toString(), Toast.LENGTH_SHORT).show()
         }
 
     private fun singIn() {
         launcher.launch(googleSignInClient.signInIntent)
     }
 
-    private fun handleResults(task: Task<GoogleSignInAccount>) {
-        if (task.isSuccessful) {
-            val account: GoogleSignInAccount? = task.result
-            if (account != null)
-                setAccountData(account)
+    private fun singOut() {
+        auth.signOut()
+        googleSignInClient.signOut()
+        setViewAccountData()
+    }
+
+    private fun setViewAccountData(user: AccountData? = null) {
+        if (user == null) {
+            binding.userNameTextView.text = "Войдите в аккаунт Google"
+            binding.userEmailTextView.text = ""
+            Glide.with(requireContext())
+                .load(R.drawable.baseline_no_accounts_24)
+                .into(binding.userPhotoImageView)
+            setAuthButtonState(false)
+        } else {
+            binding.userNameTextView.text = user.name
+            binding.userEmailTextView.text = user.email
+            Glide.with(requireContext()).load(user.photo).into(binding.userPhotoImageView)
+            setAuthButtonState(true)
         }
     }
 
-    private fun setAccountData(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                setViewAccountData(account.displayName!!)
+    private fun setAuthButtonState(enter: Boolean) {
+        with(binding.authButton) {
+            if (enter) {
+                text = "ВЫЙТИ"
+                setTextColor(Color.RED)
             } else {
-                Toast.makeText(requireContext(), it.exception.toString(), Toast.LENGTH_SHORT).show()
+                text = "ВОЙТИ"
+                setTextColor(resources.getColor(R.color.green_main))
             }
         }
-    }
-
-    private fun setViewAccountData(userName: String = "Я собака, ты собака") {
-        binding.userNameTextView.text = userName
     }
 }

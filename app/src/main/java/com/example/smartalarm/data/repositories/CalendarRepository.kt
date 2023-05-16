@@ -19,7 +19,6 @@ val holidays: ArrayList<ArrayList<Int>> = arrayListOf(
     arrayListOf(4, 1),
     arrayListOf(4, 8),
     arrayListOf(4, 9),
-    arrayListOf(4, 17),
     arrayListOf(5, 12),
     arrayListOf(10, 6)
 )
@@ -200,8 +199,9 @@ fun checkForHoliday() : Int {
             )
                 return i
 
-            calendar.add(Calendar.DATE, 1)
+
         }
+        calendar.add(Calendar.DATE, 1)
     }
     return 0
 }
