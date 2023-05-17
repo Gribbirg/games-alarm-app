@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RecordsFragment"
-        android:textSize="26dp"
+        android:textSize="26sp"
         android:layout_gravity="center"/>
 
 </FrameLayout>
