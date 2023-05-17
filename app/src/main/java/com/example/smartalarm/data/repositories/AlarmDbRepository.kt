@@ -1,8 +1,12 @@
 package com.example.smartalarm.data.repositories
 
 import android.util.Log
+import com.example.smartalarm.data.data.AlarmData
+import com.example.smartalarm.data.db.ALL_GAMES
 import com.example.smartalarm.data.db.AlarmSimpleData
+import com.example.smartalarm.data.db.AlarmUserGamesData
 import com.example.smartalarm.data.db.AlarmsDao
+import com.example.smartalarm.data.db.GameData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -23,9 +27,23 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext listAns
         }
 
-    suspend fun getAlarmFromDb(id: Long): AlarmSimpleData =
+    private suspend fun getAlarmFromDb(id: Long): AlarmSimpleData =
         withContext(Dispatchers.IO) {
             return@withContext alarmsDao.getAlarmById(id)
+        }
+
+    suspend fun getAlarmWithGames(id: Long): AlarmData =
+        withContext(Dispatchers.IO) {
+            val alarmSimpleData = getAlarmFromDb(id)
+            val games = alarmsDao.getAllGames()
+            val res: ArrayList<Int> = ArrayList()
+            var con: AlarmUserGamesData?
+
+            for (game in games) {
+                con = alarmsDao.getGamesByAlarmAndGame(id, game.id)
+                res.add(con?.difficulty ?: 0)
+            }
+            return@withContext AlarmData(alarmSimpleData, res)
         }
 
     suspend fun getEarliestAlarmsFromDb(currentDate: ArrayList<String>): ArrayList<AlarmSimpleData?> =
@@ -53,9 +71,10 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext list
         }
 
-    suspend fun insertAlarmToDb(alarm: AlarmSimpleData) =
+    suspend fun insertAlarmToDb(alarm: AlarmData) =
         withContext(Dispatchers.IO) {
-            alarmsDao.insertNewAlarmData(alarm)
+            alarm.alarmSimpleData.id = alarmsDao.insertNewAlarmData(alarm.alarmSimpleData)
+            insertAlarmGame(alarm)
         }
 
     suspend fun updateAlarmInDb(alarm: AlarmSimpleData) =
@@ -63,8 +82,36 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             alarmsDao.updateAlarm(alarm)
         }
 
+    suspend fun updateAlarmInDbWithGames(alarm: AlarmData) =
+        withContext(Dispatchers.IO) {
+            alarmsDao.updateAlarm(alarm.alarmSimpleData)
+            alarmsDao.deleteAlarmsGames(alarm.alarmSimpleData.id)
+            insertAlarmGame(alarm)
+        }
+
+    private suspend fun insertAlarmGame(alarm: AlarmData) =
+        withContext(Dispatchers.IO) {
+            for (i in 1..ALL_GAMES.size) {
+                Log.i("grib", alarm.alarmSimpleData.id.toString())
+                if (alarm.gamesList[i - 1] != 0)
+                    alarmsDao.insertNewAlarmUserGamesData(
+                        AlarmUserGamesData(
+                            idGame = i,
+                            idAlarm = alarm.alarmSimpleData.id,
+                            difficulty = alarm.gamesList[i - 1]
+                        )
+                    )
+            }
+        }
+
     suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) =
         withContext(Dispatchers.IO) {
+            alarmsDao.deleteAlarmsGames(alarm.id)
             alarmsDao.deleteAlarm(alarm)
+        }
+
+    suspend fun getGames(): List<GameData> =
+        withContext(Dispatchers.IO) {
+            return@withContext alarmsDao.getAllGames()
         }
 }

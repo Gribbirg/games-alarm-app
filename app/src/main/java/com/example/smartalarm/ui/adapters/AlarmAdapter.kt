@@ -15,7 +15,7 @@ import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.databinding.AlarmItemBinding
 
 
-class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, val listener: OnAlarmClickListener) :
+class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, private val listener: OnAlarmClickListener) :
     RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     class AlarmViewHolder(val binding: AlarmItemBinding, val listener: OnAlarmClickListener) :

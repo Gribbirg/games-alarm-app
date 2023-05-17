@@ -6,25 +6,32 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "games_table",
+    tableName = "user_games_table",
     indices = [androidx.room.Index("id")],
     foreignKeys = [
         ForeignKey(
             entity = AlarmSimpleData::class,
             parentColumns = ["id"],
             childColumns = ["alarm_id"]
+        ),
+        ForeignKey(
+            entity = GameData::class,
+            parentColumns = ["id"],
+            childColumns = ["game_id"]
         )
     ]
 )
-data class AlarmGamesData (
+data class AlarmUserGamesData(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id : Long = 0L,
+    var id: Long = 0L,
 
     @ColumnInfo(name = "game_id")
     var idGame: Int,
 
     @ColumnInfo(name = "alarm_id")
-    var idAlarm: Int,
+    var idAlarm: Long,
 
-    ) {}
+    @ColumnInfo(name = "difficulty")
+    var difficulty: Int = 1,
+)

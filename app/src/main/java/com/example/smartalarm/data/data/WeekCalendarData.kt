@@ -1,4 +1,4 @@
-package com.example.smartalarm.data
+package com.example.smartalarm.data.data
 
 class WeekCalendarData(val weekOfYear: Int) {
     val daysList = ArrayList<DateUnit>()
@@ -51,5 +51,9 @@ class WeekCalendarData(val weekOfYear: Int) {
         for (date in daysList)
             res.add(date.toString())
         return res
+    }
+
+    override fun toString(): String {
+        return "$daysList $monthList"
     }
 }

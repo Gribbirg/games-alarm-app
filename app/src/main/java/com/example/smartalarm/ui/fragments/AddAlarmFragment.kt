@@ -2,6 +2,7 @@ package com.example.smartalarm.ui.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,23 +57,32 @@ class AddAlarmFragment : Fragment() {
             setInfoText()
         }
 
-        if (!arguments?.getBoolean("isNew")!!) {
-            lifecycleScope.launch {
+        lifecycleScope.launch {
+            if (!arguments?.getBoolean("isNew")!!) {
                 whenStarted {
                     viewModel.currentAlarm = viewModel.getAlarm(arguments?.getLong("alarmId")!!)
+                    viewModel.gamesList = viewModel.currentAlarm!!.gamesList
                     with(binding) {
-                        addAlarmTimePicker.hour = viewModel.currentAlarm!!.timeHour
-                        addAlarmTimePicker.minute = viewModel.currentAlarm!!.timeMinute
+                        addAlarmTimePicker.hour = viewModel.currentAlarm!!.alarmSimpleData.timeHour
+                        addAlarmTimePicker.minute =
+                            viewModel.currentAlarm!!.alarmSimpleData.timeMinute
                         addAlarmMakeRepetitiveSwitch.isChecked =
-                            viewModel.currentAlarm!!.activateDate == null
-                        addAlarmAlarmNameText.setText(viewModel.currentAlarm!!.name)
-                        addAlarmSetBuzzSwitch.isChecked = viewModel.currentAlarm!!.isVibration
+                            viewModel.currentAlarm!!.alarmSimpleData.activateDate == null
+                        addAlarmAlarmNameText.setText(viewModel.currentAlarm!!.alarmSimpleData.name)
+                        addAlarmSetBuzzSwitch.isChecked =
+                            viewModel.currentAlarm!!.alarmSimpleData.isVibration
                         addAlarmGraduallyIncreaseVolumeSwitch.isChecked =
-                            viewModel.currentAlarm!!.isRisingVolume
+                            viewModel.currentAlarm!!.alarmSimpleData.isRisingVolume
                     }
                 }
             }
+            with(arguments?.getIntegerArrayList("games")) {
+                if (this != null)
+                    viewModel.gamesList = this
+            }
         }
+
+
 
         binding.addAlarmSaveButton.setOnClickListener {
             lifecycleScope.launch {
@@ -91,6 +101,15 @@ class AddAlarmFragment : Fragment() {
                 onResume()
             }
             navToAlarmFragment(getNumOfCheckedButton())
+        }
+
+        binding.addAlarmGamesButton.setOnClickListener {
+            val bundle = requireArguments()
+            bundle.putIntegerArrayList("games", viewModel.gamesList)
+
+            Navigation
+                .findNavController(binding.root)
+                .navigate(R.id.action_addAlarmFragment_to_gameChoiceFragment, bundle)
         }
 
         setInfoText()

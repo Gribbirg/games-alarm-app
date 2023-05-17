@@ -5,14 +5,17 @@ import androidx.room.*
 @Dao
 interface AlarmsDao {
 
+    @Insert(entity = GameData::class, onConflict = OnConflictStrategy.IGNORE)
+    fun insertGamesData(games: List<GameData>)
+
     @Insert(entity = AlarmSimpleData::class)
-    fun insertNewAlarmData(alarmSimpleData: AlarmSimpleData)
+    fun insertNewAlarmData(alarmSimpleData: AlarmSimpleData): Long
 
     @Insert(entity = AlarmInfoData::class)
     fun insertNewAlarmInfoData(alarmInfoData: AlarmInfoData)
 
-    @Insert(entity = AlarmGamesData::class)
-    fun insertNewAlarmGamesData(alarmGamesData: AlarmGamesData)
+    @Insert(entity = AlarmUserGamesData::class)
+    fun insertNewAlarmUserGamesData(alarmUserGamesData: AlarmUserGamesData)
 
     @Query("SELECT * FROM alarm_table ORDER BY time_hour, time_minute ASC")
     fun getAlarms(): List<AlarmSimpleData>
@@ -31,4 +34,19 @@ interface AlarmsDao {
 
     @Delete(entity = AlarmSimpleData::class)
     fun deleteAlarm(alarm: AlarmSimpleData)
+
+    @Query("SELECT * FROM user_games_table WHERE alarm_id = :alarmId ORDER BY game_id")
+    fun getGamesByAlarm(alarmId: Long): List<AlarmUserGamesData>
+
+    @Query("SELECT * FROM user_games_table WHERE alarm_id = :alarmId AND game_id = :gameId")
+    fun getGamesByAlarmAndGame(alarmId: Long, gameId: Int): AlarmUserGamesData?
+
+    @Query("SELECT * FROM games_table")
+    fun getAllGames(): List<GameData>
+
+    @Query("SELECT * FROM games_table WHERE id = :id")
+    fun getGameById(id: Int): GameData
+
+    @Query("DELETE FROM user_games_table WHERE alarm_id = :alarmId")
+    fun deleteAlarmsGames(alarmId: Long)
 }

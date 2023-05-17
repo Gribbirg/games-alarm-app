@@ -36,5 +36,17 @@
         <action
             android:id="@+id/action_addAlarmFragment_to_alarmsFragment2"
             app:destination="@id/alarmsFragment" />
+        <action
+            android:id="@+id/action_addAlarmFragment_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameChoiceFragment"
+        android:name="com.example.smartalarm.ui.fragments.GameChoiceFragment"
+        android:label="fragment_game_choice"
+        tools:layout="@layout/fragment_game_choice" >
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_addAlarmFragment"
+            app:destination="@id/addAlarmFragment" />
     </fragment>
 </navigation>

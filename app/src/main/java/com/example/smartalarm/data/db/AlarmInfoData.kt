@@ -3,7 +3,7 @@ package com.example.smartalarm.data.db
 import androidx.room.*
 
 @Entity(
-    tableName = "info_table",
+    tableName = "user_info_table",
     indices = [Index("id")],
     foreignKeys = [
         ForeignKey(
@@ -22,5 +22,5 @@ data class AlarmInfoData(
     var idInfo: Int,
 
     @ColumnInfo(name = "alarm_id")
-    var id_alarm: Int,
+    var idAlarm: Int,
 ) {}

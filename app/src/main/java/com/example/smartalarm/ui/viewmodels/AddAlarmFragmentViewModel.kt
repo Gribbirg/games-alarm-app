@@ -1,7 +1,10 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import com.example.smartalarm.data.data.AlarmData
+import com.example.smartalarm.data.db.ALL_GAMES
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmDbRepository
@@ -10,7 +13,13 @@ import kotlinx.coroutines.withContext
 
 class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
-    var currentAlarm: AlarmSimpleData? = null
+    var currentAlarm: AlarmData? = null
+    var gamesList: ArrayList<Int> = ArrayList()
+
+    init {
+        for (i in ALL_GAMES.indices)
+            gamesList.add(1)
+    }
 
     private val alarmDbRepository = AlarmDbRepository(
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
@@ -37,16 +46,16 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
             recordSeconds = null
         )
         if (currentAlarm == null)
-            alarmDbRepository.insertAlarmToDb(alarm)
+            alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
         else {
-            alarm.id = currentAlarm!!.id
-            alarm.recordSeconds = currentAlarm!!.recordSeconds
-            alarm.recordScore = currentAlarm!!.recordScore
-            alarmDbRepository.updateAlarmInDb(alarm)
+            alarm.id = currentAlarm!!.alarmSimpleData.id
+            alarm.recordSeconds = currentAlarm!!.alarmSimpleData.recordSeconds
+            alarm.recordScore = currentAlarm!!.alarmSimpleData.recordScore
+            alarmDbRepository.updateAlarmInDbWithGames(AlarmData(alarm, gamesList))
         }
     }
 
-    suspend fun getAlarm(id: Long): AlarmSimpleData = withContext(Dispatchers.IO) {
-        return@withContext alarmDbRepository.getAlarmFromDb(id)
+    suspend fun getAlarm(id: Long): AlarmData = withContext(Dispatchers.IO) {
+        return@withContext alarmDbRepository.getAlarmWithGames(id)
     }
 }

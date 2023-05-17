@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.smartalarm.data.data.WeekCalendarData
 
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
@@ -14,14 +15,13 @@ import com.example.smartalarm.data.repositories.getMontNameVinit
 import com.example.smartalarm.data.repositories.getTodayNumInWeek
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.*
 import kotlin.collections.ArrayList
 
 class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     var currentDayOfWeek: Int? = getTodayNumInWeek()
     private val calendarRepository = CalendarRepository()
-    var weekCalendarData = calendarRepository.getWeek()
+    lateinit var weekCalendarData: WeekCalendarData
 
     var alarmsList: MutableLiveData<ArrayList<AlarmSimpleData>> = MutableLiveData()
     var earliestAlarmsList: MutableLiveData<ArrayList<AlarmSimpleData?>> = MutableLiveData()
@@ -30,6 +30,9 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
 
+    fun setWeekData() {
+        weekCalendarData = calendarRepository.getWeek()
+    }
 
     suspend fun getAlarmsFromDbByDayOfWeek(dayOfWeek: Int?) = withContext(Dispatchers.IO) {
         if (dayOfWeek == null) alarmsList.postValue(ArrayList())
@@ -37,7 +40,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
             alarmsList.postValue(
                 alarmDbRepository.getAlarmsFromDbByDayOfWeek(
                     dayOfWeek,
-                    calendarRepository.getDateOfCurrentWeekString(dayOfWeek)
+                    weekCalendarData.daysList[currentDayOfWeek!!].toString()
                 )
             )
         }
@@ -57,10 +60,6 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
         return com.example.smartalarm.data.repositories.timesToString(alarmsList)
-    }
-
-    fun updateToday() {
-        currentDayOfWeek = getTodayNumInWeek()
     }
 
     fun addInfoInformationToBundle(currentBundle: Bundle?, id: Long? = null): Bundle {
@@ -104,11 +103,11 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
                 )
             }:"
 
-    fun getCurrentDateString(dayOfWeek: Int) =
+    private fun getCurrentDateString(dayOfWeek: Int) =
         weekCalendarData.daysList[dayOfWeek].dayNumber.toString() + " " +
                 getMontNameVinit(weekCalendarData.daysList[dayOfWeek].monthNumber)
 
-    fun getCurrentDateOfWeekString(dayOfWeek: Int) =
+    private fun getCurrentDateOfWeekString(dayOfWeek: Int) =
         if (weekCalendarData.daysList[dayOfWeek].today)
             "сегодня"
         else if (calendarRepository.isAhead(dayOfWeek, 1))
@@ -118,14 +117,14 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
         else
             getDayOfWeekNameVinit(dayOfWeek)
 
-    fun getCurrentDateStringForAllWeek(): ArrayList<String> {
+    private fun getCurrentDateStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
         for (i in 0..6)
             list.add(getCurrentDateString(i))
         return list
     }
 
-    fun getDateOfWeekStringForAllWeek(): ArrayList<String> {
+    private fun getDateOfWeekStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
         for (i in 0..6)
             list.add(getCurrentDateOfWeekString(i))

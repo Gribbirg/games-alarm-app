@@ -1,4 +1,4 @@
-package com.example.smartalarm.data
+package com.example.smartalarm.data.data
 
 import android.net.Uri
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

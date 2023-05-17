@@ -4,13 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
+import java.util.concurrent.Executors
 
 @Database(
     entities = [
         AlarmSimpleData::class,
         AlarmInfoData::class,
-        AlarmGamesData::class
-    ], version = 4
+        AlarmUserGamesData::class,
+        GameData::class
+    ],
+    version = 11
 )
 abstract class AlarmsDB : RoomDatabase() {
 
@@ -29,6 +35,15 @@ abstract class AlarmsDB : RoomDatabase() {
                     "AlarmsDb"
                 )
                     .fallbackToDestructiveMigration()
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            Executors.newSingleThreadExecutor().execute {
+                                getInstance(context)?.alarmsDao()?.getAlarms()
+                                getInstance(context)?.alarmsDao()?.insertGamesData(ALL_GAMES)
+                            }
+                        }
+                    })
                     .build()
             }
             return INSTANCE

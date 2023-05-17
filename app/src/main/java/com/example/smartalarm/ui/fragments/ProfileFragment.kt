@@ -3,7 +3,6 @@ package com.example.smartalarm.ui.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,16 +13,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.smartalarm.R
-import com.example.smartalarm.data.AccountData
+import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.databinding.FragmentProfileBinding
 import com.example.smartalarm.ui.viewmodels.ProfileFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding

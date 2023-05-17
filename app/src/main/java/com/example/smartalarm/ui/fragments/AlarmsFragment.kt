@@ -36,6 +36,18 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         binding = FragmentAlarmsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[AlarmsFragmentViewModel::class.java]
 
+        with(arguments?.getIntegerArrayList("currentDay")) {
+            if (this != null) {
+                viewModel.setDate(this)
+            } else {
+                viewModel.setWeekData()
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.getAlarmsFromDbByDayOfWeek(1)
+        }
+
         dateViewList = ArrayList()
 
         with(dateViewList) {
@@ -74,11 +86,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                 Toast.makeText(context, "Выберите день", Toast.LENGTH_LONG).show()
         }
 
-
-        val dayInfo = arguments?.getIntegerArrayList("currentDay")
-        if (dayInfo != null) {
-            viewModel.setDate(dayInfo)
-        }
 
         viewModel.earliestAlarmsList.observe(viewLifecycleOwner) {
             val timesString = viewModel.timesToString(it)
@@ -187,7 +194,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
     private fun getEarliestAlarms() {
         lifecycleScope.launch {
-             viewModel.getEarliestAlarmsForAllWeek()
+            viewModel.getEarliestAlarmsForAllWeek()
         }
     }
 

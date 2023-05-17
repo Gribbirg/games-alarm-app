@@ -1,8 +1,7 @@
 package com.example.smartalarm.data.repositories
 
 import android.util.Log
-import android.widget.ArrayAdapter
-import com.example.smartalarm.data.WeekCalendarData
+import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import java.util.Calendar
 
@@ -24,7 +23,7 @@ val holidays: ArrayList<ArrayList<Int>> = arrayListOf(
 )
 
 class CalendarRepository {
-    private val currentCalendar = Calendar.getInstance()
+    private var currentCalendar = Calendar.getInstance()
 
     fun changeWeek(next: Int) {
         currentCalendar.add(Calendar.WEEK_OF_YEAR, next)
@@ -65,6 +64,7 @@ class CalendarRepository {
         while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
             calendar.add(Calendar.DATE, -1)
 
+        Log.i("grib", "-----------------------------------")
         do {
             weekCalendarData.addDate(
                 calendar.get(Calendar.DAY_OF_MONTH),
@@ -83,8 +83,10 @@ class CalendarRepository {
             }
 
             calendar.add(Calendar.DATE, 1)
+
         } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
         calendar.add(Calendar.DATE, -1)
+
 
         with(weekCalendarData) {
             daysList[5].isWeekend = true
