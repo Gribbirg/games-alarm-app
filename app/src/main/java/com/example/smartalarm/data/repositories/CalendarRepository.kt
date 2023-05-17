@@ -64,7 +64,6 @@ class CalendarRepository {
         while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
             calendar.add(Calendar.DATE, -1)
 
-        Log.i("grib", "-----------------------------------")
         do {
             weekCalendarData.addDate(
                 calendar.get(Calendar.DAY_OF_MONTH),
