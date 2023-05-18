@@ -119,6 +119,7 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
     suspend fun insertRecord(record: RecordsData) =
         withContext(Dispatchers.IO) {
             alarmsDao.insertRecordData(record)
+            alarmsDao.deleteOldRecords()
             val game = alarmsDao.getGameById(record.gameId)
             game.record= record.recordScore
             game.recordDate = record.date

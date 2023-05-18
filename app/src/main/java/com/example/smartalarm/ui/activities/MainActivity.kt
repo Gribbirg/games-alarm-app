@@ -77,13 +77,17 @@ class MainActivity : AppCompatActivity() {
 //            val rep = AlarmDbRepository(
 //                AlarmsDB.getInstance(applicationContext)?.alarmsDao()!!
 //            )
-//            rep.insertRecord(RecordsData(
-//                gameId = 1,
-//                gameName = "Тестовая игра 1",
-//                date = "01.02.2022",
-//                recordScore = 300,
-//                recordTime = "05.20"
-//            ))
+//            for (i in 0..200) {
+//                rep.insertRecord(
+//                    RecordsData(
+//                        gameId = i % 3 + 1,
+//                        gameName = "Тестовая игра 1",
+//                        date = "01.02.$i",
+//                        recordScore = i,
+//                        recordTime = "05.20"
+//                    )
+//                )
+//            }
 //        }
     }
 }

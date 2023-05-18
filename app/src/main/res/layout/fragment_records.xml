@@ -22,7 +22,7 @@
         android:id="@+id/fromSelectionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Откуда: "
+        android:text="Откуда:"
         app:layout_constraintBottom_toTopOf="@id/fromSelectionButtons"
         app:layout_constraintRight_toRightOf="@id/fromSelectionButtons"
         app:layout_constraintLeft_toLeftOf="@id/fromSelectionButtons"
