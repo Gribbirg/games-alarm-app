@@ -17,5 +17,8 @@ data class GameData(
     var record: Int? = null,
 
     @ColumnInfo(name = "record_time")
-    var recordTime: String? = null
+    var recordTime: String? = null,
+
+    @ColumnInfo(name = "record_date")
+    val recordDate: String? = null
 )
