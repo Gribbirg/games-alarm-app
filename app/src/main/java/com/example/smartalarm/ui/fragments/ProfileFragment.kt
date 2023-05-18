@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var viewModel: ProfileFragmentViewModel
-    private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
@@ -33,8 +32,6 @@ class ProfileFragment : Fragment() {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[ProfileFragmentViewModel::class.java]
-
-        auth = FirebaseAuth.getInstance()
 
         googleSignInClient = GoogleSignIn.getClient(
             requireActivity(),
@@ -89,9 +86,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun singOut() {
-        auth.signOut()
+        viewModel.singOut()
         googleSignInClient.signOut()
-        setViewAccountData()
     }
 
     private fun setViewAccountData(user: AccountData? = null) {

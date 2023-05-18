@@ -1,33 +1,16 @@
 package com.example.smartalarm.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.ActivityMainBinding
-import com.example.smartalarm.ui.fragments.AlarmsFragment
-import com.example.smartalarm.ui.fragments.ProfileFragment
-import com.example.smartalarm.ui.fragments.RecordsFragment
-import com.example.smartalarm.ui.fragments.SettingsFragment
-import android.app.AlarmManager
-import android.content.Context
-import android.util.Log
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.example.smartalarm.data.db.AlarmsDB
-import com.example.smartalarm.data.db.RecordsData
-import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
-import kotlinx.coroutines.launch
-
 
 class MainActivity : AppCompatActivity() {
 
