@@ -73,17 +73,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            val rep = AlarmDbRepository(
-                AlarmsDB.getInstance(applicationContext)?.alarmsDao()!!
-            )
-            rep.insertRecord(RecordsData(
-                gameId = 1,
-                gameName = "Тестовая игра 1",
-                date = "01.02.2022",
-                recordScore = 300,
-                recordTime = "05.20"
-            ))
-        }
+//        lifecycleScope.launch {
+//            val rep = AlarmDbRepository(
+//                AlarmsDB.getInstance(applicationContext)?.alarmsDao()!!
+//            )
+//            rep.insertRecord(RecordsData(
+//                gameId = 1,
+//                gameName = "Тестовая игра 1",
+//                date = "01.02.2022",
+//                recordScore = 300,
+//                recordTime = "05.20"
+//            ))
+//        }
     }
 }
