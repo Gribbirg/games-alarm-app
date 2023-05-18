@@ -49,4 +49,13 @@ interface AlarmsDao {
 
     @Query("DELETE FROM user_games_table WHERE alarm_id = :alarmId")
     fun deleteAlarmsGames(alarmId: Long)
+
+    @Insert(entity = RecordsData::class)
+    fun insertRecordData(recordsData: RecordsData)
+
+    @Update(entity = GameData::class)
+    fun updateGame(gameData: GameData)
+
+    @Query("SELECT * FROM records_table")
+    fun getRecords(): List<RecordsData>
 }

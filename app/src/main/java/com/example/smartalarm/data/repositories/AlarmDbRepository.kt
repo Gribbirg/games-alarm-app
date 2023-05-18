@@ -7,6 +7,7 @@ import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmUserGamesData
 import com.example.smartalarm.data.db.AlarmsDao
 import com.example.smartalarm.data.db.GameData
+import com.example.smartalarm.data.db.RecordsData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -113,5 +114,20 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
     suspend fun getGames(): List<GameData> =
         withContext(Dispatchers.IO) {
             return@withContext alarmsDao.getAllGames()
+        }
+
+    suspend fun insertRecord(record: RecordsData) =
+        withContext(Dispatchers.IO) {
+            alarmsDao.insertRecordData(record)
+            val game = alarmsDao.getGameById(record.gameId)
+            game.record= record.recordScore
+            game.recordDate = record.date
+            game.recordTime = record.recordTime
+            alarmsDao.updateGame(game)
+        }
+
+    suspend fun getRecordsByDate(): List<RecordsData> =
+        withContext(Dispatchers.IO) {
+            return@withContext alarmsDao.getRecords()
         }
 }

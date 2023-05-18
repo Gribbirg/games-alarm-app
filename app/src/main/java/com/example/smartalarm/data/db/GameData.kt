@@ -20,5 +20,13 @@ data class GameData(
     var recordTime: String? = null,
 
     @ColumnInfo(name = "record_date")
-    val recordDate: String? = null
-)
+    var recordDate: String? = null
+) {
+    constructor(record: RecordsData) : this(
+        id = 0,
+        name = record.gameName,
+        record = record.recordScore,
+        recordTime = record.recordTime,
+        recordDate = record.date
+    )
+}

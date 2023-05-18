@@ -30,6 +30,10 @@ class RecordsFragment : Fragment() {
         binding.typeSelectionButtons.check(R.id.gamesButton)
         binding.fromSelectionButtons.check(R.id.myButton)
 
+        binding.typeSelectionButtons.addOnButtonCheckedListener { _, _, _ ->
+            viewModel.getRecordsFromDb(getNumOfButtonById())
+        }
+
         viewModel.myRecordsData.observe(viewLifecycleOwner) {
             binding.recordsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
@@ -37,7 +41,16 @@ class RecordsFragment : Fragment() {
             }
         }
 
-        viewModel.getRecordsFromDb(true)
+        viewModel.getRecordsFromDb(0)
         return binding.root
+    }
+
+    private fun getNumOfButtonById(): Int {
+        var res = 0
+        if (binding.typeSelectionButtons.checkedButtonId == R.id.lastsButton)
+            res++
+        if (binding.fromSelectionButtons.checkedButtonId == R.id.allButton)
+            res += 2
+        return res
     }
 }

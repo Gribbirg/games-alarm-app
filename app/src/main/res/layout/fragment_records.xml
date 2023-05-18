@@ -48,7 +48,7 @@
 
         <Button
             style="?attr/materialButtonOutlinedStyle"
-            android:id="@+id/LastsButton"
+            android:id="@+id/lastsButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="Дате"

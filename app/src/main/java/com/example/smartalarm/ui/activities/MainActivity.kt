@@ -18,9 +18,15 @@ import com.example.smartalarm.ui.fragments.RecordsFragment
 import com.example.smartalarm.ui.fragments.SettingsFragment
 import android.app.AlarmManager
 import android.content.Context
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.smartalarm.data.db.AlarmsDB
+import com.example.smartalarm.data.db.RecordsData
+import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,8 +54,8 @@ class MainActivity : AppCompatActivity() {
             AlertDialog.Builder(binding.root.context)
                 .setTitle("Скоро праздник!")
                 .setMessage("${viewModel.getHolidayText()} праздник, не забудьте изменить будильники")
-                .setPositiveButton("Ок") { dialog, _ -> dialog.dismiss()}
-                .setNegativeButton("Больше не показывать") {dialog, _ ->
+                .setPositiveButton("Ок") { dialog, _ -> dialog.dismiss() }
+                .setNegativeButton("Больше не показывать") { dialog, _ ->
                     sharedPreference.edit().apply {
                         putBoolean("is_complete", true)
                         apply()
@@ -65,6 +71,19 @@ class MainActivity : AppCompatActivity() {
                 remove("is_complete")
                 apply()
             }
+        }
+
+        lifecycleScope.launch {
+            val rep = AlarmDbRepository(
+                AlarmsDB.getInstance(applicationContext)?.alarmsDao()!!
+            )
+            rep.insertRecord(RecordsData(
+                gameId = 1,
+                gameName = "Тестовая игра 1",
+                date = "01.02.2022",
+                recordScore = 300,
+                recordTime = "05.20"
+            ))
         }
     }
 }

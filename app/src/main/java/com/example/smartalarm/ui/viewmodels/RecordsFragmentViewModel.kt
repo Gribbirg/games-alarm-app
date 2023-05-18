@@ -14,14 +14,19 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
 
-    val myRecordsData: MutableLiveData<List<GameData>> = MutableLiveData()
+    val myRecordsData: MutableLiveData<ArrayList<GameData>> = MutableLiveData()
 
-    fun getRecordsFromDb(byGames: Boolean) {
+    fun getRecordsFromDb(state: Int) {
         viewModelScope.launch {
-            if (byGames) {
-                myRecordsData.postValue(alarmDbRepository.getGames())
-            } else {
-
+            when (state) {
+                0 -> myRecordsData.postValue(ArrayList(alarmDbRepository.getGames()))
+                1 -> {
+                    val fromDb = alarmDbRepository.getRecordsByDate()
+                    val res: ArrayList<GameData> = ArrayList()
+                    for (record in fromDb)
+                        res.add(GameData(record))
+                    myRecordsData.postValue(res)
+                }
             }
         }
     }
