@@ -60,8 +60,6 @@ class AlarmReceiver: BroadcastReceiver() {
             mediaPlayer!!.start()
         } catch (e: IOException) {
             e.printStackTrace()
-
-            Toast.makeText(context, "AMONGUS POTION AT 3AM", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -70,8 +68,6 @@ class AlarmReceiver: BroadcastReceiver() {
             mediaPlayer!!.stop()
             mediaPlayer!!.reset()
             mediaPlayer!!.release()
-        } else {
-            Toast.makeText(context, "AMONGUS POISON?!??!!?!?!?!", Toast.LENGTH_SHORT).show()
         }
     }
 }

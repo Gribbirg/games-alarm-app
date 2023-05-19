@@ -37,8 +37,8 @@ abstract class AlarmsDB : RoomDatabase() {
                 )
                     .fallbackToDestructiveMigration()
                     .addCallback(object : Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
+                        override fun onOpen(db: SupportSQLiteDatabase) {
+                            super.onOpen(db)
                             Executors.newSingleThreadExecutor().execute {
                                 getInstance(context)?.alarmsDao()?.getAlarms()
                                 getInstance(context)?.alarmsDao()?.insertGamesData(ALL_GAMES)
