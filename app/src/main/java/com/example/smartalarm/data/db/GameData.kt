@@ -1,5 +1,6 @@
 package com.example.smartalarm.data.db
 
+import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -23,7 +24,7 @@ data class GameData(
     var recordDate: String? = null
 ) {
     constructor(record: RecordsData) : this(
-        id = 0,
+        id = record.gameId,
         name = record.gameName,
         record = record.recordScore,
         recordTime = record.recordTime,
@@ -31,7 +32,7 @@ data class GameData(
     )
 
     constructor(str: String) : this() {
-        with(str.split('.')) {
+        with(str.split(';')) {
             id = this[0].toInt()
             name = this[1]
             record = if (this[2] == "null") null else this[2].toInt()
@@ -41,6 +42,34 @@ data class GameData(
     }
 
     override fun toString(): String {
-        return "$id.$name.$record.$recordTime.$recordDate"
+        return "$id;$name;$record;$recordTime;$recordDate"
     }
+
+    fun toStringList(current: String): String {
+        val list = getRecordsList(current)
+        if (list[id - 1] == null)
+            list[id - 1] = this
+        else if (list[id - 1]?.record!! < record!!) {
+            list[id - 1] = this
+        }
+        return arrayToString(list)
+    }
+}
+
+fun arrayToString(list: ArrayList<GameData?>): String {
+    var res = ""
+    for (i in list) {
+        res += i?.toString() ?: "null"
+        res += '/'
+    }
+    return res.substring(0, res.length - 1)
+}
+fun getRecordsList(records: String): ArrayList<GameData?> {
+    val res = ArrayList<GameData?>()
+    for (i in records.split('/')) {
+        res.add(
+            if (i == "null") null else GameData(i)
+        )
+    }
+    return res
 }

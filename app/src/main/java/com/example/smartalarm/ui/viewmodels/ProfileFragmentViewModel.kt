@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 class ProfileFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val authRepository = AuthRepository()
-    private val usersRealtimeDatabaseRepository = UsersRealtimeDatabaseRepository()
+    private val authRepository = AuthRepository
+    private val usersRealtimeDatabaseRepository = UsersRealtimeDatabaseRepository
     val currentUser: MutableLiveData<AccountData?> = MutableLiveData()
 
     init {

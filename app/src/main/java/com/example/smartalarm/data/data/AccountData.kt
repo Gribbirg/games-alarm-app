@@ -13,23 +13,8 @@ class AccountData(
     var email: String? = null,
     var name: String? = null,
     var photo: String? = null,
-    recordsList: ArrayList<GameData?>? = null
+    var records: String = ""
 ) {
-    var records = ""
-
-    init {
-        if (recordsList != null) {
-            for (i in recordsList) {
-                records += i?.toString() ?: "null"
-                records += '/'
-            }
-        } else {
-            for (i in ALL_GAMES.indices) {
-                records += "null/"
-            }
-        }
-    }
-
     constructor(account: FirebaseUser,  recordsList: ArrayList<GameData?>? = null) : this(
         account.uid,
         account.email!!,
@@ -38,13 +23,21 @@ class AccountData(
         recordsList
     )
 
-//    fun getRecordsList(): ArrayList<GameData?> {
-//        val res = ArrayList<GameData?>()
-//        for (i in records.split('/')) {
-//            res.add(
-//                if (i == "null") null else GameData(i)
-//            )
-//        }
-//        return res
-//    }
+    constructor(
+        uid: String? = null,
+        email: String? = null,
+        name: String? = null,
+        photo: String? = null,
+        recordsList: ArrayList<GameData?>? = null
+    ) : this (uid, email, name, photo, "") {
+        if (recordsList != null) {
+            for (i in recordsList) {
+                records += i?.toString() ?: "null"
+                records += '/'
+            }
+        } else {
+            records = "null/"
+        }
+        records = records.substring(0, records.length - 1)
+    }
 }

@@ -6,11 +6,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartalarm.R
+import com.example.smartalarm.data.db.AlarmsDB
+import com.example.smartalarm.data.db.RecordsData
+import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.databinding.ActivityMainBinding
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,21 +61,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        lifecycleScope.launch {
-//            val rep = AlarmDbRepository(
-//                AlarmsDB.getInstance(applicationContext)?.alarmsDao()!!
-//            )
-//            for (i in 0..200) {
-//                rep.insertRecord(
-//                    RecordsData(
-//                        gameId = i % 3 + 1,
-//                        gameName = "Тестовая игра 1",
-//                        date = "01.02.$i",
-//                        recordScore = i,
-//                        recordTime = "05.20"
-//                    )
-//                )
-//            }
-//        }
+        lifecycleScope.launch {
+            val rep = AlarmDbRepository(
+                AlarmsDB.getInstance(applicationContext)?.alarmsDao()!!
+            )
+            for (i in 0..200) {
+                rep.insertRecord(
+                    RecordsData(
+                        gameId = i % 3 + 1,
+                        gameName = "Тестовая игра 1",
+                        date = "01.02.$i",
+                        recordScore = i,
+                        recordTime = "05.20"
+                    )
+                )
+            }
+        }
     }
 }

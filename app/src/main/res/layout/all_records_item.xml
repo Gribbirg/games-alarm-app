@@ -20,12 +20,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/photoRecordHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="@id/gameNameRecordsTextView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="5dp"
+                android:layout_marginTop="15dp"
+                app:cardElevation="5dp">
+
+            <ImageView
+                android:id="@+id/userPhotoRecordImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/userNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/photoRecordHolder"
+                app:layout_constraintTop_toTopOf="@id/photoRecordHolder"
+                tools:text="Я собака"
+                android:textSize="20dp"
+                android:layout_marginStart="15dp"/>
+
             <TextView
                 android:id="@+id/gameNameRecordsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/dateRecordTextView"
                 tools:text="Потряси телефон"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="22dp"
@@ -36,9 +63,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="@id/gameNameRecordsTextView"
-                app:layout_constraintTop_toBottomOf="@id/gameNameRecordsTextView"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="23.10.2023"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
                 android:textSize="20sp"/>
 
             <TextView
@@ -46,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/recordTimeTextView"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginEnd="30dp"
                 android:text="НЕТ"
@@ -57,22 +85,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="@id/recordPointsTextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recordPointsTextView"
+                app:layout_constraintTop_toTopOf="@id/dateRecordTextView"
                 android:text="Нет времени"
                 android:textSize="20sp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/shareButton"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="5dp"
-                android:textColor="@color/red"
-                android:textSize="10sp"
-                android:text="ПОДЕЛИТЬСЯ"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

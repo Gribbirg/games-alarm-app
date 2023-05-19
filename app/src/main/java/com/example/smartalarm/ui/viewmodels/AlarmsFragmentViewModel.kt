@@ -35,7 +35,8 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     suspend fun getAlarmsFromDbByDayOfWeek(dayOfWeek: Int?) = withContext(Dispatchers.IO) {
-        if (dayOfWeek == null) alarmsList.postValue(ArrayList())
+        if (dayOfWeek == null || currentDayOfWeek == null)
+            alarmsList.postValue(ArrayList())
         else {
             alarmsList.postValue(
                 alarmDbRepository.getAlarmsFromDbByDayOfWeek(

@@ -2,14 +2,16 @@ package com.example.smartalarm.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.example.smartalarm.R
 import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.databinding.RecordItemBinding
 
-class MyRecordsAdapter(var data: List<GameData>) :
+class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecordClickListener) :
     RecyclerView.Adapter<MyRecordsAdapter.MyRecordsViewHolder>() {
 
-    class MyRecordsViewHolder(val binding: RecordItemBinding) :
+    class MyRecordsViewHolder(val binding: RecordItemBinding, val listener: OnMyRecordClickListener) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyRecordsViewHolder {
@@ -18,7 +20,7 @@ class MyRecordsAdapter(var data: List<GameData>) :
             parent,
             false
         )
-        return MyRecordsViewHolder(binding)
+        return MyRecordsViewHolder(binding, listener)
     }
 
     override fun getItemCount(): Int {
@@ -26,16 +28,36 @@ class MyRecordsAdapter(var data: List<GameData>) :
     }
 
     override fun onBindViewHolder(holder: MyRecordsViewHolder, position: Int) {
-        val currencyData = data[position]
+        val currentData = data[position]
 
         with(holder.binding) {
-            gameNameRecordsTextView.text = currencyData.name
-            if (currencyData.recordDate != null)
-                dateRecordTextView.text = currencyData.recordDate
-            if (currencyData.record != null)
-                recordPointsTextView.text = currencyData.record.toString()
-            if (currencyData.recordTime != null)
-                recordTimeTextView.text = currencyData.recordTime
+            gameNameRecordsTextView.text = currentData.name
+            if (currentData.recordDate != null)
+                dateRecordTextView.text = currentData.recordDate
+            if (currentData.record != null)
+                recordPointsTextView.text = currentData.record.toString()
+            if (currentData.recordTime != null)
+                recordTimeTextView.text = currentData.recordTime
+
+            shareButton.setOnClickListener {
+                AlertDialog.Builder(holder.binding.root.context)
+                    .setTitle("Поделиться результатом")
+                    .setIcon(R.drawable.baseline_warning_24)
+                    .setMessage("Вы уверены, что хотите поделиться данным результатом? Его смогут увидеть другие пользователи")
+                    .setPositiveButton("Да") { dialog, _ ->
+                        listener.onShareClickListener(currentData)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Нет") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                    .show()
+            }
         }
+    }
+
+    interface OnMyRecordClickListener {
+        fun onShareClickListener(gameData: GameData)
     }
 }
