@@ -1,21 +1,63 @@
 package com.example.smartalarm.ui.activities
 
-import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.ActivityMainBinding
+import com.example.smartalarm.ui.fragments.AlarmsFragment
+import com.example.smartalarm.ui.fragments.ProfileFragment
+import com.example.smartalarm.ui.fragments.RecordsFragment
+import com.example.smartalarm.ui.fragments.SettingsFragment
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.os.Build
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.smartalarm.data.db.AlarmsDB
+import com.example.smartalarm.data.db.RecordsData
+import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
+import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
+    val CHANNEL_ID = "channelID";
+    val CHANNEL_NAME = "channelName";
+    val NOTIFICATION_ID = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createNotificationChannel();
+
+
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Будильник работает!")
+            .setContentText("Нажмите, чтобы продолжить и выключить...")
+            .setSmallIcon(R.drawable.ic_baseline_access_alarm_24)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build()
+
+        val notificationManager = NotificationManagerCompat.from(this)
+
+        notificationManager.notify(NOTIFICATION_ID, notification)
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         setContentView(binding.root)
@@ -72,5 +114,15 @@ class MainActivity : AppCompatActivity() {
 //                )
 //            }
 //        }
+    }
+
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
+            .apply {
+                lightColor = Color.GREEN
+                enableLights(true);
+            }
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel);
     }
 }
