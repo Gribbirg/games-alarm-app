@@ -40,9 +40,8 @@ class AlarmAdapter(var data: ArrayList<AlarmSimpleData>, private val listener: O
                 "${currencyAlarmData.timeHour}:0${currencyAlarmData.timeMinute}"
             alarmNameTextView.text = currencyAlarmData.name
 
-            if (currencyAlarmData.recordSeconds != null)
-                recordTextView.text = "${currencyAlarmData.recordSeconds!!.toInt() / 60}:" +
-                        "${currencyAlarmData.recordSeconds!!.toInt() % 60}"
+            if (currencyAlarmData.recordScore != null)
+                recordTextView.text = "Лучший результат: ${currencyAlarmData.recordScore}"
             else
                 recordTextView.text = "Нет данных"
 
