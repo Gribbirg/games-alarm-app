@@ -11,10 +11,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.databinding.FragmentProfileBinding
+import com.example.smartalarm.ui.adapters.AllRecordsAdapter
 import com.example.smartalarm.ui.viewmodels.ProfileFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -66,7 +68,19 @@ class ProfileFragment : Fragment() {
             setViewAccountData(it)
         }
 
+        viewModel.userRecords.observe(viewLifecycleOwner) {
+            binding.userRecordsRecycler.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = AllRecordsAdapter(it)
+            }
+        }
+
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getUserRecords()
     }
 
     private val launcher =

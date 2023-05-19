@@ -54,7 +54,7 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
                     users.observeForever {
                         val records = mutableListOf<AccountData>()
                         for (user in it) {
-                            for (record in getRecordsList(user.records)) {
+                            for (record in getRecordsList(user.records!!)) {
 
                                 if (record != null) {
 
@@ -71,7 +71,7 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
                                 }
                             }
                         }
-                        records.sortBy { -it.records.split(';')[2].toInt() }
+                        records.sortBy { -it.records!!.split(';')[2].toInt() }
                         allRecordsData.postValue(records)
                     }
                 }
@@ -80,7 +80,6 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun shareRecord(gameData: GameData): Boolean {
-        Log.i("grib", currentUser?.email!!)
         if (currentUser == null) return false
         viewModelScope.launch {
             usersRealtimeDatabaseRepository.updateUserRecords(currentUser!!, gameData)

@@ -43,20 +43,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        createNotificationChannel();
+//        createNotificationChannel();
 
-
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Будильник работает!")
-            .setContentText("Нажмите, чтобы продолжить и выключить...")
-            .setSmallIcon(R.drawable.ic_baseline_access_alarm_24)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
-
-        val notificationManager = NotificationManagerCompat.from(this)
-
-        notificationManager.notify(NOTIFICATION_ID, notification)
+//        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+//            .setContentTitle("Будильник работает!")
+//            .setContentText("Нажмите, чтобы продолжить и выключить...")
+//            .setSmallIcon(R.drawable.ic_baseline_access_alarm_24)
+//            .setPriority(NotificationCompat.PRIORITY_HIGH)
+//            .build()
+//
+//        val notificationManager = NotificationManagerCompat.from(this)
+//
+//        notificationManager.notify(NOTIFICATION_ID, notification)
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]

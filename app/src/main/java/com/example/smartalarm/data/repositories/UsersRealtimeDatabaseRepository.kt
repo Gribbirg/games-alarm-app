@@ -30,6 +30,12 @@ object UsersRealtimeDatabaseRepository {
         }
     }
 
+    suspend fun getUser(uri: String, user: MutableLiveData<AccountData>) = withContext(Dispatchers.IO) {
+        usersDatabase.child(uri).get().addOnSuccessListener {
+            user.postValue(it.getValue(AccountData::class.java))
+        }
+    }
+
     suspend fun getTopRecords(userList: MutableLiveData<List<AccountData>>) =
         withContext(Dispatchers.IO) {
             topRecordsDatabase.addListenerForSingleValueEvent(object : ValueEventListener {

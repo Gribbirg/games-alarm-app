@@ -24,11 +24,6 @@
         android:label="fragment_records"
         tools:layout="@layout/fragment_records" />
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.smartalarm.ui.fragments.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
-    <fragment
         android:id="@+id/addAlarmFragment"
         android:name="com.example.smartalarm.ui.fragments.AddAlarmFragment"
         android:label="fragment_add_alarm"

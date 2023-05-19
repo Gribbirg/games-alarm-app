@@ -48,8 +48,8 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
         if (currentAlarm == null) {
 
             alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
-            val creator = AlarmCreateRepository(getApplication<Application>().applicationContext)
-            alarm?.let(creator::schedule)
+//            val creator = AlarmCreateRepository(getApplication<Application>().applicationContext)
+//            alarm?.let(creator::schedule)
         }
         else {
             alarm.id = currentAlarm!!.alarmSimpleData.id

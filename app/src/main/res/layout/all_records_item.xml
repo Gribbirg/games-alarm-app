@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/recordTimeTextView"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginEnd="30dp"
                 android:text="НЕТ"
@@ -85,7 +85,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="@id/recordPointsTextView"
-                app:layout_constraintTop_toTopOf="@id/dateRecordTextView"
+                app:layout_constraintTop_toBottomOf="@id/recordPointsTextView"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:text="Нет времени"
                 android:textSize="20sp"/>
 

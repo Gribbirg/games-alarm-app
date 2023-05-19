@@ -38,7 +38,7 @@ class AllRecordsAdapter(var data: List<AccountData?>) :
 
             if (currentData != null) {
 
-                val game = GameData(currentData.records)
+                val game = GameData(currentData.records!!)
                 Glide.with(photoRecordHolder.context).load(currentData.photo)
                     .into(userPhotoRecordImageView)
                 userNameTextView.text = currentData.name

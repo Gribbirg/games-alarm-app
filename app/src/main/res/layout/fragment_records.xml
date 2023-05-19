@@ -51,7 +51,7 @@
             android:id="@+id/lastsButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Дате"
+            android:text="ОЧКАМ"
             />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>

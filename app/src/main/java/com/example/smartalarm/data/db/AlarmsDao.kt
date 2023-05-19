@@ -59,6 +59,6 @@ interface AlarmsDao {
     @Update(entity = GameData::class)
     fun updateGame(gameData: GameData)
 
-    @Query("SELECT * FROM records_table ORDER BY id DESC")
+    @Query("SELECT * FROM records_table ORDER BY record_score DESC")
     fun getRecords(): List<RecordsData>
 }

@@ -13,7 +13,7 @@ class AccountData(
     var email: String? = null,
     var name: String? = null,
     var photo: String? = null,
-    var records: String = ""
+    var records: String? = ""
 ) {
     constructor(account: FirebaseUser,  recordsList: ArrayList<GameData?>? = null) : this(
         account.uid,
@@ -38,6 +38,6 @@ class AccountData(
         } else {
             records = "null/"
         }
-        records = records.substring(0, records.length - 1)
+        records = records?.substring(0, records?.length!! - 1)
     }
 }
