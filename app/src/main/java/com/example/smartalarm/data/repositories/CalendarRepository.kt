@@ -145,6 +145,20 @@ class CalendarRepository {
     }
 }
 
+fun getNearestDate(dayOfWeek: Int): ArrayList<Int> {
+    val calendar = Calendar.getInstance()
+    val res = ArrayList<Int>()
+
+    while ((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 != dayOfWeek) {
+        calendar.add(Calendar.DATE, 1)
+    }
+
+    return arrayListOf(
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH) + 1,
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+}
 fun getTodayNumInWeek(): Int {
     return (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) + 5) % 7
 }

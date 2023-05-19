@@ -2,11 +2,11 @@ package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.example.smartalarm.data.alarm.AlarmCreateRepository
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.db.ALL_GAMES
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
-import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,6 +15,7 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
 
     var currentAlarm: AlarmData? = null
     var gamesList: ArrayList<Int> = ArrayList()
+    private val creator = AlarmCreateRepository(application.applicationContext)
 
     init {
         for (i in ALL_GAMES.indices)
@@ -48,8 +49,7 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
         if (currentAlarm == null) {
 
             alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
-//            val creator = AlarmCreateRepository(getApplication<Application>().applicationContext)
-//            alarm?.let(creator::schedule)
+            AlarmData(alarm, gamesList).let(creator::schedule)
         }
         else {
             alarm.id = currentAlarm!!.alarmSimpleData.id

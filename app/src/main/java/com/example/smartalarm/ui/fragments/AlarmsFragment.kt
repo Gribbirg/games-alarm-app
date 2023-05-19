@@ -2,13 +2,13 @@ package com.example.smartalarm.ui.fragments
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.PopupMenu
-import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.motion.widget.OnSwipe
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
