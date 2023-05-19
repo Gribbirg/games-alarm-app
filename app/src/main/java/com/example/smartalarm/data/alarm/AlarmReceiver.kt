@@ -47,13 +47,16 @@ class AlarmReceiver: BroadcastReceiver() {
 
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
-        playAudio(context)
+        playAudio(context, alarmRisingVolume)
     }
 
-    private fun playAudio(context: Context?) {
+    private fun playAudio(context: Context?, isRisingVolume: Boolean) {
         val audioUrl = "https://www.bensound.com/bensound-music/bensound-ukulele.mp3"
         mediaPlayer = MediaPlayer()
-        mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        if (isRisingVolume)
+            mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_ALARM)
+        else
+            mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
 
         try {
             mediaPlayer!!.setDataSource(audioUrl)
