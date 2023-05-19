@@ -1,6 +1,9 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context.NOTIFICATION_SERVICE
 import androidx.lifecycle.AndroidViewModel
 import com.example.smartalarm.data.alarm.AlarmCreateRepository
 import com.example.smartalarm.data.data.AlarmData
@@ -20,6 +23,15 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
     init {
         for (i in ALL_GAMES.indices)
             gamesList.add(1)
+
+        val id = "smartalarm";
+        val name = "channelName"
+        val descriptionText = "channelDesc"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val mChannel = NotificationChannel(id, name, importance)
+        mChannel.description = descriptionText
+        val notificationManager = application.applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
     }
 
     private val alarmDbRepository = AlarmDbRepository(

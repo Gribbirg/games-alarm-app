@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 data class AlarmData(
     var alarmSimpleData: AlarmSimpleData,
-    var gamesList: ArrayList<Int>
+    var gamesList: ArrayList<Int> = arrayListOf()
 ) {
     var localDateTime: LocalDateTime
 

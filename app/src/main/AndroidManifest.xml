@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE"
         tools:node="remove" />
@@ -27,6 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartAlarm"
         tools:targetApi="31">
+
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true">
@@ -40,8 +40,12 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".ui.activities.CountActivity"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:exported="false" />
 
-        <receiver android:name="com.example.smartalarm.data.alarm.AlarmReceiver"/>
+        <receiver android:name=".data.alarm.AlarmReceiver" />
     </application>
 
 </manifest>

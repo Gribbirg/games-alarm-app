@@ -4,6 +4,8 @@ import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.smartalarm.data.alarm.AlarmCreateRepository
+import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.WeekCalendarData
 
 import com.example.smartalarm.data.db.AlarmSimpleData
@@ -21,6 +23,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     var currentDayOfWeek: Int? = getTodayNumInWeek()
     private val calendarRepository = CalendarRepository()
+    private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
     lateinit var weekCalendarData: WeekCalendarData
 
     var alarmsList: MutableLiveData<ArrayList<AlarmSimpleData>> = MutableLiveData()
@@ -53,6 +56,11 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     suspend fun setAlarmStateInDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         alarmDbRepository.updateAlarmInDb(alarm)
+        if (alarm.isOn) {
+            alarmCreateRepository.schedule(AlarmData(alarm))
+        } else {
+            alarmCreateRepository.cancel(AlarmData(alarm))
+        }
     }
 
     suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {

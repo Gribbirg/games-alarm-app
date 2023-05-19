@@ -37,24 +37,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    val CHANNEL_ID = "channelID";
-    val CHANNEL_NAME = "channelName";
-    val NOTIFICATION_ID = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        createNotificationChannel();
-
-//        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setContentTitle("Будильник работает!")
-//            .setContentText("Нажмите, чтобы продолжить и выключить...")
-//            .setSmallIcon(R.drawable.ic_baseline_access_alarm_24)
-//            .setPriority(NotificationCompat.PRIORITY_HIGH)
-//            .build()
-//
-//        val notificationManager = NotificationManagerCompat.from(this)
-//
-//        notificationManager.notify(NOTIFICATION_ID, notification)
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
@@ -112,15 +96,5 @@ class MainActivity : AppCompatActivity() {
 //                )
 //            }
 //        }
-    }
-
-    private fun createNotificationChannel() {
-        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
-            .apply {
-                lightColor = Color.GREEN
-                enableLights(true);
-            }
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.createNotificationChannel(channel);
     }
 }

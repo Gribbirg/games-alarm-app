@@ -22,7 +22,7 @@ class AlarmCreateRepository(
 
     override fun schedule(item: AlarmData) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("EXTRA MESSAGE", "${item.alarmSimpleData.name} ${item.localDateTime}")
+            putExtra("alarm id", item.alarmSimpleData.id)
         }
         Log.i("grib", (item.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000).toString())
         val pendingIntent = PendingIntent.getBroadcast(
@@ -42,7 +42,7 @@ class AlarmCreateRepository(
         alarmManager.cancel(
             PendingIntent.getBroadcast(
                 context,
-                item.hashCode(),
+                item.alarmSimpleData.id.toInt(),
                 Intent(context, AlarmReceiver::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             )
