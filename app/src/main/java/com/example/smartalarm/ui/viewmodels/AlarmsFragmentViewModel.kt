@@ -4,7 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.smartalarm.data.alarm.AlarmCreateRepository
+import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.WeekCalendarData
 
