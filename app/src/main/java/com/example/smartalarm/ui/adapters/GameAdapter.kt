@@ -28,22 +28,22 @@ class GameAdapter(var data: ArrayList<AlarmGameData>, private val listener: OnGa
     }
 
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
-        val currencyData = data[position]
+        val currentData = data[position]
 
         with(holder.binding) {
 
-            gameNameTextView.text = currencyData.name
-            difficultyButton.text = when (currencyData.difficulty) {
+            gameNameTextView.text = currentData.name
+            difficultyButton.text = when (currentData.difficulty) {
                 1 -> "Лёгкая"
                 2 -> "Средняя"
                 3 -> "Сложная"
                 else -> ""
             }
-            onOffSwitch.isChecked = currencyData.isOn
+            onOffSwitch.isChecked = currentData.isOn
 
             onOffSwitch.setOnClickListener {
-                currencyData.isOn = onOffSwitch.isChecked
-                holder.listener.onOnOffSwitchClickListener(currencyData)
+                currentData.isOn = onOffSwitch.isChecked
+                holder.listener.onOnOffSwitchClickListener(currentData)
             }
 
             difficultyButton.setOnClickListener {
@@ -52,27 +52,31 @@ class GameAdapter(var data: ArrayList<AlarmGameData>, private val listener: OnGa
                 menu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.easyItem -> {
-                            currencyData.difficulty = 1
+                            currentData.difficulty = 1
                             difficultyButton.text = "Лёгкая"
-                            holder.listener.onChangeDifficultyClickListener(currencyData)
+                            holder.listener.onChangeDifficultyClickListener(currentData)
                             true
                         }
                         R.id.middleItem -> {
-                            currencyData.difficulty = 2
+                            currentData.difficulty = 2
                             difficultyButton.text = "Средняя"
-                            holder.listener.onChangeDifficultyClickListener(currencyData)
+                            holder.listener.onChangeDifficultyClickListener(currentData)
                             true
                         }
                         R.id.hardItem -> {
-                            currencyData.difficulty = 3
+                            currentData.difficulty = 3
                             difficultyButton.text = "Сложная"
-                            holder.listener.onChangeDifficultyClickListener(currencyData)
+                            holder.listener.onChangeDifficultyClickListener(currentData)
                             true
                         }
                         else -> true
                     }
                 }
                 menu.show()
+            }
+
+            testGameButton.setOnClickListener {
+                holder.listener.testButtonClickListener(currentData)
             }
         }
     }
@@ -82,6 +86,8 @@ class GameAdapter(var data: ArrayList<AlarmGameData>, private val listener: OnGa
         fun onOnOffSwitchClickListener(gameData: AlarmGameData)
 
         fun onChangeDifficultyClickListener(gameData: AlarmGameData)
+
+        fun testButtonClickListener(gameData: AlarmGameData)
 
     }
 }

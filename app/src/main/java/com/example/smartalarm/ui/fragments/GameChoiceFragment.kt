@@ -53,4 +53,20 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
     override fun onChangeDifficultyClickListener(gameData: AlarmGameData) {
         viewModel.games[gameData.id - 1].difficulty = gameData.difficulty
     }
+
+    override fun testButtonClickListener(gameData: AlarmGameData) {
+        val bundle = requireArguments()
+        val navController = Navigation.findNavController(binding.root)
+        when (gameData.id) {
+            1 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_calcGameFragment2,
+                bundle
+            )
+
+            2 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_taskGameFragment2,
+                bundle
+            )
+        }
+    }
 }

@@ -22,6 +22,7 @@ class GameChoiceViewModel(application: Application) : AndroidViewModel(applicati
     fun getGames(gamesDifficulties: ArrayList<Int>?) {
         viewModelScope.launch {
             val gamesDataList = alarmDbRepository.getGames()
+            games = ArrayList()
             for (i in ALL_GAMES.indices) {
                 games.add(AlarmGameData(gamesDataList[i], gamesDifficulties?.get(i) ?: 0))
             }
