@@ -53,6 +53,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
                 usersRealtimeDatabaseRepository.getUser(currentUser.value?.uid!!, user)
                 user.observeForever {
                     val records = mutableListOf<AccountData>()
+                    if (it != null) {
                         for (record in getRecordsList(it.records!!)) {
                             if (record != null) {
                                 records.add(
@@ -65,9 +66,12 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
                                     )
                                 )
                             }
+                        }
+                        records.sortBy { -it.records!!.split(';')[2].toInt() }
+                        userRecords.postValue(records)
+                    } else {
+                        userRecords.postValue(listOf())
                     }
-                    records.sortBy { -it.records!!.split(';')[2].toInt() }
-                    userRecords.postValue(records)
                 }
             }
         } else {
