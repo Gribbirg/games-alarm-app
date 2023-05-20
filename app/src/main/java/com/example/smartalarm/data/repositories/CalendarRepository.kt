@@ -145,6 +145,13 @@ class CalendarRepository {
     }
 }
 
+fun getTodayDate(): String {
+    val currentCalendar = Calendar.getInstance()
+    return "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +
+            "${currentCalendar.get(Calendar.MONTH) + 1}." +
+            "${currentCalendar.get(Calendar.YEAR)}"
+}
+
 fun getNearestDate(dayOfWeek: Int): ArrayList<Int> {
     val calendar = Calendar.getInstance()
     val res = ArrayList<Int>()

@@ -43,6 +43,7 @@ class CalcGameFragment : Fragment() {
                 val bundle = requireArguments()
                 bundle.putString("time", viewModel.timeCurrentString.value)
                 bundle.putInt("score", viewModel.finishScore())
+                bundle.putInt("game id", 1)
 
                 if (requireArguments().getBoolean("test"))
                     Navigation.findNavController(binding.root)

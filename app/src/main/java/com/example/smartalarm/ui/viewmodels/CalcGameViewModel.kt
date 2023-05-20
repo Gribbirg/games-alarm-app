@@ -37,7 +37,7 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun finishScore(): Int {
-        score += ((600 - ((timeStarted - timeCurrent) / 1000)) * difficulty).toInt()
+        score += ((600 - ((System.currentTimeMillis() - timeStarted) / 1000)) * difficulty).toInt()
         return score
     }
 
