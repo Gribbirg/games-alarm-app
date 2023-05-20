@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.util.Log
@@ -54,9 +55,21 @@ class AlarmReceiver: BroadcastReceiver() {
         val audioUrl = "https://www.bensound.com/bensound-music/bensound-ukulele.mp3"
         mediaPlayer = MediaPlayer()
         if (isRisingVolume)
-            mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_ALARM)
+            mediaPlayer!!.setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build()
+            )
         else
-            mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            mediaPlayer!!.setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
+            )
+
+        mediaPlayer!!.isLooping = true
 
         try {
             mediaPlayer!!.setDataSource(audioUrl)
