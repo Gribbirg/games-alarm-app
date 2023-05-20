@@ -61,4 +61,16 @@ interface AlarmsDao {
 
     @Query("SELECT * FROM records_table ORDER BY record_score DESC")
     fun getRecords(): List<RecordsData>
+
+    @Query("DELETE FROM user_games_table")
+    fun deleteAllUserGames()
+
+    @Query("DELETE FROM games_table")
+    fun deleteAllGames()
+
+    @Query("DELETE FROM records_table")
+    fun deleteAllRecords()
+
+    @Query("DELETE FROM alarm_table")
+    fun deleteAllAlarms()
 }

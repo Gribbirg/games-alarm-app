@@ -57,7 +57,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     suspend fun setAlarmStateInDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         alarmDbRepository.updateAlarmInDb(alarm)
         if (alarm.isOn) {
-            alarmCreateRepository.schedule(AlarmData(alarm))
+            alarmCreateRepository.create(AlarmData(alarm))
         } else {
             alarmCreateRepository.cancel(AlarmData(alarm))
         }
@@ -65,6 +65,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         alarmDbRepository.deleteAlarmFromDb(alarm)
+        AlarmData(alarm, arrayListOf()).let(alarmCreateRepository::cancel)
     }
 
     fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {

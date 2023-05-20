@@ -159,6 +159,12 @@ fun getNearestDate(dayOfWeek: Int): ArrayList<Int> {
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 }
+
+fun dateListFromString(string: String): ArrayList<Int> {
+    val list = string.split('.')
+    return arrayListOf(list[2].toInt(), list[1].toInt(), list[0].toInt())
+}
+
 fun getTodayNumInWeek(): Int {
     return (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) + 5) % 7
 }
@@ -203,7 +209,7 @@ fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
     return list
 }
 
-fun checkForHoliday() : Int {
+fun checkForHoliday(): Int {
     val calendar = Calendar.getInstance()
     for (i in 1..2) {
         for (holiday in holidays) {
