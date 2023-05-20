@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "659007915598",
+    "firebase_url": "https://smartalarm-ccdbb-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "smartalarm-ccdbb",
     "storage_bucket": "smartalarm-ccdbb.appspot.com"
   },
@@ -13,6 +14,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "659007915598-1pmtv0q7anil39k8ma9aarv932ssc5ab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartalarm",
+            "certificate_hash": "af1fc898613f6a649b13f985995420dc83c5acd6"
+          }
+        },
+        {
+          "client_id": "659007915598-9nei9n3ji5poammm1ilse9eoveacolcq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartalarm",
+            "certificate_hash": "4c7c013a2589011115a4168fba43302567e4b0a1"
+          }
+        },
         {
           "client_id": "659007915598-l1ssufm3eimqonqioe2kkd77uroa2por.apps.googleusercontent.com",
           "client_type": 1,
