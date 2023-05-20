@@ -7,27 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.smartalarm.R
+import com.example.smartalarm.databinding.FragmentGameResultBinding
 import com.example.smartalarm.ui.viewmodels.GameResultViewModel
 
 class GameResultFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = GameResultFragment()
-    }
-
+    private lateinit var binding: FragmentGameResultBinding
     private lateinit var viewModel: GameResultViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_game_result, container, false)
-    }
+        binding = FragmentGameResultBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(GameResultViewModel::class.java)
-        // TODO: Use the ViewModel
+        return inflater.inflate(R.layout.fragment_game_result, container, false)
     }
 
 }

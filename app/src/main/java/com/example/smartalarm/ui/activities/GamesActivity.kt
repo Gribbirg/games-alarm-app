@@ -19,4 +19,8 @@ class GamesActivity : AppCompatActivity() {
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         vibrator.cancel()
     }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+    }
 }

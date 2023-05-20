@@ -56,7 +56,7 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
 
     override fun testButtonClickListener(gameData: AlarmGameData) {
         val bundle = requireArguments()
-        bundle.putBoolean("is test", true)
+        bundle.putBoolean("test", true)
         bundle.putInt("difficulty", gameData.difficulty)
         val navController = Navigation.findNavController(binding.root)
         when (gameData.id) {

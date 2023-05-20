@@ -27,6 +27,7 @@ class LoadGameFragment : Fragment() {
         viewModel.currentGame.observe(viewLifecycleOwner) {
             val bundle = Bundle()
             bundle.putLong("alarm id", requireActivity().intent.getLongExtra("alarm id", -1))
+            bundle.putBoolean("test", false)
             bundle.putInt("difficulty", it[1])
 
             val navController = Navigation.findNavController(binding.root)
