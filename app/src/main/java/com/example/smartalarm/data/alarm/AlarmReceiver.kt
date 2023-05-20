@@ -9,9 +9,15 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.getSystemService
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.activities.GamesActivity
 import java.io.IOException
@@ -48,11 +54,19 @@ class AlarmReceiver: BroadcastReceiver() {
 
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
-        playAudio(context, alarmRisingVolume)
+        playAudio(context, alarmRisingVolume, alarmVibration)
     }
 
-    private fun playAudio(context: Context?, isRisingVolume: Boolean) {
-        val audioUrl = "https://www.bensound.com/bensound-music/bensound-ukulele.mp3"
+    private fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean) {
+        val audioUrl = "https://vgmsite.com/soundtracks/pixel-gun-3d-2014-ios-gamerip/mggwsgzyfq/Arena%20Background.mp3"
+
+        if (vibrationRequired)
+        {
+            val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
+            val v = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            v.vibrate(pattern, 0)
+        }
+
         mediaPlayer = MediaPlayer()
         if (isRisingVolume)
             mediaPlayer!!.setAudioAttributes(
