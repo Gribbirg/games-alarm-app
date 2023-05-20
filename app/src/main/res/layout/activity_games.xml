@@ -6,13 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.GamesActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerGames"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="ВСТАВАААААААААААААЙ"/>
+        tools:layout="@layout/fragment_load_game"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_game_graph"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

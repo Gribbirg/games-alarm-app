@@ -43,5 +43,38 @@
         <action
             android:id="@+id/action_gameChoiceFragment_to_addAlarmFragment"
             app:destination="@id/addAlarmFragment" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_calcGameFragment2"
+            app:destination="@id/calcGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_taskGameFragment2"
+            app:destination="@id/taskGameFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/calcGameFragment2"
+        android:name="com.example.smartalarm.ui.fragments.CalcGameFragment"
+        android:label="fragment_calc_game"
+        tools:layout="@layout/fragment_calc_game" >
+        <action
+            android:id="@+id/action_calcGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameResultFragment2"
+        android:name="com.example.smartalarm.ui.fragments.GameResultFragment"
+        android:label="fragment_game_result"
+        tools:layout="@layout/fragment_game_result" >
+        <action
+            android:id="@+id/action_gameResultFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskGameFragment2"
+        android:name="com.example.smartalarm.ui.fragments.TaskGameFragment"
+        android:label="fragment_task_game"
+        tools:layout="@layout/fragment_task_game" >
+        <action
+            android:id="@+id/action_taskGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
     </fragment>
 </navigation>

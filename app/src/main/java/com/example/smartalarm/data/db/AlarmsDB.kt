@@ -1,6 +1,7 @@
 package com.example.smartalarm.data.db
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -44,7 +45,7 @@ abstract class AlarmsDB : RoomDatabase() {
                             Executors.newSingleThreadExecutor().execute {
 
                                 val dao = getInstance(context)?.alarmsDao()!!
-                                val games = dao.getAlarms()
+                                val games = dao.getAllGames()
                                 if (games.size != ALL_GAMES.size){
                                     dao.deleteAllUserGames()
                                     dao.deleteAllRecords()

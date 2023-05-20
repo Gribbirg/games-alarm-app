@@ -22,9 +22,9 @@ class AlarmReceiver: BroadcastReceiver() {
         val alarmId = intent?.getLongExtra("alarm id", 0L) ?: return
         val alarmRisingVolume = intent.getBooleanExtra("alarm rising volume", false)
         val alarmVibration = intent.getBooleanExtra("alarm vibration", false)
-        Log.i("alarm", alarmId.toString())
-        Log.i("alarm", alarmRisingVolume.toString())
-        Log.i("alarm", alarmVibration.toString())
+        Log.i("alarm", "Alarm id: $alarmId")
+        Log.i("alarm", "Rising volume: $alarmRisingVolume")
+        Log.i("alarm", "Vibration: $alarmVibration")
 
         val intentToActivity = Intent(context, GamesActivity::class.java)
         intentToActivity.putExtra("alarm id", alarmId)

@@ -152,7 +152,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15sp"
                 android:layout_marginBottom="10sp"
-                android:text="@string/addAlarmChooseMelodyButton" />
+                android:text="@string/addAlarmChooseMelodyButton"
+                android:visibility="gone"/>
 
             <Switch
                 android:id="@+id/addAlarmSetBuzzSwitch"
@@ -181,7 +182,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15sp"
-                android:text="@string/addAlarmInformationButton" />
+                android:text="@string/addAlarmInformationButton"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/addAlarmGamesButton"

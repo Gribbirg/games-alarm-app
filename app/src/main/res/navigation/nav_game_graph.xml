@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_game_graph"
+    app:startDestination="@id/loadGameFragment">
+    <fragment
+        android:id="@+id/loadGameFragment"
+        android:name="com.example.smartalarm.ui.fragments.LoadGameFragment"
+        android:label="fragment_load_game"
+        tools:layout="@layout/fragment_load_game" >
+        <action
+            android:id="@+id/action_loadGameFragment_to_calcGameFragment"
+            app:destination="@id/calcGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_taskGameFragment"
+            app:destination="@id/taskGameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calcGameFragment"
+        android:name="com.example.smartalarm.ui.fragments.CalcGameFragment"
+        android:label="fragment_calc_game"
+        tools:layout="@layout/fragment_calc_game" >
+        <action
+            android:id="@+id/action_calcGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskGameFragment"
+        android:name="com.example.smartalarm.ui.fragments.TaskGameFragment"
+        android:label="fragment_task_game"
+        tools:layout="@layout/fragment_task_game" >
+        <action
+            android:id="@+id/action_taskGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameResultFragment"
+        android:name="com.example.smartalarm.ui.fragments.GameResultFragment"
+        android:label="fragment_game_result"
+        tools:layout="@layout/fragment_game_result" />
+</navigation>
