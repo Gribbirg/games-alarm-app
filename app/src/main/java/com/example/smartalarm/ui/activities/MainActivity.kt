@@ -10,7 +10,6 @@ import com.example.smartalarm.databinding.ActivityMainBinding
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,6 +20,7 @@ import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
 class MainActivity : AppCompatActivity() {
 
     private val NOTIFICATION_REQUEST_CODE = 100;
+    private val VIBRATION_REQUEST_CODE = 101;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,10 @@ class MainActivity : AppCompatActivity() {
             checkPermission(NOTIFICATION_REQUEST_CODE,
                 android.Manifest.permission.POST_NOTIFICATIONS,
                 "показ уведомлений")
+
+            checkPermission(VIBRATION_REQUEST_CODE,
+                android.Manifest.permission.VIBRATE,
+                "вибрацию")
         }
 
         val binding = ActivityMainBinding.inflate(layoutInflater)

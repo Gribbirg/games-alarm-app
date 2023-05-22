@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
+import com.example.smartalarm.data.receivers.AlarmReceiver
 import com.example.smartalarm.databinding.FragmentGameResultBinding
 import com.example.smartalarm.ui.viewmodels.GameResultViewModel
 import kotlin.system.exitProcess
@@ -21,6 +22,9 @@ class GameResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        AlarmReceiver.stopAudio(context)
+
         binding = FragmentGameResultBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[GameResultViewModel::class.java]
 

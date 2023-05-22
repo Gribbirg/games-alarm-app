@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Vibrator
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -16,7 +17,17 @@ import java.io.IOException
 
 class AlarmReceiver: BroadcastReceiver() {
 
-    var mediaPlayer: MediaPlayer? = null
+    companion object {
+        var mediaPlayer: MediaPlayer? = null
+
+        fun stopAudio(context: Context?) {
+            if (mediaPlayer!!.isPlaying) {
+                mediaPlayer!!.release()
+                mediaPlayer = null
+            }
+        }
+    }
+
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.i("alarm", "Alarm on start!")
         val alarmId = intent?.getLongExtra("alarm id", 0L) ?: return
@@ -28,12 +39,21 @@ class AlarmReceiver: BroadcastReceiver() {
 
         val intentToActivity = Intent(context, GamesActivity::class.java)
         intentToActivity.putExtra("alarm id", alarmId)
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            alarmId.toInt(),
-            intentToActivity,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(
+                context,
+                alarmId.toInt(),
+                intentToActivity,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+        } else {
+            PendingIntent.getActivity(
+                context,
+                alarmId.toInt(),
+                intentToActivity,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
 
         val notificationBuilder = NotificationCompat.Builder(context!!, "smartalarm")
             .setSmallIcon(R.drawable.baseline_alarm_24)
@@ -83,14 +103,6 @@ class AlarmReceiver: BroadcastReceiver() {
             mediaPlayer!!.start()
         } catch (e: IOException) {
             e.printStackTrace()
-        }
-    }
-
-    private fun pauseAudio(context: Context?) {
-        if (mediaPlayer!!.isPlaying) {
-            mediaPlayer!!.stop()
-            mediaPlayer!!.reset()
-            mediaPlayer!!.release()
         }
     }
 }
