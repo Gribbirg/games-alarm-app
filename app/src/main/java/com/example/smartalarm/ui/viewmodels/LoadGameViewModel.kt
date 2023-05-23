@@ -33,7 +33,7 @@ class LoadGameViewModel(application: Application) : AndroidViewModel(application
                     alarm.gamesList[gamesActive[iGame]]
                 )
             )
-            Log.i("game", "Chose game: ${currentGame.value}")
+            Log.i("game", "Choose game: ${currentGame.value}")
         }
     }
 

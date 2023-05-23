@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Context.ALARM_SERVICE
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import com.example.smartalarm.data.receivers.AlarmReceiver
 import com.example.smartalarm.data.data.AlarmData
@@ -38,14 +39,25 @@ class AlarmCreateRepository(
     }
     fun cancel(alarm: AlarmData) {
         Log.i("alarm", "Alarm on delete!")
-        alarmManager.cancel(
-            PendingIntent.getBroadcast(
-                context,
-                alarm.alarmSimpleData.id.toInt(),
-                Intent(context, AlarmReceiver::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            alarmManager.cancel(
+                PendingIntent.getBroadcast(
+                    context,
+                    alarm.alarmSimpleData.id.toInt(),
+                    Intent(context, AlarmReceiver::class.java),
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                )
             )
-        )
+        } else {
+            alarmManager.cancel(
+                PendingIntent.getBroadcast(
+                    context,
+                    alarm.alarmSimpleData.id.toInt(),
+                    Intent(context, AlarmReceiver::class.java),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            )
+        }
     }
 
     fun update(alarm: AlarmData) {

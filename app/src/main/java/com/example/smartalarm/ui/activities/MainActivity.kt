@@ -4,41 +4,36 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.ActivityMainBinding
-import com.example.smartalarm.ui.fragments.AlarmsFragment
-import com.example.smartalarm.ui.fragments.ProfileFragment
-import com.example.smartalarm.ui.fragments.RecordsFragment
-import com.example.smartalarm.ui.fragments.SettingsFragment
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
+import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.example.smartalarm.data.db.AlarmsDB
-import com.example.smartalarm.data.db.RecordsData
-import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
-import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
 
+    private val NOTIFICATION_REQUEST_CODE = 100;
+    private val VIBRATION_REQUEST_CODE = 101;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkPermission(NOTIFICATION_REQUEST_CODE,
+                android.Manifest.permission.POST_NOTIFICATIONS,
+                "показ уведомлений")
+
+            checkPermission(VIBRATION_REQUEST_CODE,
+                android.Manifest.permission.VIBRATE,
+                "вибрацию")
+        }
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
@@ -95,5 +90,31 @@ class MainActivity : AppCompatActivity() {
 //                )
 //            }
 //        }
+    }
+
+    private fun checkPermission(requestCode: Int, permission: String, name: String) {
+        when {
+            ContextCompat.checkSelfPermission(applicationContext,
+                permission) == PackageManager.PERMISSION_GRANTED -> {}
+
+            shouldShowRequestPermissionRationale(permission) -> {
+
+                val builder = AlertDialog.Builder(this)
+                builder.apply {
+                    setMessage("Для корректной работы приложения необходимо разрешение на $name.")
+                    setTitle("Необходимо разрешение")
+                    setPositiveButton("Разрешить") { dialog, which ->
+                        ActivityCompat.requestPermissions(this@MainActivity,
+                            arrayOf(permission),
+                            requestCode)
+                    }
+                }
+
+                val dialog = builder.create()
+                dialog.show()
+            }
+
+            else -> ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
+        }
     }
 }
