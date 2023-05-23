@@ -3,7 +3,6 @@ package com.example.smartalarm
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import androidx.appcompat.app.AppCompatDelegate
 
 class App : Application() {
     override fun onCreate() {

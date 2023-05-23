@@ -45,9 +45,16 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
         score -= 10
     }
 
+    fun checkResult(sumResult: String, multResult: String): Boolean {
+        return sumResult != "" &&
+                multResult != "" &&
+                sumResult.toInt() == arifData.sumResult &&
+                multResult.toInt() == arifData.multResult
+    }
+
     fun generateRandom() {
-        arifData = when(difficulty) {
-            1 ->  ArifData(
+        arifData = when (difficulty) {
+            1 -> ArifData(
                 arrayListOf(
                     (1..10).random(),
                     (1..100).random()
@@ -57,6 +64,7 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
                     (2..10).random()
                 )
             )
+
             2 -> ArifData(
                 arrayListOf(
                     (1..100).random(),
@@ -67,6 +75,7 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
                     (11..99).random()
                 )
             )
+
             3 -> ArifData(
                 arrayListOf(
                     (1..100).random(),
@@ -79,6 +88,7 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
                     (2..9).random()
                 )
             )
+
             else -> ArifData(arrayListOf(), arrayListOf())
         }
     }

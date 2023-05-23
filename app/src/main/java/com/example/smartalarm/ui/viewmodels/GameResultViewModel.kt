@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.RecordsData
+import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.getTodayDate
 import kotlinx.coroutines.launch
@@ -15,6 +16,8 @@ class GameResultViewModel(application: Application) : AndroidViewModel(applicati
     private val alarmDbRepository = AlarmDbRepository(
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
+
+    private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
 
     fun setGameResult(alarmId: Long, gameId: Int, score: Int, time: String) {
         viewModelScope.launch {
@@ -30,6 +33,9 @@ class GameResultViewModel(application: Application) : AndroidViewModel(applicati
                 ),
                 alarm
             )
+            if (alarm.alarmSimpleData.activateDate == null) {
+                alarmCreateRepository.create(alarm)
+            }
         }
     }
 
