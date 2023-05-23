@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private val NOTIFICATION_REQUEST_CODE = 100;
     private val VIBRATION_REQUEST_CODE = 101;
+    private val READ_EXTERNAL_STORAGE = 102;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
             checkPermission(VIBRATION_REQUEST_CODE,
                 android.Manifest.permission.VIBRATE,
                 "вибрацию")
+
+            checkPermission(READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                "чтение файлов для выбора мелодии")
         }
 
         val binding = ActivityMainBinding.inflate(layoutInflater)

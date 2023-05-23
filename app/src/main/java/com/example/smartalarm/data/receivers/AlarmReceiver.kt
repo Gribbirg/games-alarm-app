@@ -14,6 +14,8 @@ import androidx.core.app.NotificationManagerCompat
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.activities.GamesActivity
 import java.io.IOException
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class AlarmReceiver: BroadcastReceiver() {
 
@@ -98,9 +100,11 @@ class AlarmReceiver: BroadcastReceiver() {
         mediaPlayer!!.isLooping = true
 
         try {
+
             mediaPlayer!!.setDataSource(audioUrl)
             mediaPlayer!!.prepare()
             mediaPlayer!!.start()
+
         } catch (e: IOException) {
             e.printStackTrace()
         }
