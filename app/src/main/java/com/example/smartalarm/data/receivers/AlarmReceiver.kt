@@ -23,7 +23,7 @@ class AlarmReceiver: BroadcastReceiver() {
         var mediaPlayer: MediaPlayer? = null
 
         fun stopAudio(context: Context?) {
-            if (mediaPlayer!!.isPlaying) {
+            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
                 mediaPlayer!!.release()
                 mediaPlayer = null
             }
@@ -100,7 +100,6 @@ class AlarmReceiver: BroadcastReceiver() {
         mediaPlayer!!.isLooping = true
 
         try {
-
             mediaPlayer!!.setDataSource(audioUrl)
             mediaPlayer!!.prepare()
             mediaPlayer!!.start()
