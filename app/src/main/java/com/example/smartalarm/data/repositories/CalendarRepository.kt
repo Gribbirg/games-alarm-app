@@ -152,14 +152,20 @@ fun getTodayDate(): String {
             "${currentCalendar.get(Calendar.YEAR)}"
 }
 
-fun getNearestDate(dayOfWeek: Int): ArrayList<Int> {
+fun getNearestDate(dayOfWeek: Int, timeMinute: Int, timeHours: Int): ArrayList<Int> {
     val calendar = Calendar.getInstance()
-    val res = ArrayList<Int>()
 
+    if (
+        calendar.get(Calendar.HOUR_OF_DAY) > timeHours ||
+        calendar.get(Calendar.HOUR_OF_DAY) == timeHours && calendar.get(Calendar.MINUTE) >= timeMinute
+    )
+        calendar.add(Calendar.DATE, 1)
+    Log.i("calendar", 'h' + calendar.get(Calendar.HOUR_OF_DAY).toString())
+    Log.i("calendar", 'm' + calendar.get(Calendar.MINUTE).toString())
     while ((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 != dayOfWeek) {
         calendar.add(Calendar.DATE, 1)
     }
-
+    Log.i("calendar", "Alarm Date:" + calendar.get(Calendar.DATE).toString())
     return arrayListOf(
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH) + 1,

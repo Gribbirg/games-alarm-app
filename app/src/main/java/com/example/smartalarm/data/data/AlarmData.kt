@@ -13,7 +13,12 @@ data class AlarmData(
 
     init {
         val date =
-            if (alarmSimpleData.activateDate == null) getNearestDate(alarmSimpleData.dayOfWeek)
+            if (alarmSimpleData.activateDate == null)
+                getNearestDate(
+                    alarmSimpleData.dayOfWeek,
+                    alarmSimpleData.timeMinute,
+                    alarmSimpleData.timeHour
+                )
             else dateListFromString(alarmSimpleData.activateDate!!)
 
         localDateTime = LocalDateTime.of(

@@ -2,6 +2,7 @@ package com.example.smartalarm.ui.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,29 +36,44 @@ class CalcGameFragment : Fragment() {
         binding.multTextView.text = viewModel.arifData.multText
 
         binding.calcResultCheckButton.setOnClickListener {
-            if (
-                binding.sumEditText.text.toString().toInt() == viewModel.arifData.sumResult &&
-                binding.multEditText.text.toString().toInt() == viewModel.arifData.multResult
-            ) {
+            checkResult()
+        }
 
-                val bundle = requireArguments()
-                bundle.putString("time", viewModel.timeCurrentString.value)
-                bundle.putInt("score", viewModel.finishScore())
-                bundle.putInt("game id", 1)
-
-                if (requireArguments().getBoolean("test"))
-                    Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_calcGameFragment2_to_gameResultFragment2, bundle)
-                else
-                    Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_calcGameFragment_to_gameResultFragment, bundle)
-
-            } else {
-                Toast.makeText(context, "Неправильно!", Toast.LENGTH_SHORT).show()
-                viewModel.mistake()
+        binding.multEditText.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
+                if (binding.sumEditText.text.isNotEmpty()) {
+                    binding.calcResultCheckButton.performClick()
+                }
+                return@setOnKeyListener true
             }
+            false
         }
 
         return binding.root
+    }
+
+    private fun checkResult() {
+        if (viewModel.checkResult(
+                binding.sumEditText.text.toString(),
+                binding.multEditText.text.toString()
+            )
+        ) {
+
+            val bundle = requireArguments()
+            bundle.putString("time", viewModel.timeCurrentString.value)
+            bundle.putInt("score", viewModel.finishScore())
+            bundle.putInt("game id", 1)
+
+            if (requireArguments().getBoolean("test"))
+                Navigation.findNavController(binding.root)
+                    .navigate(R.id.action_calcGameFragment2_to_gameResultFragment2, bundle)
+            else
+                Navigation.findNavController(binding.root)
+                    .navigate(R.id.action_calcGameFragment_to_gameResultFragment, bundle)
+
+        } else {
+            Toast.makeText(context, "Неправильно!", Toast.LENGTH_SHORT).show()
+            viewModel.mistake()
+        }
     }
 }
