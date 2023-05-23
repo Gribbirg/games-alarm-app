@@ -39,15 +39,15 @@ class CalcGameFragment : Fragment() {
             checkResult()
         }
 
-        binding.multEditText.setOnKeyListener { _, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
-                if (binding.sumEditText.text.isNotEmpty()) {
-                    binding.calcResultCheckButton.performClick()
-                }
-                return@setOnKeyListener true
-            }
-            false
-        }
+//        binding.multEditText.setOnKeyListener { _, keyCode, event ->
+//            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
+//                if (binding.sumEditText.text.isNotEmpty()) {
+//                    binding.calcResultCheckButton.performClick()
+//                }
+//                return@setOnKeyListener true
+//            }
+//            false
+//        }
 
         return binding.root
     }

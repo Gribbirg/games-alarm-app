@@ -18,6 +18,7 @@ val holidays: ArrayList<ArrayList<Int>> = arrayListOf(
     arrayListOf(4, 1),
     arrayListOf(4, 8),
     arrayListOf(4, 9),
+    arrayListOf(4, 22),
     arrayListOf(5, 12),
     arrayListOf(10, 6)
 )
