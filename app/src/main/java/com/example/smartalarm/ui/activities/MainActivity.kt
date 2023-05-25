@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         setContentView(binding.root)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         val navController = supportFragmentManager
             .findFragmentById(R.id.fragment)
