@@ -1,10 +1,6 @@
 package com.example.smartalarm.data.data
 
-import android.net.Uri
-import com.example.smartalarm.data.db.ALL_GAMES
 import com.example.smartalarm.data.db.GameData
-import com.example.smartalarm.data.db.RecordsData
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseUser
 
 class AccountData(

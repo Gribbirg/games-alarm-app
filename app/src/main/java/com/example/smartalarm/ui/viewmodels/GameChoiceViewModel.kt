@@ -1,13 +1,11 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AlarmGameData
-import com.example.smartalarm.data.db.ALL_GAMES
+import com.example.smartalarm.data.constants.ALL_GAMES
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import kotlinx.coroutines.launch

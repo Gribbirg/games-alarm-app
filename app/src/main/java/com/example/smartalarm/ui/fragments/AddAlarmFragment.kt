@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
+import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.ui.viewmodels.AddAlarmFragmentViewModel
 import com.example.smartalarm.databinding.FragmentAddAlarmBinding
 import kotlinx.coroutines.launch
@@ -40,39 +41,15 @@ class AddAlarmFragment : Fragment() {
         binding = FragmentAddAlarmBinding.inflate(inflater, container, false)
 
         binding.addAlarmDaysToggleGroup.check(
-            when (arguments?.getIntegerArrayList("currentDay")!![0]) {
-                0 -> R.id.addAlarmMondayButton
-                1 -> R.id.addAlarmTuesdayButton
-                2 -> R.id.addAlarmWednesdayButton
-                3 -> R.id.addAlarmThursdayButton
-                4 -> R.id.addAlarmFridayButton
-                5 -> R.id.addAlarmSaturdayButton
-                6 -> R.id.addAlarmSundayButton
-                else -> 0
-            }
+            getDayOfWeekButtonByNum(requireArguments().getIntegerArrayList("currentDay")!![0])
         )
-
-        binding.addAlarmDaysToggleGroup.addOnButtonCheckedListener { _, _, _ ->
-            setInfoText()
-        }
 
         lifecycleScope.launch {
             if (!arguments?.getBoolean("isNew")!!) {
                 whenStarted {
                     viewModel.currentAlarm = viewModel.getAlarm(arguments?.getLong("alarmId")!!)
                     viewModel.gamesList = viewModel.currentAlarm!!.gamesList
-                    with(binding) {
-                        addAlarmTimePicker.hour = viewModel.currentAlarm!!.alarmSimpleData.timeHour
-                        addAlarmTimePicker.minute =
-                            viewModel.currentAlarm!!.alarmSimpleData.timeMinute
-                        addAlarmMakeRepetitiveSwitch.isChecked =
-                            viewModel.currentAlarm!!.alarmSimpleData.activateDate == null
-                        addAlarmAlarmNameText.setText(viewModel.currentAlarm!!.alarmSimpleData.name)
-                        addAlarmSetBuzzSwitch.isChecked =
-                            viewModel.currentAlarm!!.alarmSimpleData.isVibration
-                        addAlarmGraduallyIncreaseVolumeSwitch.isChecked =
-                            viewModel.currentAlarm!!.alarmSimpleData.isRisingVolume
-                    }
+                    setStateFromAlarm(viewModel.currentAlarm!!.alarmSimpleData)
                 }
             }
             with(arguments?.getIntegerArrayList("games")) {
@@ -81,21 +58,17 @@ class AddAlarmFragment : Fragment() {
             }
         }
 
+        with(requireArguments().getStringArrayList("state")) {
+            if (this != null) {
+                setStateFromAlarm(AlarmSimpleData(this))
+            }
+        }
 
 
         binding.addAlarmSaveButton.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.insertOrUpdateAlarmToDb(
-                    binding.addAlarmTimePicker.hour,
-                    binding.addAlarmTimePicker.minute,
-                    getNumOfCheckedButton(),
-                    binding.addAlarmAlarmNameText.text.toString(),
-                    binding.addAlarmSetBuzzSwitch.isChecked,
-                    binding.addAlarmGraduallyIncreaseVolumeSwitch.isChecked,
-                    if (binding.addAlarmMakeRepetitiveSwitch.isChecked)
-                        null
-                    else
-                        arguments?.getStringArrayList("datesOfWeek")?.get(getNumOfCheckedButton())
+                    getAlarmFromState()
                 )
                 onResume()
             }
@@ -105,16 +78,33 @@ class AddAlarmFragment : Fragment() {
         binding.addAlarmGamesButton.setOnClickListener {
             val bundle = requireArguments()
             bundle.putIntegerArrayList("games", viewModel.gamesList)
+            bundle.putStringArrayList("state", getAlarmFromState().toStringArray())
 
             Navigation
                 .findNavController(binding.root)
                 .navigate(R.id.action_addAlarmFragment_to_gameChoiceFragment, bundle)
         }
 
+        binding.addAlarmDaysToggleGroup.addOnButtonCheckedListener { _, _, _ ->
+            setInfoText()
+        }
+
         setInfoText()
 
         return binding.root
     }
+
+    private fun getDayOfWeekButtonByNum(num: Int): Int =
+        when (num) {
+            0 -> R.id.addAlarmMondayButton
+            1 -> R.id.addAlarmTuesdayButton
+            2 -> R.id.addAlarmWednesdayButton
+            3 -> R.id.addAlarmThursdayButton
+            4 -> R.id.addAlarmFridayButton
+            5 -> R.id.addAlarmSaturdayButton
+            6 -> R.id.addAlarmSundayButton
+            else -> 0
+        }
 
     private fun setInfoText() {
         val buttonNum = getNumOfCheckedButton()
@@ -150,5 +140,37 @@ class AddAlarmFragment : Fragment() {
                 R.id.action_addAlarmFragment_to_alarmsFragment2,
                 bundle
             )
+    }
+
+    private fun getAlarmFromState(): AlarmSimpleData {
+        return AlarmSimpleData(
+            timeHour = binding.addAlarmTimePicker.hour,
+            timeMinute = binding.addAlarmTimePicker.minute,
+            dayOfWeek = getNumOfCheckedButton(),
+            name = if (binding.addAlarmAlarmNameText.text.toString() == "")
+                "Будильник"
+            else
+                binding.addAlarmAlarmNameText.text.toString(),
+            isVibration = binding.addAlarmSetBuzzSwitch.isChecked,
+            isRisingVolume = binding.addAlarmGraduallyIncreaseVolumeSwitch.isChecked,
+            activateDate = if (binding.addAlarmMakeRepetitiveSwitch.isChecked)
+                null
+            else
+                arguments?.getStringArrayList("datesOfWeek")?.get(getNumOfCheckedButton()),
+            recordScore = null,
+            recordSeconds = null
+        )
+    }
+
+    private fun setStateFromAlarm(alarm: AlarmSimpleData) {
+        with(binding) {
+            addAlarmTimePicker.hour = alarm.timeHour
+            addAlarmTimePicker.minute = alarm.timeMinute
+            addAlarmMakeRepetitiveSwitch.isChecked = alarm.activateDate == null
+            addAlarmAlarmNameText.setText(alarm.name)
+            addAlarmSetBuzzSwitch.isChecked = alarm.isVibration
+            addAlarmGraduallyIncreaseVolumeSwitch.isChecked = alarm.isRisingVolume
+            addAlarmDaysToggleGroup.check(getDayOfWeekButtonByNum(alarm.dayOfWeek))
+        }
     }
 }

@@ -39,4 +39,35 @@ data class AlarmSimpleData(
 
     @ColumnInfo(name = "is_on")
     var isOn: Boolean = true
-)
+) {
+
+    constructor(strList: ArrayList<String>) : this(
+        strList[0].toLong(),
+        strList[1],
+        strList[2].toInt(),
+        strList[3].toInt(),
+        strList[4].toInt(),
+        if (strList[5] == "null") null else strList[5],
+        if (strList[6] == "null") null else strList[6].toInt(),
+        if (strList[7] == "null") null else strList[7],
+        strList[8].toBoolean(),
+        strList[9].toBoolean(),
+        strList[10].toBoolean()
+    )
+
+    fun toStringArray(): ArrayList<String> {
+        return arrayListOf(
+            id.toString(),
+            name,
+            timeHour.toString(),
+            timeMinute.toString(),
+            dayOfWeek.toString(),
+            activateDate.toString(),
+            recordScore.toString(),
+            recordSeconds.toString(),
+            isVibration.toString(),
+            isRisingVolume.toString(),
+            isOn.toString()
+            )
+    }
+}

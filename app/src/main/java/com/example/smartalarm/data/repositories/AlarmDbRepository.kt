@@ -2,7 +2,7 @@ package com.example.smartalarm.data.repositories
 
 import android.util.Log
 import com.example.smartalarm.data.data.AlarmData
-import com.example.smartalarm.data.db.ALL_GAMES
+import com.example.smartalarm.data.constants.ALL_GAMES
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmUserGamesData
 import com.example.smartalarm.data.db.AlarmsDao

@@ -1,27 +1,10 @@
 package com.example.smartalarm.data.repositories
 
 import android.util.Log
+import com.example.smartalarm.data.constants.HOLIDAYS
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import java.util.Calendar
-
-val holidays: ArrayList<ArrayList<Int>> = arrayListOf(
-    arrayListOf(0, 2),
-    arrayListOf(0, 3),
-    arrayListOf(0, 4),
-    arrayListOf(0, 5),
-    arrayListOf(0, 6),
-    arrayListOf(1, 23),
-    arrayListOf(1, 24),
-    arrayListOf(2, 8),
-    arrayListOf(2, 8),
-    arrayListOf(4, 1),
-    arrayListOf(4, 8),
-    arrayListOf(4, 9),
-    arrayListOf(4, 22),
-    arrayListOf(5, 12),
-    arrayListOf(10, 6)
-)
 
 class CalendarRepository {
     private var currentCalendar = Calendar.getInstance()
@@ -72,11 +55,12 @@ class CalendarRepository {
                 calendar.get(Calendar.YEAR)
             )
 
-            for (holiday in holidays) {
+            for (holiday in HOLIDAYS) {
 
                 if (
                     holiday[0] == calendar.get(Calendar.MONTH) &&
-                    holiday[1] == calendar.get(Calendar.DAY_OF_MONTH)
+                    holiday[1] == calendar.get(Calendar.DAY_OF_MONTH) &&
+                    holiday[2] == calendar.get(Calendar.YEAR)
                 )
                     weekCalendarData.daysList[weekCalendarData.getListLen() - 1].isHoliday = true
 
@@ -226,11 +210,12 @@ fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
 fun checkForHoliday(): Int {
     val calendar = Calendar.getInstance()
     for (i in 1..2) {
-        for (holiday in holidays) {
+        for (holiday in HOLIDAYS) {
 
             if (
                 holiday[0] == calendar.get(Calendar.MONTH) &&
-                holiday[1] == calendar.get(Calendar.DAY_OF_MONTH)
+                holiday[1] == calendar.get(Calendar.DAY_OF_MONTH) &&
+                holiday[2] == calendar.get(Calendar.YEAR)
             )
                 return i
 
