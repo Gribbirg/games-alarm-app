@@ -48,6 +48,7 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = MyRecordsAdapter(it, this@RecordsFragment)
             }
+            showErrorText(if (it.isEmpty()) 1 else 0)
         }
 
         viewModel.allRecordsData.observe(viewLifecycleOwner) {
@@ -55,11 +56,17 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = AllRecordsAdapter(it)
             }
+            showErrorText(if (it.isEmpty()) 2 else 0)
         }
 
         viewModel.getRecordsFromDb(0)
         setupChange()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupChange()
     }
 
     private fun getNumOfButtonById(): Int {
@@ -69,6 +76,20 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
         if (binding.fromSelectionButtons.checkedButtonId == R.id.allButton)
             res += 2
         return res
+    }
+
+    private fun showErrorText(type: Int = 0) {
+        when (type) {
+            0 -> binding.recordsErrorTextView.visibility = View.GONE
+            1 -> {
+                binding.recordsErrorTextView.visibility = View.VISIBLE
+                binding.recordsErrorTextView.text = "Нет данных"
+            }
+            2 -> {
+                binding.recordsErrorTextView.visibility = View.VISIBLE
+                binding.recordsErrorTextView.text = "Войдите в аккаунт!"
+            }
+        }
     }
 
     private fun setupChange() {

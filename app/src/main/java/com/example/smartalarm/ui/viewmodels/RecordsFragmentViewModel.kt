@@ -45,34 +45,42 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
                 }
 
                 2 -> {
-                    usersRealtimeDatabaseRepository.getTopRecords(allRecordsData)
+                    if (currentUser != null) {
+                        usersRealtimeDatabaseRepository.getTopRecords(allRecordsData)
+                    } else {
+                        allRecordsData.postValue(listOf())
+                    }
                 }
 
                 3 -> {
-                    val users = MutableLiveData<List<AccountData>>()
-                    usersRealtimeDatabaseRepository.getAllUsers(users)
-                    users.observeForever {
-                        val records = mutableListOf<AccountData>()
-                        for (user in it) {
-                            for (record in getRecordsList(user.records!!)) {
+                    if (currentUser != null) {
+                        val users = MutableLiveData<List<AccountData>>()
+                        usersRealtimeDatabaseRepository.getAllUsers(users)
+                        users.observeForever {
+                            val records = mutableListOf<AccountData>()
+                            for (user in it) {
+                                for (record in getRecordsList(user.records!!)) {
 
-                                if (record != null) {
+                                    if (record != null) {
 
-                                 records.add(
-                                     AccountData(
-                                         user.uid,
-                                         user.email,
-                                         user.name,
-                                         user.photo,
-                                         record.toString()
-                                     )
-                                 )
+                                        records.add(
+                                            AccountData(
+                                                user.uid,
+                                                user.email,
+                                                user.name,
+                                                user.photo,
+                                                record.toString()
+                                            )
+                                        )
 
+                                    }
                                 }
                             }
+                            records.sortBy { -it.records!!.split(';')[2].toInt() }
+                            allRecordsData.postValue(records)
                         }
-                        records.sortBy { -it.records!!.split(';')[2].toInt() }
-                        allRecordsData.postValue(records)
+                    } else {
+                        allRecordsData.postValue(listOf())
                     }
                 }
             }
