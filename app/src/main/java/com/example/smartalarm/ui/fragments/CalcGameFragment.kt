@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentCalcGameBinding
@@ -17,6 +19,22 @@ class CalcGameFragment : Fragment() {
 
     private lateinit var binding: FragmentCalcGameBinding
     private lateinit var viewModel: CalcGameViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    Navigation.findNavController(binding.root)
+                        .navigate(
+                            R.id.action_gameChoiceFragment_to_addAlarmFragment,
+                            requireArguments(),
+                            NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                        )
+                }
+            })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,16 +57,6 @@ class CalcGameFragment : Fragment() {
             checkResult()
         }
 
-//        binding.multEditText.setOnKeyListener { _, keyCode, event ->
-//            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
-//                if (binding.sumEditText.text.isNotEmpty()) {
-//                    binding.calcResultCheckButton.performClick()
-//                }
-//                return@setOnKeyListener true
-//            }
-//            false
-//        }
-
         return binding.root
     }
 
@@ -66,10 +74,18 @@ class CalcGameFragment : Fragment() {
 
             if (requireArguments().getBoolean("test"))
                 Navigation.findNavController(binding.root)
-                    .navigate(R.id.action_calcGameFragment2_to_gameResultFragment2, bundle)
+                    .navigate(
+                        R.id.action_calcGameFragment2_to_gameResultFragment2,
+                        bundle,
+                        NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                    )
             else
                 Navigation.findNavController(binding.root)
-                    .navigate(R.id.action_calcGameFragment_to_gameResultFragment, bundle)
+                    .navigate(
+                        R.id.action_calcGameFragment_to_gameResultFragment,
+                        bundle,
+                        NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                    )
 
         } else {
             Toast.makeText(context, "Неправильно!", Toast.LENGTH_SHORT).show()

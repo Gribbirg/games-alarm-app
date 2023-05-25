@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.data.db.AlarmSimpleData
@@ -82,7 +83,11 @@ class AddAlarmFragment : Fragment() {
 
             Navigation
                 .findNavController(binding.root)
-                .navigate(R.id.action_addAlarmFragment_to_gameChoiceFragment, bundle)
+                .navigate(
+                    R.id.action_addAlarmFragment_to_gameChoiceFragment,
+                    bundle,
+                    NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                )
         }
 
         binding.addAlarmDaysToggleGroup.addOnButtonCheckedListener { _, _, _ ->
@@ -138,7 +143,8 @@ class AddAlarmFragment : Fragment() {
         Navigation.findNavController(binding.root)
             .navigate(
                 R.id.action_addAlarmFragment_to_alarmsFragment2,
-                bundle
+                bundle,
+                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
             )
     }
 

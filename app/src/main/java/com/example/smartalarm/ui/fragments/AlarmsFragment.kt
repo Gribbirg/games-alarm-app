@@ -11,11 +11,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
 import com.example.smartalarm.data.db.AlarmSimpleData
-import com.example.smartalarm.data.receivers.AlarmReceiver
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
@@ -185,11 +185,14 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         if (bundle == null)
             Navigation.findNavController(binding.root).navigate(
                 R.id.action_alarmsFragment_to_addAlarmFragment,
+                null,
+                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
             )
         else
             Navigation.findNavController(binding.root).navigate(
                 R.id.action_alarmsFragment_to_addAlarmFragment,
-                bundle
+                bundle,
+                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
             )
     }
 

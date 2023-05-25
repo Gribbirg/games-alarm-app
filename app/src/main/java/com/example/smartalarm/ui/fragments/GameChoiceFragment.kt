@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.ui.viewmodels.GameChoiceViewModel
@@ -19,6 +21,22 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
 
     private lateinit var viewModel: GameChoiceViewModel
     private lateinit var binding: FragmentGameChoiceBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    Navigation.findNavController(binding.root)
+                        .navigate(
+                            R.id.action_gameChoiceFragment_to_addAlarmFragment,
+                            requireArguments(),
+                            NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                        )
+                }
+            })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +58,11 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
             val bundle = requireArguments()
             bundle.putIntegerArrayList("games", viewModel.getDifficultiesList())
             Navigation.findNavController(binding.root)
-                .navigate(R.id.action_gameChoiceFragment_to_addAlarmFragment, bundle)
+                .navigate(
+                    R.id.action_gameChoiceFragment_to_addAlarmFragment,
+                    bundle,
+                    NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                )
         }
 
         return binding.root
@@ -62,12 +84,14 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
         when (gameData.id) {
             1 -> navController.navigate(
                 R.id.action_gameChoiceFragment_to_calcGameFragment2,
-                bundle
+                bundle,
+                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
             )
 
             2 -> navController.navigate(
                 R.id.action_gameChoiceFragment_to_taskGameFragment2,
-                bundle
+                bundle,
+                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
             )
         }
     }

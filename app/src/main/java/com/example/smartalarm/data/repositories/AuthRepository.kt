@@ -13,23 +13,21 @@ object AuthRepository {
     val currentAccount : MutableLiveData<FirebaseUser?> = MutableLiveData()
 
     init {
-        getCurrentUser()
-    }
-    private fun getCurrentUser() {
         currentAccount.postValue(auth.currentUser)
     }
+    fun getCurrentUser() = currentAccount.value
 
     suspend fun setAccountData(account: GoogleSignInAccount) = withContext(Dispatchers.IO) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                getCurrentUser()
+                currentAccount.postValue(auth.currentUser)
             }
         }
     }
 
     suspend fun singOut() = withContext(Dispatchers.IO) {
         auth.signOut()
-        getCurrentUser()
+        currentAccount.postValue(auth.currentUser)
     }
 }

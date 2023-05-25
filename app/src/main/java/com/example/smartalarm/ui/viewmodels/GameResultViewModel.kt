@@ -2,12 +2,15 @@ package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
+import com.example.smartalarm.data.repositories.AuthRepository
 import com.example.smartalarm.data.repositories.getTodayDate
 import kotlinx.coroutines.launch
 
@@ -18,6 +21,15 @@ class GameResultViewModel(application: Application) : AndroidViewModel(applicati
     )
 
     private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
+    private val authRepository = AuthRepository
+
+    val currentUser: MutableLiveData<AccountData?> = MutableLiveData()
+
+    init {
+        authRepository.currentAccount.observeForever {
+            currentUser.postValue(if (it != null) AccountData(it) else null)
+        }
+    }
 
     fun setGameResult(alarmId: Long, gameId: Int, score: Int, time: String) {
         viewModelScope.launch {

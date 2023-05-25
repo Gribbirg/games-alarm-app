@@ -14,6 +14,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.smartalarm.ui.fragments.AlarmsFragment
+import com.example.smartalarm.ui.fragments.ProfileFragment
+import com.example.smartalarm.ui.fragments.RecordsFragment
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
 
 
@@ -27,17 +30,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            checkPermission(NOTIFICATION_REQUEST_CODE,
+            checkPermission(
+                NOTIFICATION_REQUEST_CODE,
                 android.Manifest.permission.POST_NOTIFICATIONS,
-                "показ уведомлений")
+                "показ уведомлений"
+            )
 
-            checkPermission(VIBRATION_REQUEST_CODE,
+            checkPermission(
+                VIBRATION_REQUEST_CODE,
                 android.Manifest.permission.VIBRATE,
-                "вибрацию")
+                "вибрацию"
+            )
 
-            checkPermission(READ_EXTERNAL_STORAGE,
+            checkPermission(
+                READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                "чтение файлов для выбора мелодии")
+                "чтение файлов для выбора мелодии"
+            )
         }
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -50,6 +59,7 @@ class MainActivity : AppCompatActivity() {
             ?.findNavController()
 
         binding.bottomNavigationView.setupWithNavController(navController!!)
+
 
         val sharedPreference = getSharedPreferences("holiday_is_complete", Context.MODE_PRIVATE)
 
@@ -99,8 +109,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermission(requestCode: Int, permission: String, name: String) {
         when {
-            ContextCompat.checkSelfPermission(applicationContext,
-                permission) == PackageManager.PERMISSION_GRANTED -> {}
+            ContextCompat.checkSelfPermission(
+                applicationContext,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED -> {
+            }
 
             shouldShowRequestPermissionRationale(permission) -> {
 
@@ -109,9 +122,11 @@ class MainActivity : AppCompatActivity() {
                     setMessage("Для корректной работы приложения необходимо разрешение на $name.")
                     setTitle("Необходимо разрешение")
                     setPositiveButton("Разрешить") { dialog, which ->
-                        ActivityCompat.requestPermissions(this@MainActivity,
+                        ActivityCompat.requestPermissions(
+                            this@MainActivity,
                             arrayOf(permission),
-                            requestCode)
+                            requestCode
+                        )
                     }
                 }
 

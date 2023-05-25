@@ -1,7 +1,6 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -22,6 +21,8 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
     private val authRepository = AuthRepository
     private val usersRealtimeDatabaseRepository = UsersRealtimeDatabaseRepository
     var currentUser: AccountData? = null
+    val myRecordsData: MutableLiveData<ArrayList<GameData>> = MutableLiveData()
+    val allRecordsData: MutableLiveData<List<AccountData>> = MutableLiveData()
 
     init {
         authRepository.currentAccount.observeForever {
@@ -29,8 +30,6 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 
-    val myRecordsData: MutableLiveData<ArrayList<GameData>> = MutableLiveData()
-    val allRecordsData: MutableLiveData<List<AccountData>> = MutableLiveData()
 
     fun getRecordsFromDb(state: Int) {
         viewModelScope.launch {
