@@ -65,6 +65,7 @@ class AlarmReceiver: BroadcastReceiver() {
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
+            .setOngoing(true)
 
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
