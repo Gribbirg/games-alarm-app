@@ -1,7 +1,9 @@
 package com.example.smartalarm.ui.fragments
 
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -94,6 +96,10 @@ class AddAlarmFragment : Fragment() {
             setInfoText()
         }
 
+        binding.addAlarmChooseMelodyButton.setOnClickListener {
+            selectLauncher.launch(arrayOf("audio/mpeg"))
+        }
+
         setInfoText()
 
         return binding.root
@@ -178,5 +184,18 @@ class AddAlarmFragment : Fragment() {
             addAlarmGraduallyIncreaseVolumeSwitch.isChecked = alarm.isRisingVolume
             addAlarmDaysToggleGroup.check(getDayOfWeekButtonByNum(alarm.dayOfWeek))
         }
+    }
+
+    private val selectLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            try {
+                uri?.let { selectFile(it) }
+            } catch (e: Exception) {
+                Log.i("selection fail", e.toString())
+            }
+        }
+
+    private fun selectFile(uri: Uri) {
+        val selectLauncher = context?.contentResolver?.openInputStream(uri)?.use {}
     }
 }
