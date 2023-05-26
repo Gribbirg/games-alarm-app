@@ -28,7 +28,7 @@ class CalcGameFragment : Fragment() {
                 override fun handleOnBackPressed() {
                     Navigation.findNavController(binding.root)
                         .navigate(
-                            R.id.action_gameChoiceFragment_to_addAlarmFragment,
+                            R.id.action_calcGameFragment2_to_gameChoiceFragment,
                             requireArguments(),
                             NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
                         )
