@@ -1,5 +1,6 @@
 package com.example.smartalarm.ui.fragments
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -308,5 +309,40 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             getEarliestAlarms()
         }
     }
+
+    override fun getColor(on: Boolean, regular: Boolean): Int =
+        if (on)
+            if (regular)
+                MaterialColors.getColor(
+                    requireContext(),
+                    com.google.android.material.R.attr.colorSurface,
+                    Color.BLACK
+                )
+            else
+                MaterialColors.getColor(
+                    requireContext(),
+                    com.google.android.material.R.attr.colorSurfaceContainer,
+                    Color.BLACK
+                )
+        else
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorSurfaceVariant,
+                Color.BLACK
+            )
+
+    override fun getOnViewColor(on: Boolean): Int =
+        if (on)
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorOnSurface,
+                Color.BLACK
+            )
+        else
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorOnSurfaceVariant,
+                Color.BLACK
+            )
 }
 
