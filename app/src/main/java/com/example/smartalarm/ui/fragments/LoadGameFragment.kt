@@ -29,7 +29,6 @@ class LoadGameFragment : Fragment() {
         binding = FragmentLoadGameBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[LoadGameViewModel::class.java]
 
-//        val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         AlarmVibrator.stop()
 
         val bundle = Bundle()
