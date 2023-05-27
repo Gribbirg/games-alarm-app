@@ -21,6 +21,7 @@ import com.example.smartalarm.ui.viewmodels.ProfileFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.material.color.MaterialColors
 import com.google.firebase.auth.FirebaseAuth
 
 class ProfileFragment : Fragment() {
@@ -124,10 +125,22 @@ class ProfileFragment : Fragment() {
         with(binding.authButton) {
             if (enter) {
                 text = "ВЫЙТИ"
-                setTextColor(Color.RED)
+                setTextColor(
+                    MaterialColors.getColor(
+                        requireContext(),
+                        com.google.android.material.R.attr.colorTertiary,
+                        Color.BLACK
+                    )
+                )
             } else {
                 text = "ВОЙТИ"
-                setTextColor(resources.getColor(R.color.green_main))
+                setTextColor(
+                    MaterialColors.getColor(
+                        requireContext(),
+                        com.google.android.material.R.attr.colorSecondary,
+                        Color.BLACK
+                    )
+                )
             }
         }
     }

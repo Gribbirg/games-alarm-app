@@ -42,16 +42,21 @@ class GameResultFragment : Fragment() {
         viewModel = ViewModelProvider(this)[GameResultViewModel::class.java]
 
         with(requireArguments()) {
-            if (!getBoolean("test"))
-                viewModel.setGameResult(
-                    getLong("alarm id"),
-                    getInt("game id"),
-                    getInt("score"),
-                    getString("time")!!
-                )
+            if (!containsKey("game id")) {
+                binding.resultScoreTextView.visibility = View.GONE
+                binding.resultTimeTextView.visibility = View.GONE
+            } else {
+                if (!getBoolean("test"))
+                    viewModel.setGameResult(
+                        getLong("alarm id"),
+                        getInt("game id"),
+                        getInt("score"),
+                        getString("time")!!
+                    )
 
-            binding.resultScoreTextView.text = "Очки: ${getInt("score")}"
-            binding.resultTimeTextView.text = "Время: ${getString("time")}"
+                binding.resultScoreTextView.text = "Очки: ${getInt("score")}"
+                binding.resultTimeTextView.text = "Время: ${getString("time")}"
+            }
         }
 
         viewModel.currentUser.observe(viewLifecycleOwner) {

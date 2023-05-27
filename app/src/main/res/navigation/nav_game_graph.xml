@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_loadGameFragment_to_taskGameFragment"
             app:destination="@id/taskGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
     </fragment>
     <fragment
         android:id="@+id/calcGameFragment"

@@ -26,14 +26,18 @@ class LoadGameViewModel(application: Application) : AndroidViewModel(application
                 if (alarm.gamesList[i] != 0)
                     gamesActive.add(i)
             }
-            val iGame = (gamesActive.indices).random()
-            currentGame.postValue(
-                listOf(
-                    gamesActive[iGame] + 1,
-                    alarm.gamesList[gamesActive[iGame]]
+            if (gamesActive.isEmpty()) {
+                currentGame.postValue(listOf())
+            } else {
+                val iGame = (gamesActive.indices).random()
+                currentGame.postValue(
+                    listOf(
+                        gamesActive[iGame] + 1,
+                        alarm.gamesList[gamesActive[iGame]]
+                    )
                 )
-            )
-            Log.i("game", "Choose game: ${currentGame.value}")
+                Log.i("game", "Choose game: ${currentGame.value}")
+            }
         }
     }
 

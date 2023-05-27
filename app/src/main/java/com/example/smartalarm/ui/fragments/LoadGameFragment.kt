@@ -25,22 +25,27 @@ class LoadGameFragment : Fragment() {
         viewModel = ViewModelProvider(this)[LoadGameViewModel::class.java]
 
         viewModel.currentGame.observe(viewLifecycleOwner) {
+            val navController = Navigation.findNavController(binding.root)
             val bundle = Bundle()
+
             bundle.putLong("alarm id", requireActivity().intent.getLongExtra("alarm id", -1))
             bundle.putBoolean("test", false)
-            bundle.putInt("difficulty", it[1])
 
-            val navController = Navigation.findNavController(binding.root)
-            when (it[0]) {
-                1 -> navController.navigate(
-                    R.id.action_loadGameFragment_to_calcGameFragment,
-                    bundle
-                )
+            if (it.isEmpty()) {
+                navController.navigate(R.id.action_loadGameFragment_to_gameResultFragment, bundle)
+            } else {
+                bundle.putInt("difficulty", it[1])
+                when (it[0]) {
+                    1 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_calcGameFragment,
+                        bundle
+                    )
 
-                2 -> navController.navigate(
-                    R.id.action_loadGameFragment_to_taskGameFragment,
-                    bundle
-                )
+                    2 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_taskGameFragment,
+                        bundle
+                    )
+                }
             }
         }
 
