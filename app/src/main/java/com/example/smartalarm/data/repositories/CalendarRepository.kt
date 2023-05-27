@@ -229,6 +229,7 @@ fun timesToString(alarmsList: ArrayList<AlarmSimpleData?>): ArrayList<String> {
 
 fun checkForHoliday(): Int {
     val calendar = Calendar.getInstance()
+    calendar.add(Calendar.DATE, 1)
     for (i in 1..2) {
         for (holiday in HOLIDAYS) {
 
@@ -241,6 +242,9 @@ fun checkForHoliday(): Int {
 
 
         }
+        Log.i("grib", calendar.get(Calendar.MONTH).toString())
+        Log.i("grib", calendar.get(Calendar.DAY_OF_MONTH).toString())
+        Log.i("grib", calendar.get(Calendar.YEAR).toString())
         calendar.add(Calendar.DATE, 1)
     }
     return 0
