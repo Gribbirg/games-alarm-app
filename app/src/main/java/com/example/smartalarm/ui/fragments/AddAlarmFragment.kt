@@ -3,6 +3,7 @@ package com.example.smartalarm.ui.fragments
 import android.media.RingtoneManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -74,6 +75,8 @@ class AddAlarmFragment : Fragment() {
             ringtonePath = RealPathUtil.getRealPath(requireContext(),
                 RingtoneManager.getActualDefaultRingtoneUri(context,
                     RingtoneManager.TYPE_ALARM)).toString()
+
+            Log.i("chosen song", ringtonePath)
 
             if (viewModel.insertOrUpdateAlarm(getAlarmFromState()))
                 navToAlarmFragment(getNumOfCheckedButton())
