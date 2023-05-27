@@ -19,6 +19,7 @@ class CalcGameFragment : Fragment() {
 
     private lateinit var binding: FragmentCalcGameBinding
     private lateinit var viewModel: CalcGameViewModel
+    private var result = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +89,7 @@ class CalcGameFragment : Fragment() {
                         bundle,
                         NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
                     )
-
+                result = true
         } else {
             Toast.makeText(context, "Неправильно!", Toast.LENGTH_SHORT).show()
             viewModel.mistake()

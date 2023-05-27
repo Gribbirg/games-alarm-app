@@ -84,9 +84,10 @@ class AlarmReceiver : BroadcastReceiver() {
         val audioUrl =
             "https://vgmsite.com/soundtracks/pixel-gun-3d-2014-ios-gamerip/mggwsgzyfq/Arena%20Background.mp3"
 
+        AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
+
         if (vibrationRequired) {
             val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
-            AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
             AlarmVibrator.start(pattern, 0)
         }
 
