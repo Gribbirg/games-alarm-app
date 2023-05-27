@@ -216,6 +216,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="@string/addAlarmSaveButton"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:textSize="15sp"/>
         </LinearLayout>
     </ScrollView>
