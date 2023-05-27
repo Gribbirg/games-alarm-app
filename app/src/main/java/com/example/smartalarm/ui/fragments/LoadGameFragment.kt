@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentLoadGameBinding
 import com.example.smartalarm.ui.viewmodels.LoadGameViewModel
+import java.time.ZoneId
 
 class LoadGameFragment : Fragment() {
 
@@ -24,25 +25,33 @@ class LoadGameFragment : Fragment() {
         binding = FragmentLoadGameBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[LoadGameViewModel::class.java]
 
+        val bundle = Bundle()
+
         viewModel.currentGame.observe(viewLifecycleOwner) {
-            val bundle = Bundle()
+            val navController = Navigation.findNavController(binding.root)
+
             bundle.putLong("alarm id", requireActivity().intent.getLongExtra("alarm id", -1))
             bundle.putBoolean("test", false)
-            bundle.putInt("difficulty", it[1])
 
-            val navController = Navigation.findNavController(binding.root)
-            when (it[0]) {
-                1 -> navController.navigate(
-                    R.id.action_loadGameFragment_to_calcGameFragment,
-                    bundle
-                )
+            if (it.isEmpty()) {
+                navController.navigate(R.id.action_loadGameFragment_to_gameResultFragment, bundle)
+            } else {
+                bundle.putInt("difficulty", it[1])
+                when (it[0]) {
+                    1 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_calcGameFragment,
+                        bundle
+                    )
 
-                2 -> navController.navigate(
-                    R.id.action_loadGameFragment_to_taskGameFragment,
-                    bundle
-                )
+                    2 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_taskGameFragment,
+                        bundle
+                    )
+                }
             }
         }
+
+        bundle.putLong("start time", requireActivity().intent.getLongExtra("start time", 0L))
 
         viewModel.getAlarm(requireActivity().intent.getLongExtra("alarm id", -1))
 

@@ -28,7 +28,7 @@ class CalcGameFragment : Fragment() {
                 override fun handleOnBackPressed() {
                     Navigation.findNavController(binding.root)
                         .navigate(
-                            R.id.action_gameChoiceFragment_to_addAlarmFragment,
+                            R.id.action_calcGameFragment2_to_gameChoiceFragment,
                             requireArguments(),
                             NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
                         )
@@ -42,6 +42,8 @@ class CalcGameFragment : Fragment() {
     ): View {
         binding = FragmentCalcGameBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[CalcGameViewModel::class.java]
+
+        viewModel.setStartTime(requireArguments().getLong("start time", 0))
 
         viewModel.timeCurrentString.observe(viewLifecycleOwner) {
             binding.calcTimeTextView.text = it

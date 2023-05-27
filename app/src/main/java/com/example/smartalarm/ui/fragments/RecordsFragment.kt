@@ -48,7 +48,7 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = MyRecordsAdapter(it, this@RecordsFragment)
             }
-            showErrorText(if (it.isEmpty()) 1 else 0)
+            showErrorText(it.isEmpty())
         }
 
         viewModel.allRecordsData.observe(viewLifecycleOwner) {
@@ -56,7 +56,7 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = AllRecordsAdapter(it)
             }
-            showErrorText(if (it.isEmpty()) 2 else 0)
+            showErrorText(it.isEmpty())
         }
 
         viewModel.getRecordsFromDb(0)
@@ -78,17 +78,12 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
         return res
     }
 
-    private fun showErrorText(type: Int = 0) {
-        when (type) {
-            0 -> binding.recordsErrorTextView.visibility = View.GONE
-            1 -> {
-                binding.recordsErrorTextView.visibility = View.VISIBLE
-                binding.recordsErrorTextView.text = "Нет данных"
-            }
-            2 -> {
-                binding.recordsErrorTextView.visibility = View.VISIBLE
-                binding.recordsErrorTextView.text = "Войдите в аккаунт!"
-            }
+    private fun showErrorText(on: Boolean) {
+        if (on) {
+            binding.recordsErrorTextView.visibility = View.VISIBLE
+            binding.recordsErrorTextView.text = "Нет данных"
+        } else {
+            binding.recordsErrorTextView.visibility = View.GONE
         }
     }
 

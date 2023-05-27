@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import androidx.navigation.NavOptions
@@ -67,13 +69,18 @@ class AddAlarmFragment : Fragment() {
 
 
         binding.addAlarmSaveButton.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.insertOrUpdateAlarmToDb(
-                    getAlarmFromState()
-                )
-                onResume()
-            }
-            navToAlarmFragment(getNumOfCheckedButton())
+            if (viewModel.insertOrUpdateAlarm(getAlarmFromState()))
+                navToAlarmFragment(getNumOfCheckedButton())
+            else
+                AlertDialog.Builder(binding.root.context)
+                    .setTitle("Предупреждение")
+                    .setIcon(R.drawable.baseline_warning_24)
+                    .setMessage("Нельзя поставить одноразовый будильник в прошлое!")
+                    .setPositiveButton("Понятно") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                    .show()
         }
 
         binding.addAlarmGamesButton.setOnClickListener {

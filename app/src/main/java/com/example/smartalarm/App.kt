@@ -3,11 +3,13 @@ package com.example.smartalarm
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import com.google.android.material.color.DynamicColors
 
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        DynamicColors.applyToActivitiesIfAvailable(this)
     }
 
     private fun createNotificationChannel() {

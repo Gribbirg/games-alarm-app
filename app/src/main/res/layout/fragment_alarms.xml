@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@id/daysLayout"
+        app:layout_constraintBottom_toTopOf="@id/daysLayoutHolder"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textSize="30sp"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/previousWeekButton"
             app:layout_constraintTop_toTopOf="parent"
@@ -53,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:textSize="30sp"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@id/nextWeekButton"
             app:layout_constraintTop_toTopOf="parent"
@@ -63,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -72,279 +75,283 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <LinearLayout
-        android:id="@+id/daysLayout"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/daysLayoutHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="3dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:background="@drawable/rounded_corners_grey"
-        android:weightSum="70"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/upLayout">
+        app:layout_constraintTop_toBottomOf="@id/upLayout"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        app:cardElevation="5dp">
+
 
         <LinearLayout
-            android:id="@+id/monLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="10"
-            android:background="@drawable/rounded_corners_grey"
+            android:id="@+id/daysLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:weightSum="70">
 
-            <TextView
-                android:id="@+id/monTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/monLayout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
-                tools:text="18" />
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/monLegTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Пн"
-                android:textSize="15sp"
-                android:layout_marginBottom="5sp"
-                />
+                <TextView
+                    android:id="@+id/monTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:textSize="30sp"
+                    tools:text="18" />
 
-            <TextView
-                android:id="@+id/monFirstAlarmTextView"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/monLegTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:text="Пн"
+                    android:textColor="?attr/colorOnTertiaryContainer"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/monFirstAlarmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:textColor="?attr/colorOnTertiaryContainer"
+                    android:textSize="14sp"
+                    tools:text="9:00" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tueLayout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                tools:text="9:00"
-                android:textSize="14sp"
-                android:layout_marginBottom="5sp"/>
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    tools:text="18" />
+
+                <TextView
+                    android:id="@+id/tueLegTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:text="Вт"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tueFirstAlarmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="14sp"
+                    tools:text="9:00" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/wedLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="vertical"
+                tools:background="@drawable/rounded_corners_green">
+
+                <TextView
+                    android:id="@+id/wedTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    tools:text="18" />
+
+                <TextView
+                    android:id="@+id/wedLegTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:text="Ср"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/wedFirstAlarmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="14sp"
+                    tools:text="9:00" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/thurLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/thurTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    tools:text="18" />
+
+                <TextView
+                    android:id="@+id/thurLegTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:text="Чт"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/thurFirstAlarmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="14sp"
+                    tools:text="9:00" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/friLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/friTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    tools:text="18" />
+
+                <TextView
+                    android:id="@+id/friLegTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:text="Пт"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/friFirstAlarmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="14sp"
+                    tools:text="9:00" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/satLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/satTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    tools:text="18" />
+
+                <TextView
+                    android:id="@+id/satLegTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:text="Сб"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/satFirstAlarmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="14sp"
+                    tools:text="9:00" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sunLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/sunTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    tools:text="18" />
+
+                <TextView
+                    android:id="@+id/sunLegTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:text="Вс"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/sunFirstAlarmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="14sp"
+                    tools:text="9:00" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/tueLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="10"
-            android:background="@drawable/rounded_corners_grey"
-            android:gravity="center"
-            android:orientation="vertical">
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                tools:text="18" />
-
-            <TextView
-                android:id="@+id/tueLegTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Вт"
-                android:textSize="15sp"
-                android:layout_marginBottom="5sp" />
-
-            <TextView
-                android:id="@+id/tueFirstAlarmTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="9:00"
-                android:textSize="14sp"
-                android:layout_marginBottom="5sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/wedLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="10"
-            android:background="@drawable/rounded_corners_grey"
-            tools:background="@drawable/rounded_corners_green"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/wedTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                tools:text="18" />
-
-            <TextView
-                android:id="@+id/wedLegTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ср"
-                android:textSize="15sp"
-                android:layout_marginBottom="5sp" />
-
-            <TextView
-                android:id="@+id/wedFirstAlarmTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="9:00"
-                android:textSize="14sp"
-                android:layout_marginBottom="5sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/thurLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="10"
-            android:background="@drawable/rounded_corners_grey"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/thurTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                tools:text="18" />
-
-            <TextView
-                android:id="@+id/thurLegTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Чт"
-                android:textSize="15sp"
-                android:layout_marginBottom="5sp" />
-
-            <TextView
-                android:id="@+id/thurFirstAlarmTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="9:00"
-                android:textSize="14sp"
-                android:layout_marginBottom="5sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/friLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="10"
-            android:background="@drawable/rounded_corners_grey"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/friTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                tools:text="18" />
-
-            <TextView
-                android:id="@+id/friLegTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Пт"
-                android:textSize="15sp"
-                android:layout_marginBottom="5sp" />
-
-            <TextView
-                android:id="@+id/friFirstAlarmTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="9:00"
-                android:textSize="14sp"
-                android:layout_marginBottom="5sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/satLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="10"
-            android:background="@drawable/rounded_corners_grey"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/satTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                tools:text="18" />
-
-            <TextView
-                android:id="@+id/satLegTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Сб"
-                android:textSize="15sp"
-                android:layout_marginBottom="5sp" />
-
-            <TextView
-                android:id="@+id/satFirstAlarmTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="9:00"
-                android:textSize="14sp"
-                android:layout_marginBottom="5sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/sunLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="10"
-            android:background="@drawable/rounded_corners_grey"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/sunTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                tools:text="18" />
-
-            <TextView
-                android:id="@+id/sunLegTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Вс"
-                android:textSize="15sp"
-                android:layout_marginBottom="5sp" />
-
-            <TextView
-                android:id="@+id/sunFirstAlarmTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="9:00"
-                android:textSize="14sp"
-                android:layout_marginBottom="5sp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/infoLayout"
@@ -352,21 +359,23 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/daysLayout">
+        app:layout_constraintTop_toBottomOf="@id/daysLayoutHolder">
 
         <TextView
             android:id="@+id/infoTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="8dp"
-            tools:text="Будильники на сегодня, 25 февраля:"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Будильники на сегодня, 25 февраля:" />
 
         <Button
             android:id="@+id/addAlarmButton"
+            style="?attr/materialIconButtonFilledStyle"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="10sp"
@@ -384,37 +393,37 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/infoLayout"
-        />
+        app:layout_constraintTop_toBottomOf="@id/infoLayout" />
 
     <TextView
         android:id="@+id/noAlarmsTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/noAlarmsImageView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="@string/noAlarmsToAdd"
-        android:textColor="@color/grey"
-        android:textSize="30sp"
-        android:gravity="center"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:text="@string/noAlarmsToAdd"
+        android:textSize="30sp"
+        android:textColor="?attr/colorPrimary"
         android:visibility="invisible"
-        tools:visibility="visible"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/noAlarmsImageView"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/noAlarmsImageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="@drawable/baseline_alarm_off_24"
-        app:layout_constraintTop_toBottomOf="@id/infoLayout"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/noAlarmsTextView"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/noAlarmsTextView"
-        android:visibility="invisible"
-        tools:visibility="visible"/>
+        app:layout_constraintTop_toBottomOf="@id/infoLayout"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

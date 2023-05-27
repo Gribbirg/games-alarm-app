@@ -36,7 +36,8 @@
         app:layout_constraintTop_toBottomOf="@id/typeSelectionTextView"
         app:layout_constraintRight_toLeftOf="@id/fromSelectionButtons"
         app:selectionRequired="true"
-        app:singleSelection="true">
+        app:singleSelection="true"
+        android:orientation="vertical">
 
         <Button
             style="?attr/materialButtonOutlinedStyle"
@@ -51,7 +52,7 @@
             android:id="@+id/lastsButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="ОЧКАМ"
+            android:text="Очкам"
             />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -65,14 +66,15 @@
         app:layout_constraintBottom_toBottomOf="@id/typeSelectionButtons"
         app:layout_constraintLeft_toRightOf="@id/typeSelectionButtons"
         app:selectionRequired="true"
-        app:singleSelection="true">
+        app:singleSelection="true"
+        android:orientation="vertical">
 
         <Button
             style="?attr/materialButtonOutlinedStyle"
             android:id="@+id/myButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="МОИ"
+            android:text="Мои"
             />
         <Button
             style="?attr/materialButtonOutlinedStyle"

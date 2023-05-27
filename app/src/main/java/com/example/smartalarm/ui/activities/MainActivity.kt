@@ -9,6 +9,7 @@ import com.example.smartalarm.R
 import com.example.smartalarm.databinding.ActivityMainBinding
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -18,6 +19,7 @@ import com.example.smartalarm.ui.fragments.AlarmsFragment
 import com.example.smartalarm.ui.fragments.ProfileFragment
 import com.example.smartalarm.ui.fragments.RecordsFragment
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
+import com.google.android.material.color.MaterialColors
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,7 +54,6 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         setContentView(binding.root)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         val navController = supportFragmentManager
             .findFragmentById(R.id.fragment)

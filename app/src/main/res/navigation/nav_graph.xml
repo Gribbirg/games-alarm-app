@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_calcGameFragment2_to_gameResultFragment2"
             app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_calcGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameResultFragment2"

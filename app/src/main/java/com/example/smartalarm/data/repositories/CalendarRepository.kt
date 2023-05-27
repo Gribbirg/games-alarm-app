@@ -130,6 +130,26 @@ class CalendarRepository {
     }
 }
 
+fun isAhead(date: String, hour: Int, minute: Int): Boolean {
+    val currentCalendar = Calendar.getInstance()
+    val dateList = date.split('.')
+    return if (dateList[2].toInt() > currentCalendar.get(Calendar.YEAR))
+        true
+    else if (dateList[2].toInt() < currentCalendar.get(Calendar.YEAR))
+        false
+    else if (dateList[1].toInt() > currentCalendar.get(Calendar.MONTH) + 1)
+        true
+    else if (dateList[1].toInt() < currentCalendar.get(Calendar.MONTH) + 1)
+        false
+    else if (dateList[0].toInt() > currentCalendar.get(Calendar.DAY_OF_MONTH))
+        true
+    else if (dateList[0].toInt() < currentCalendar.get(Calendar.DAY_OF_MONTH))
+        false
+    else if (hour > currentCalendar.get(Calendar.HOUR_OF_DAY))
+        true
+    else minute >= currentCalendar.get(Calendar.MINUTE)
+}
+
 fun getTodayDate(): String {
     val currentCalendar = Calendar.getInstance()
     return "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +

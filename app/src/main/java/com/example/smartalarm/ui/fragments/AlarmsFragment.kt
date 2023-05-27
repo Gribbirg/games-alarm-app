@@ -1,5 +1,6 @@
 package com.example.smartalarm.ui.fragments
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +21,7 @@ import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
+import com.google.android.material.color.MaterialColors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,6 +31,17 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     private lateinit var dateViewList: ArrayList<DateView>
     private lateinit var viewModel: AlarmsFragmentViewModel
     private lateinit var binding: FragmentAlarmsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,13 +66,62 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         dateViewList = ArrayList()
 
         with(dateViewList) {
-            add(DateView(binding.monLayout, binding.monTextView, binding.monLegTextView))
-            add(DateView(binding.tueLayout, binding.tueTextView, binding.tueLegTextView))
-            add(DateView(binding.wedLayout, binding.wedTextView, binding.wedLegTextView))
-            add(DateView(binding.thurLayout, binding.thurTextView, binding.thurLegTextView))
-            add(DateView(binding.friLayout, binding.friTextView, binding.friLegTextView))
-            add(DateView(binding.satLayout, binding.satTextView, binding.satLegTextView))
-            add(DateView(binding.sunLayout, binding.sunTextView, binding.sunLegTextView))
+            add(
+                DateView(
+                    binding.monLayout,
+                    binding.monTextView,
+                    binding.monLegTextView,
+                    binding.monFirstAlarmTextView
+                )
+            )
+            add(
+                DateView(
+                    binding.tueLayout,
+                    binding.tueTextView,
+                    binding.tueLegTextView,
+                    binding.tueFirstAlarmTextView
+                )
+            )
+            add(
+                DateView(
+                    binding.wedLayout,
+                    binding.wedTextView,
+                    binding.wedLegTextView,
+                    binding.wedFirstAlarmTextView
+                )
+            )
+            add(
+                DateView(
+                    binding.thurLayout,
+                    binding.thurTextView,
+                    binding.thurLegTextView,
+                    binding.thurFirstAlarmTextView
+                )
+            )
+            add(
+                DateView(
+                    binding.friLayout,
+                    binding.friTextView,
+                    binding.friLegTextView,
+                    binding.friFirstAlarmTextView
+                )
+            )
+            add(
+                DateView(
+                    binding.satLayout,
+                    binding.satTextView,
+                    binding.satLegTextView,
+                    binding.satFirstAlarmTextView
+                )
+            )
+            add(
+                DateView(
+                    binding.sunLayout,
+                    binding.sunTextView,
+                    binding.sunLegTextView,
+                    binding.sunFirstAlarmTextView
+                )
+            )
         }
 
         for (i in 0..6)
@@ -122,13 +185,37 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                 viewModel.weekCalendarData.daysList[i].dayNumber.toString()
             with(viewModel.weekCalendarData.daysList[i]) {
                 if (today)
-                    dateViewList[i].setTextsColor(Color.parseColor("#0000FF"))
+                    dateViewList[i].setTextsColor(
+                        MaterialColors.getColor(
+                            requireContext(),
+                            com.google.android.material.R.attr.colorSecondary,
+                            Color.BLACK
+                        )
+                    )
                 else if (isWeekend)
-                    dateViewList[i].setTextsColor(Color.parseColor("#FF0000"))
+                    dateViewList[i].setTextsColor(
+                        MaterialColors.getColor(
+                            requireContext(),
+                            com.google.android.material.R.attr.colorTertiary,
+                            Color.BLACK
+                        )
+                    )
                 else if (isHoliday)
-                    dateViewList[i].setTextsColor(Color.parseColor("#C00000"))
+                    dateViewList[i].setTextsColor(
+                        MaterialColors.getColor(
+                            requireContext(),
+                            com.google.android.material.R.attr.colorOnErrorContainer,
+                            Color.BLACK
+                        )
+                    )
                 else
-                    dateViewList[i].setTextsColor(Color.parseColor("#525252"))
+                    dateViewList[i].setTextsColor(
+                        MaterialColors.getColor(
+                            requireContext(),
+                            com.google.android.material.R.attr.colorOnPrimaryContainer,
+                            Color.BLACK
+                        )
+                    )
             }
         }
         setMonth()
@@ -147,7 +234,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
     private fun setDay() {
         for (i in 0..6) {
-            dateViewList[i].layout.setBackgroundResource(R.drawable.rounded_corners_grey)
+            dateViewList[i].layout.setBackgroundResource(0)
         }
         if (viewModel.currentDayOfWeek != null)
             dateViewList[viewModel.currentDayOfWeek!!].layout.setBackgroundResource(R.drawable.rounded_corners_green)
@@ -173,11 +260,13 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     data class DateView(
         val layout: LinearLayout,
         val numTextView: TextView,
-        val dayTextView: TextView
+        val dayTextView: TextView,
+        val alarmTextView: TextView
     ) {
         fun setTextsColor(color: Int) {
             numTextView.setTextColor(color)
             dayTextView.setTextColor(color)
+            alarmTextView.setTextColor(color)
         }
     }
 
@@ -220,5 +309,40 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             getEarliestAlarms()
         }
     }
+
+    override fun getColor(on: Boolean, regular: Boolean): Int =
+        if (on)
+            if (regular)
+                MaterialColors.getColor(
+                    requireContext(),
+                    com.google.android.material.R.attr.colorSurface,
+                    Color.BLACK
+                )
+            else
+                MaterialColors.getColor(
+                    requireContext(),
+                    com.google.android.material.R.attr.colorSurfaceContainer,
+                    Color.BLACK
+                )
+        else
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorSurfaceVariant,
+                Color.BLACK
+            )
+
+    override fun getOnViewColor(on: Boolean): Int =
+        if (on)
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorOnSurface,
+                Color.BLACK
+            )
+        else
+            MaterialColors.getColor(
+                requireContext(),
+                com.google.android.material.R.attr.colorOnSurfaceVariant,
+                Color.BLACK
+            )
 }
 

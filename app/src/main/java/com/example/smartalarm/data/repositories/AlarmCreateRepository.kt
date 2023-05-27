@@ -14,29 +14,31 @@ import java.time.ZoneId
 
 class AlarmCreateRepository(
     private val context: Context
-)  {
+) {
 
     private val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
 
     fun create(alarm: AlarmData) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("alarm id", alarm.alarmSimpleData.id)
+            putExtra("alarm name", alarm.alarmSimpleData.name)
             putExtra("alarm vibration", alarm.alarmSimpleData.isVibration)
             putExtra("alarm rising volume", alarm.alarmSimpleData.isRisingVolume)
         }
         Log.i("alarm", "Alarm on create!")
         val pendingIntent = PendingIntent.getBroadcast(
-                context,
-                alarm.alarmSimpleData.id.toInt(),
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-            )
+            context,
+            alarm.alarmSimpleData.id.toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             alarm.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,
             pendingIntent
         )
     }
+
     fun cancel(alarm: AlarmData) {
         Log.i("alarm", "Alarm on delete!")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

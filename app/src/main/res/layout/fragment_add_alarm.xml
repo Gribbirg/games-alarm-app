@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.fragments.AddAlarmFragment">
+    tools:context=".ui.fragments.AddAlarmFragment"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <TimePicker
         android:id="@+id/addAlarmTimePicker"
@@ -24,17 +26,21 @@
         android:layout_marginBottom="10sp"
         android:textSize="21sp"
         android:textStyle="italic"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         tools:text="Завтра, 22 февраля" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusableInTouchMode="true"
+            android:focusable="true">
 
             <TextView
                 android:id="@+id/addAlarmDayOfWeekText"
@@ -44,7 +50,7 @@
                 android:layout_marginEnd="20sp"
                 android:textSize="21sp"
                 android:textStyle="italic"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 android:text="@string/dayOfWeek" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
@@ -120,7 +126,7 @@
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <Switch
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/addAlarmMakeRepetitiveSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,21 +135,29 @@
                 android:text="@string/addAlarmMakeRepetitiveSwitch"
                 android:textSize="21sp"
                 android:textStyle="italic"
+                android:textColor="?attr/colorOnBackground"
                 tools:ignore="TouchTargetSizeCheck"
                 android:checked="true"/>
 
-            <EditText
-                android:id="@+id/addAlarmAlarmNameText"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15sp"
-                android:layout_marginBottom="5sp"
+                android:layout_marginBottom="5sp">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addAlarmAlarmNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:autofillHints="Будильник"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:hint="@string/addAlarmAlarmNameText"
                 android:textSize="21sp"
                 android:textStyle="italic" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <Button
@@ -155,7 +169,7 @@
                 android:text="@string/addAlarmChooseMelodyButton"
                 android:visibility="gone"/>
 
-            <Switch
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/addAlarmSetBuzzSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -164,9 +178,10 @@
                 android:text="@string/addAlarmSetBuzzSwitch"
                 android:textSize="21sp"
                 android:textStyle="italic"
+                android:textColor="?attr/colorOnBackground"
                 tools:ignore="TouchTargetSizeCheck" />
 
-            <Switch
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/addAlarmGraduallyIncreaseVolumeSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -175,7 +190,8 @@
                 android:text="@string/addAlarmGraduallyIncreaseVolumeSwitch"
                 android:textSize="21sp"
                 android:textStyle="italic"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck"
+                android:textColor="?attr/colorOnBackground"/>
 
             <Button
                 android:id="@+id/addAlarmInformationButton"
@@ -185,8 +201,9 @@
                 android:text="@string/addAlarmInformationButton"
                 android:visibility="gone"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addAlarmGamesButton"
+                android:backgroundTint="?attr/colorSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15sp"
@@ -197,7 +214,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/addAlarmSaveButton" />
+                android:text="@string/addAlarmSaveButton"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

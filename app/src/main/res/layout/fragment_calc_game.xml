@@ -15,7 +15,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
         tools:text="00:00"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:textColor="?attr/colorSecondary"/>
 
     <TextView
         android:id="@+id/calcActionTextView"
@@ -26,7 +27,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/sumHolder"
         android:layout_marginBottom="20dp"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:textColor="?attr/colorPrimary"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/sumHolder"
@@ -36,6 +38,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:cardBackgroundColor="?attr/colorPrimaryContainer"
         app:cardElevation="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,11 +56,12 @@
             app:layout_constraintRight_toLeftOf="@id/sumEditText"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="10dp"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimaryContainer"/>
 
         <EditText
             android:id="@+id/sumEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="50sp"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -65,9 +69,11 @@
             app:layout_constraintLeft_toRightOf="@id/sumTextView"
             android:layout_marginEnd="5dp"
             android:maxLines="1"
-            tools:text="4"
+            tools:text="444"
             android:inputType="number"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:gravity="center"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -81,7 +87,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sumHolder"
         android:layout_marginTop="20dp"
-        app:cardElevation="5dp">
+        app:cardElevation="5dp"
+        app:cardBackgroundColor="?attr/colorPrimaryContainer">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -98,11 +105,12 @@
                 app:layout_constraintRight_toLeftOf="@id/multEditText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="10dp"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:textColor="?attr/colorOnPrimaryContainer"/>
 
             <EditText
                 android:id="@+id/multEditText"
-                android:layout_width="wrap_content"
+                android:layout_width="50sp"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -112,7 +120,9 @@
                 tools:text="4"
                 android:maxLines="1"
                 android:inputType="number"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:textColor="?attr/colorOnPrimaryContainer"
+                android:gravity="center"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

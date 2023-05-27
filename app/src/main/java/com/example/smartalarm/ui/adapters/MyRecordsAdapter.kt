@@ -1,6 +1,7 @@
 package com.example.smartalarm.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,8 @@ class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecor
                 recordPointsTextView.text = currentData.record.toString()
             if (currentData.recordTime != null)
                 recordTimeTextView.text = currentData.recordTime
+            else
+                shareButton.visibility = View.GONE
 
             shareButton.setOnClickListener {
                 AlertDialog.Builder(holder.binding.root.context)

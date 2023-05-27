@@ -40,10 +40,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="22dp"
                 android:layout_marginBottom="20dp"
-                android:textColor="@color/red"
+                android:textColor="?attr/colorSecondary"
                 android:text="Тест игры"/>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/onOffSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="10dp"
-                android:text="Лёгкая"/>
+                android:text="Лёгкая"
+                android:textColor="?attr/colorTertiary"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
