@@ -38,7 +38,7 @@ class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecor
             if (currentData.record != null)
                 recordPointsTextView.text = currentData.record.toString()
             if (currentData.recordTime != null)
-                recordTimeTextView.text = currentData.recordTime
+                recordTimeTextView.text = "Время: ${currentData.recordTime}"
             else
                 shareButton.visibility = View.GONE
 
