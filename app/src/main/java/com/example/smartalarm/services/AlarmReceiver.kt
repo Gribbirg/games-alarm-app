@@ -25,6 +25,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         fun stopAudio() {
             if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                Log.i("music", "music off!")
                 mediaPlayer!!.release()
                 mediaPlayer = null
             }
@@ -108,7 +109,7 @@ class AlarmReceiver : BroadcastReceiver() {
             )
 
         mediaPlayer!!.isLooping = true
-
+        Log.i("music", "music on!")
         try {
             mediaPlayer!!.setDataSource(ringtonePath)
             mediaPlayer!!.prepare()

@@ -9,6 +9,7 @@ import com.example.smartalarm.databinding.ActivityMainBinding
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,6 +25,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+        setContentView(binding.root)
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkPermission(
@@ -45,9 +51,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
-        setContentView(binding.root)
 
         val navController = supportFragmentManager
             .findFragmentById(R.id.fragment)
@@ -59,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("holiday_is_complete", Context.MODE_PRIVATE)
 
         val holidayIsComplete = sharedPreference.getBoolean("is_complete", false)
+        Log.i("grib", holidayIsComplete.toString())
 
         if (viewModel.holidayAlertNeed(holidayIsComplete)) {
 
