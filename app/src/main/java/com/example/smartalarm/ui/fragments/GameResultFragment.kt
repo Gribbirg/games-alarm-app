@@ -36,8 +36,6 @@ class GameResultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        AlarmReceiver.stopAudio(context)
-
         binding = FragmentGameResultBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[GameResultViewModel::class.java]
 

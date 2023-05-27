@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentLoadGameBinding
+import com.example.smartalarm.services.AlarmReceiver
 import com.example.smartalarm.services.AlarmVibrator
 import com.example.smartalarm.ui.viewmodels.LoadGameViewModel
 import java.time.ZoneId
@@ -30,6 +31,7 @@ class LoadGameFragment : Fragment() {
         viewModel = ViewModelProvider(this)[LoadGameViewModel::class.java]
 
         AlarmVibrator.stop()
+        AlarmReceiver.stopAudio()
 
         val bundle = Bundle()
 

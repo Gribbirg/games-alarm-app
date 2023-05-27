@@ -44,7 +44,7 @@ class AllRecordsAdapter(var data: List<AccountData?>) :
                 userNameTextView.text = currentData.name
                 gameNameRecordsTextView.text = game.name
                 dateRecordTextView.text = game.recordDate
-                recordTimeTextView.text = game.recordTime
+                recordTimeTextView.text = "Время: ${game.recordTime}"
                 recordPointsTextView.text = game.record.toString()
             } else {
                 Glide.with(photoRecordHolder.context).load(R.drawable.baseline_no_accounts_24)
