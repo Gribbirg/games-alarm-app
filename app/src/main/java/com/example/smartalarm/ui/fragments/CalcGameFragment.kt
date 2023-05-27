@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
@@ -19,7 +20,6 @@ class CalcGameFragment : Fragment() {
 
     private lateinit var binding: FragmentCalcGameBinding
     private lateinit var viewModel: CalcGameViewModel
-    private var result = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +45,7 @@ class CalcGameFragment : Fragment() {
         viewModel = ViewModelProvider(this)[CalcGameViewModel::class.java]
 
         viewModel.setStartTime(requireArguments().getLong("start time", 0))
+        viewModel.getAlarm(requireArguments().getLong("alarm id"))
 
         viewModel.timeCurrentString.observe(viewLifecycleOwner) {
             binding.calcTimeTextView.text = it
@@ -61,6 +62,17 @@ class CalcGameFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        val notificationManager = NotificationManagerCompat.from(requireContext())
+        notificationManager.cancel(requireArguments().getLong("alarm id").toInt())
+        super.onResume()
+    }
+
+    override fun onPause() {
+        viewModel.startNewAlarm()
+        super.onPause()
     }
 
     private fun checkResult() {
@@ -82,14 +94,15 @@ class CalcGameFragment : Fragment() {
                         bundle,
                         NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
                     )
-            else
+            else {
                 Navigation.findNavController(binding.root)
                     .navigate(
                         R.id.action_calcGameFragment_to_gameResultFragment,
                         bundle,
                         NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
                     )
-                result = true
+                viewModel.setPositiveResult()
+            }
         } else {
             Toast.makeText(context, "Неправильно!", Toast.LENGTH_SHORT).show()
             viewModel.mistake()

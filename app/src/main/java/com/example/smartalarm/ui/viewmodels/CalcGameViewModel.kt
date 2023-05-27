@@ -3,10 +3,18 @@ package com.example.smartalarm.ui.viewmodels
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.ArifData
+import com.example.smartalarm.data.db.AlarmsDB
+import com.example.smartalarm.data.repositories.AlarmCreateRepository
+import com.example.smartalarm.data.repositories.AlarmDbRepository
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class CalcGameViewModel(application: Application) : AndroidViewModel(application) {
     private var timeStarted: Long = 0
@@ -28,8 +36,32 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
     private var score = 0
     var difficulty = 0
 
+    private val alarmDbRepository = AlarmDbRepository(
+        AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
+    )
+
+    private lateinit var currentAlarm: AlarmData
+
+    private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
+
+    private var result = false
+
     init {
         handler.post(runnable)
+    }
+
+    fun getAlarm(alarmId: Long) {
+        viewModelScope.launch {
+            currentAlarm = alarmDbRepository.getAlarmWithGames(alarmId)
+            currentAlarm.milisTime = timeStarted
+        }
+    }
+
+    fun startNewAlarm() {
+        if (!result) {
+            Log.i("game", "Game not finished!")
+            alarmCreateRepository.create(currentAlarm)
+        }
     }
 
     fun setStartTime(time: Long) {
@@ -98,5 +130,9 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
 
             else -> ArifData(arrayListOf(), arrayListOf())
         }
+    }
+
+    fun setPositiveResult() {
+        result = true
     }
 }

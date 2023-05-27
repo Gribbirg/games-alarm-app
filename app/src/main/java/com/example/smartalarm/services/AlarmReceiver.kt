@@ -40,6 +40,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.i("alarm", "Alarm on start!")
         val alarmId = intent?.getLongExtra("alarm id", 0L) ?: return
+        val alarmTime = intent.getLongExtra("alarm time", 0L)
         val alarmRisingVolume = intent.getBooleanExtra("alarm rising volume", false)
         val alarmVibration = intent.getBooleanExtra("alarm vibration", false)
         val alarmRingtone = intent.getStringExtra("alarm ringtone path")
@@ -50,7 +51,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val intentToActivity = Intent(context, GamesActivity::class.java)
         intentToActivity.putExtra("alarm id", alarmId)
-        intentToActivity.putExtra("start time", System.currentTimeMillis())
+        intentToActivity.putExtra("start time", alarmTime)
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(
                 context,

@@ -21,6 +21,7 @@ class AlarmCreateRepository(
     fun create(alarm: AlarmData) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("alarm id", alarm.alarmSimpleData.id)
+            putExtra("alarm time", alarm.milisTime)
             putExtra("alarm name", alarm.alarmSimpleData.name)
             putExtra("alarm vibration", alarm.alarmSimpleData.isVibration)
             putExtra("alarm rising volume", alarm.alarmSimpleData.isRisingVolume)
@@ -35,7 +36,7 @@ class AlarmCreateRepository(
         )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            alarm.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,
+            alarm.milisTime,
             pendingIntent
         )
     }
