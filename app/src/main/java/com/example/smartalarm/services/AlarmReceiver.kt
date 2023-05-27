@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.media.Ringtone
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Vibrator
 import android.util.Log
@@ -21,13 +23,16 @@ import java.io.IOException
 class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
-        var mediaPlayer: MediaPlayer? = null
+        lateinit var track: Ringtone
 
         fun stopAudio() {
-            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
+            //if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
+            //    Log.i("music", "music off!")
+            //    mediaPlayer!!.release()
+            //    mediaPlayer = null
+            if (track.isPlaying) {
                 Log.i("music", "music off!")
-                mediaPlayer!!.release()
-                mediaPlayer = null
+                track.stop()
             }
         }
     }
@@ -65,7 +70,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val notificationBuilder = NotificationCompat.Builder(context!!, "smartalarm")
             .setSmallIcon(R.drawable.baseline_alarm_24)
             .setContentTitle("${intent.getStringExtra("alarm name")} звонит!")
-            .setContentText("Нажмите, что бы отключить будильник")
+            .setContentText("Нажмите, чтобы отключить будильник")
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -93,31 +98,38 @@ class AlarmReceiver : BroadcastReceiver() {
             AlarmVibrator.start(pattern, 0)
         }
 
-        mediaPlayer = MediaPlayer()
-        if (isRisingVolume)
-            mediaPlayer!!.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .build()
-            )
-        else
-            mediaPlayer!!.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
+//        mediaPlayer = MediaPlayer()
+//        if (isRisingVolume)
+//            mediaPlayer!!.setAudioAttributes(
+//                AudioAttributes.Builder()
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                    .setUsage(AudioAttributes.USAGE_ALARM)
+//                    .build()
+//            )
+//        else
+//            mediaPlayer!!.setAudioAttributes(
+//                AudioAttributes.Builder()
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                    .setUsage(AudioAttributes.USAGE_MEDIA)
+//                    .build()
+//            )
 
-        mediaPlayer!!.isLooping = true
-        Log.i("music", "music on!")
-        try {
-            mediaPlayer!!.setDataSource(ringtonePath)
-            mediaPlayer!!.prepare()
-            mediaPlayer!!.start()
-
-        } catch (e: IOException) {
-            e.printStackTrace()
+        val ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+        track = RingtoneManager.getRingtone(context, ringtone)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            track.isLooping = true
         }
+        track.play()
+
+//        mediaPlayer!!.isLooping = true
+        Log.i("music", "music on!")
+//        try {
+//            mediaPlayer!!.setDataSource(ringtonePath)
+//            mediaPlayer!!.prepare()
+//            mediaPlayer!!.start()
+//
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
     }
 }
