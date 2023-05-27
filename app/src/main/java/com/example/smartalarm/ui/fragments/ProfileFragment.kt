@@ -110,12 +110,13 @@ class ProfileFragment : Fragment() {
             binding.userNameTextView.text = "Войдите в аккаунт Google"
             binding.userEmailTextView.text = ""
             Glide.with(requireContext())
-                .load(R.drawable.baseline_no_accounts_24)
-                .into(binding.userPhotoImageView)
+                .clear(binding.userPhotoImageView)
+            binding.userPhotoImageView.setBackgroundResource(R.drawable.baseline_no_accounts_24)
             setAuthButtonState(false)
         } else {
             binding.userNameTextView.text = user.name
             binding.userEmailTextView.text = user.email
+            binding.userPhotoImageView.setBackgroundResource(0)
             Glide.with(requireContext()).load(user.photo).into(binding.userPhotoImageView)
             setAuthButtonState(true)
         }

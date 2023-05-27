@@ -28,8 +28,7 @@
     <ImageView
         android:id="@+id/userPhotoImageView"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:backgroundTint="?attr/colorPrimary"/>
+        android:layout_height="100dp" />
 
     </com.google.android.material.card.MaterialCardView>
 
