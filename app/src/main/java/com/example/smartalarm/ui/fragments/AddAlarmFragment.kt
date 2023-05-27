@@ -1,22 +1,20 @@
 package com.example.smartalarm.ui.fragments
 
-import android.net.Uri
+import android.media.RingtoneManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
+import com.example.smartalarm.data.utils.RealPathUtil
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.ui.viewmodels.AddAlarmFragmentViewModel
 import com.example.smartalarm.databinding.FragmentAddAlarmBinding
@@ -26,6 +24,8 @@ class AddAlarmFragment : Fragment() {
 
     private lateinit var viewModel: AddAlarmFragmentViewModel
     lateinit var binding: FragmentAddAlarmBinding
+
+    private var ringtonePath: String = "null"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +71,10 @@ class AddAlarmFragment : Fragment() {
 
 
         binding.addAlarmSaveButton.setOnClickListener {
+            ringtonePath = RealPathUtil.getRealPath(requireContext(),
+                RingtoneManager.getActualDefaultRingtoneUri(context,
+                    RingtoneManager.TYPE_ALARM)).toString()
+
             if (viewModel.insertOrUpdateAlarm(getAlarmFromState()))
                 navToAlarmFragment(getNumOfCheckedButton())
             else
@@ -104,7 +108,7 @@ class AddAlarmFragment : Fragment() {
         }
 
         binding.addAlarmChooseMelodyButton.setOnClickListener {
-            selectLauncher.launch(arrayOf("audio/mpeg"))
+            //selectLauncher.launch(arrayOf("audio/*"))
         }
 
         setInfoText()
@@ -172,6 +176,7 @@ class AddAlarmFragment : Fragment() {
                 binding.addAlarmAlarmNameText.text.toString(),
             isVibration = binding.addAlarmSetBuzzSwitch.isChecked,
             isRisingVolume = binding.addAlarmGraduallyIncreaseVolumeSwitch.isChecked,
+            ringtonePath = ringtonePath,
             activateDate = if (binding.addAlarmMakeRepetitiveSwitch.isChecked)
                 null
             else
@@ -190,19 +195,29 @@ class AddAlarmFragment : Fragment() {
             addAlarmSetBuzzSwitch.isChecked = alarm.isVibration
             addAlarmGraduallyIncreaseVolumeSwitch.isChecked = alarm.isRisingVolume
             addAlarmDaysToggleGroup.check(getDayOfWeekButtonByNum(alarm.dayOfWeek))
+            ringtonePath = alarm.ringtonePath
         }
     }
 
-    private val selectLauncher =
-        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            try {
-                uri?.let { selectFile(it) }
-            } catch (e: Exception) {
-                Log.i("selection fail", e.toString())
-            }
-        }
-
-    private fun selectFile(uri: Uri) {
-        val selectLauncher = context?.contentResolver?.openInputStream(uri)?.use {}
-    }
+    //TODO("fix ringtone selection methods")
+//    private val selectLauncher =
+//        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+//            try {
+//                uri?.let { selectFile(it) }
+//            } catch (e: Exception) {
+//                Log.i("selection fail", e.toString())
+//            }
+//        }
+//
+//    private fun selectFile(uri: Uri) {
+//        val uriPathHelper = RealPathUtil
+//
+//        ringtonePath = uriPathHelper.getRealPath(requireContext(), uri).toString()
+//        if (ringtonePath == "null") {
+//            selectFile(RingtoneManager.getActualDefaultRingtoneUri(context,
+//                RingtoneManager.TYPE_RINGTONE))
+//        }
+//
+//        Log.i("chosen song", ringtonePath)
+//    }
 }

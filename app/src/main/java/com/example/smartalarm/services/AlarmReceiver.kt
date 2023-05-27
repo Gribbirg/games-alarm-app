@@ -23,7 +23,7 @@ class AlarmReceiver : BroadcastReceiver() {
     companion object {
         var mediaPlayer: MediaPlayer? = null
 
-        fun stopAudio(context: Context?) {
+        fun stopAudio() {
             if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
                 mediaPlayer!!.release()
                 mediaPlayer = null
@@ -36,6 +36,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmId = intent?.getLongExtra("alarm id", 0L) ?: return
         val alarmRisingVolume = intent.getBooleanExtra("alarm rising volume", false)
         val alarmVibration = intent.getBooleanExtra("alarm vibration", false)
+        val alarmRingtone = intent.getStringExtra("alarm ringtone path")
         Log.i("alarm", "Alarm id: $alarmId")
         Log.i("alarm", "Rising volume: $alarmRisingVolume")
         Log.i("alarm", "Vibration: $alarmVibration")
@@ -77,12 +78,11 @@ class AlarmReceiver : BroadcastReceiver() {
         ) {
             notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
         }
-        playAudio(context, alarmRisingVolume, alarmVibration)
+        playAudio(context, alarmRisingVolume, alarmVibration, alarmRingtone!!)
     }
 
-    private fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean) {
-        val audioUrl =
-            "https://vgmsite.com/soundtracks/pixel-gun-3d-2014-ios-gamerip/mggwsgzyfq/Arena%20Background.mp3"
+    private fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean,
+                          ringtonePath: String) {
 
         AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
 
@@ -110,7 +110,7 @@ class AlarmReceiver : BroadcastReceiver() {
         mediaPlayer!!.isLooping = true
 
         try {
-            mediaPlayer!!.setDataSource(audioUrl)
+            mediaPlayer!!.setDataSource(ringtonePath)
             mediaPlayer!!.prepare()
             mediaPlayer!!.start()
 

@@ -24,6 +24,7 @@ class AlarmCreateRepository(
             putExtra("alarm name", alarm.alarmSimpleData.name)
             putExtra("alarm vibration", alarm.alarmSimpleData.isVibration)
             putExtra("alarm rising volume", alarm.alarmSimpleData.isRisingVolume)
+            putExtra("alarm ringtone path", alarm.alarmSimpleData.ringtonePath)
         }
         Log.i("alarm", "Alarm on create!")
         val pendingIntent = PendingIntent.getBroadcast(

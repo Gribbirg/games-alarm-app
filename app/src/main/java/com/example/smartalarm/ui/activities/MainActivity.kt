@@ -2,31 +2,25 @@ package com.example.smartalarm.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.ActivityMainBinding
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.smartalarm.ui.fragments.AlarmsFragment
-import com.example.smartalarm.ui.fragments.ProfileFragment
-import com.example.smartalarm.ui.fragments.RecordsFragment
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
-import com.google.android.material.color.MaterialColors
 
 
 class MainActivity : AppCompatActivity() {
 
     private val NOTIFICATION_REQUEST_CODE = 100;
     private val VIBRATION_REQUEST_CODE = 101;
-    private val READ_EXTERNAL_STORAGE = 102;
+    private val READ_EXTERNAL_STORAGE_REQUEST_CODE = 102;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             checkPermission(
-                READ_EXTERNAL_STORAGE,
+                READ_EXTERNAL_STORAGE_REQUEST_CODE,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 "чтение файлов для выбора мелодии"
             )

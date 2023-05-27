@@ -38,7 +38,10 @@ data class AlarmSimpleData(
     var isRisingVolume: Boolean,
 
     @ColumnInfo(name = "is_on")
-    var isOn: Boolean = true
+    var isOn: Boolean = true,
+
+    @ColumnInfo(name = "ringtone_path")
+    var ringtonePath: String
 ) {
 
     constructor(strList: ArrayList<String>) : this(
@@ -52,7 +55,8 @@ data class AlarmSimpleData(
         if (strList[7] == "null") null else strList[7],
         strList[8].toBoolean(),
         strList[9].toBoolean(),
-        strList[10].toBoolean()
+        strList[10].toBoolean(),
+        strList[11]
     )
 
     fun toStringArray(): ArrayList<String> {
@@ -67,7 +71,8 @@ data class AlarmSimpleData(
             recordSeconds.toString(),
             isVibration.toString(),
             isRisingVolume.toString(),
-            isOn.toString()
+            isOn.toString(),
+            ringtonePath
             )
     }
 }
