@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.POST_NOTIFICATIONS,
                 "показ уведомлений"
             )
+        }
 
             checkPermission(
                 VIBRATION_REQUEST_CODE,
@@ -43,7 +44,6 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 "чтение файлов для выбора мелодии"
             )
-        }
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]

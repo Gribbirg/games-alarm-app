@@ -40,6 +40,7 @@ class AlarmReceiver : BroadcastReceiver() {
         Log.i("alarm", "Alarm id: $alarmId")
         Log.i("alarm", "Rising volume: $alarmRisingVolume")
         Log.i("alarm", "Vibration: $alarmVibration")
+        Log.i("alarm", "Ringtone: $alarmRingtone")
 
         val intentToActivity = Intent(context, GamesActivity::class.java)
         intentToActivity.putExtra("alarm id", alarmId)
