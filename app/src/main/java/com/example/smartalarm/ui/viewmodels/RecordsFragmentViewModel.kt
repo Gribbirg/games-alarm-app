@@ -36,7 +36,7 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
             when (state) {
                 0 -> myRecordsData.postValue(ArrayList(alarmDbRepository.getGames()))
                 1 -> {
-                    val fromDb = alarmDbRepository.getRecordsByDate()
+                    val fromDb = alarmDbRepository.getRecordsByScore()
                     val res: ArrayList<GameData> = ArrayList()
                     for (record in fromDb)
                         res.add(GameData(record))
