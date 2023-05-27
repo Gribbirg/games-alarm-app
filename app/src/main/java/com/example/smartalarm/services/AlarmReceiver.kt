@@ -1,4 +1,4 @@
-package com.example.smartalarm.data.receivers
+package com.example.smartalarm.services
 
 import android.Manifest
 import android.app.PendingIntent
@@ -17,8 +17,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.activities.GamesActivity
 import java.io.IOException
-import java.util.Timer
-import kotlin.concurrent.schedule
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -88,8 +86,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
         if (vibrationRequired) {
             val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
-            val v = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            v.vibrate(pattern, 0)
+            AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
+            AlarmVibrator.start(pattern, 0)
         }
 
         mediaPlayer = MediaPlayer()

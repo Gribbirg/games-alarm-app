@@ -1,15 +1,19 @@
 package com.example.smartalarm.ui.fragments
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Vibrator
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentLoadGameBinding
+import com.example.smartalarm.services.AlarmVibrator
 import com.example.smartalarm.ui.viewmodels.LoadGameViewModel
 import java.time.ZoneId
 
@@ -24,6 +28,9 @@ class LoadGameFragment : Fragment() {
     ): View {
         binding = FragmentLoadGameBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[LoadGameViewModel::class.java]
+
+//        val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        AlarmVibrator.stop()
 
         val bundle = Bundle()
 

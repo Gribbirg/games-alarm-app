@@ -8,7 +8,7 @@ import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import com.example.smartalarm.data.receivers.AlarmReceiver
+import com.example.smartalarm.services.AlarmReceiver
 import com.example.smartalarm.data.data.AlarmData
 import java.time.ZoneId
 

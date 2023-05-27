@@ -16,9 +16,6 @@ class GamesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGamesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        vibrator.cancel()
     }
 
     override fun onBackPressed() {

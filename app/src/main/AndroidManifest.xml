@@ -46,7 +46,7 @@
             android:parentActivityName=".ui.activities.MainActivity"
             android:exported="false" />
 
-        <receiver android:name=".data.receivers.AlarmReceiver" />
+        <receiver android:name=".services.AlarmReceiver" />
     </application>
 
 </manifest>
