@@ -16,15 +16,9 @@ class GamesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGamesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         vibrator.cancel()
-        window.statusBarColor = MaterialColors.getColor(
-            this,
-            com.google.android.material.R.attr.colorBackgroundFloating,
-            Color.BLACK
-        )
     }
 
     override fun onBackPressed() {

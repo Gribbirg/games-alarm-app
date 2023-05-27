@@ -1,14 +1,17 @@
 package com.example.smartalarm.data.receivers
 
+import android.Manifest
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Vibrator
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smartalarm.R
@@ -17,7 +20,7 @@ import java.io.IOException
 import java.util.Timer
 import kotlin.concurrent.schedule
 
-class AlarmReceiver: BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
         var mediaPlayer: MediaPlayer? = null
@@ -41,6 +44,7 @@ class AlarmReceiver: BroadcastReceiver() {
 
         val intentToActivity = Intent(context, GamesActivity::class.java)
         intentToActivity.putExtra("alarm id", alarmId)
+        intentToActivity.putExtra("start time", System.currentTimeMillis())
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(
                 context,
@@ -59,23 +63,29 @@ class AlarmReceiver: BroadcastReceiver() {
 
         val notificationBuilder = NotificationCompat.Builder(context!!, "smartalarm")
             .setSmallIcon(R.drawable.baseline_alarm_24)
-            .setContentTitle("Разбуди меня полностью")
-            .setContentText("Нажми, что бы отключить будильник")
+            .setContentTitle("${intent.getStringExtra("alarm name")} звонит!")
+            .setContentText("Нажмите, что бы отключить будильник")
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
 
         val notificationManager = NotificationManagerCompat.from(context)
-        notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
+        }
         playAudio(context, alarmRisingVolume, alarmVibration)
     }
 
     private fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean) {
-        val audioUrl = "https://vgmsite.com/soundtracks/pixel-gun-3d-2014-ios-gamerip/mggwsgzyfq/Arena%20Background.mp3"
+        val audioUrl =
+            "https://vgmsite.com/soundtracks/pixel-gun-3d-2014-ios-gamerip/mggwsgzyfq/Arena%20Background.mp3"
 
-        if (vibrationRequired)
-        {
+        if (vibrationRequired) {
             val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
             val v = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             v.vibrate(pattern, 0)

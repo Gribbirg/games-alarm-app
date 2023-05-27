@@ -71,7 +71,7 @@ class AlarmAdapter(
                 recordTextView.text = "Нет данных"
 
             if (currencyAlarmData.activateDate != null) {
-                recordTextView.visibility = View.GONE
+                recordTextView.text = "Одноразовый"
             }
 
             alarmOnOffSwitch.isChecked = currencyAlarmData.isOn

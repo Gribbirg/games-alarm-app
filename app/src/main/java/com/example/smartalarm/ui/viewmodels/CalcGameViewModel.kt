@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.example.smartalarm.data.data.ArifData
 
 class CalcGameViewModel(application: Application) : AndroidViewModel(application) {
-    private val timeStarted = System.currentTimeMillis()
+    private var timeStarted: Long = 0
     private var timeCurrent: Long = 0
 
     var timeCurrentString: MutableLiveData<String> = MutableLiveData()
@@ -30,6 +30,13 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
 
     init {
         handler.post(runnable)
+    }
+
+    fun setStartTime(time: Long) {
+        timeStarted = if (time != 0L)
+            time
+        else
+            System.currentTimeMillis()
     }
 
     fun setDifficultyLevel(difficulty: Int) {

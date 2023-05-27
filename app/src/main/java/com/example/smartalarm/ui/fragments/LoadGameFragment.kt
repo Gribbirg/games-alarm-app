@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentLoadGameBinding
 import com.example.smartalarm.ui.viewmodels.LoadGameViewModel
+import java.time.ZoneId
 
 class LoadGameFragment : Fragment() {
 
@@ -24,9 +25,10 @@ class LoadGameFragment : Fragment() {
         binding = FragmentLoadGameBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[LoadGameViewModel::class.java]
 
+        val bundle = Bundle()
+
         viewModel.currentGame.observe(viewLifecycleOwner) {
             val navController = Navigation.findNavController(binding.root)
-            val bundle = Bundle()
 
             bundle.putLong("alarm id", requireActivity().intent.getLongExtra("alarm id", -1))
             bundle.putBoolean("test", false)
@@ -48,6 +50,8 @@ class LoadGameFragment : Fragment() {
                 }
             }
         }
+
+        bundle.putLong("start time", requireActivity().intent.getLongExtra("start time", 0L))
 
         viewModel.getAlarm(requireActivity().intent.getLongExtra("alarm id", -1))
 

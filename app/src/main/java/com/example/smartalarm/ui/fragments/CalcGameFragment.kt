@@ -43,6 +43,8 @@ class CalcGameFragment : Fragment() {
         binding = FragmentCalcGameBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[CalcGameViewModel::class.java]
 
+        viewModel.setStartTime(requireArguments().getLong("start time", 0))
+
         viewModel.timeCurrentString.observe(viewLifecycleOwner) {
             binding.calcTimeTextView.text = it
         }
