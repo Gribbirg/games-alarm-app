@@ -3,6 +3,7 @@ package com.example.smartalarm.ui.adapters
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.AlarmItemBinding
+import com.google.android.material.color.MaterialColors
 
 
 class AlarmAdapter(
@@ -28,8 +30,8 @@ class AlarmAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun setState(on: Boolean, regular: Boolean) {
             with(binding) {
-                val onColor = listener.getOnViewColor(on)
-                alarmMaterialCardView.setCardBackgroundColor(listener.getColor(on, regular))
+                val onColor = getOnViewColor(on)
+                alarmMaterialCardView.setCardBackgroundColor(getColor(on, regular))
                 alarmTimeTextView.setTextColor(onColor)
                 alarmNameTextView.setTextColor(onColor)
                 recordTextView.setTextColor(onColor)
@@ -44,6 +46,37 @@ class AlarmAdapter(
                 }
             }
         }
+
+        private fun getColor(on: Boolean, regular: Boolean): Int =
+            if (on)
+                if (regular)
+                    MaterialColors.getColor(
+                        binding.root.context,
+                        com.google.android.material.R.attr.colorSurface,
+                        Color.BLACK
+                    )
+                else
+                    MaterialColors.getColor(
+                        binding.root.context,
+                        com.google.android.material.R.attr.colorSurfaceContainer,
+                        Color.BLACK
+                    )
+            else
+                MaterialColors.getColor(
+                    binding.root.context,
+                    com.google.android.material.R.attr.colorSurfaceVariant,
+                    Color.BLACK
+                )
+
+        private fun getOnViewColor(on: Boolean): Int =
+            MaterialColors.getColor(
+                binding.root.context,
+                if (on)
+                    com.google.android.material.R.attr.colorOnSurface
+                else
+                    com.google.android.material.R.attr.colorOnSurfaceVariant,
+                Color.BLACK
+            )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
@@ -153,7 +186,5 @@ class AlarmAdapter(
         fun onOnOffSwitchClickListener(alarm: AlarmData)
         fun openEditMenu(alarm: AlarmData)
         fun deleteAlarm(alarm: AlarmData)
-        fun getColor(on: Boolean, regular: Boolean): Int
-        fun getOnViewColor(on: Boolean): Int
     }
 }

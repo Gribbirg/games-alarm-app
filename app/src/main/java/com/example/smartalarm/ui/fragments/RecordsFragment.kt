@@ -44,19 +44,19 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
         }
 
         viewModel.myRecordsData.observe(viewLifecycleOwner) {
+            showErrorText(it.isEmpty())
             binding.recordsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = MyRecordsAdapter(it, this@RecordsFragment)
             }
-            showErrorText(it.isEmpty())
         }
 
         viewModel.allRecordsData.observe(viewLifecycleOwner) {
+            showErrorText(it.isEmpty())
             binding.allRecordsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = AllRecordsAdapter(it)
             }
-            showErrorText(it.isEmpty())
         }
 
         viewModel.getRecordsFromDb(0)

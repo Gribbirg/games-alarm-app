@@ -1,12 +1,15 @@
 package com.example.smartalarm.ui.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AlarmGameData
 import com.example.smartalarm.databinding.GameItemBinding
+import com.google.android.material.color.MaterialColors
 
 class GameAdapter(var data: ArrayList<AlarmGameData>, private val listener: OnGameClickListener) :
     RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
@@ -33,12 +36,26 @@ class GameAdapter(var data: ArrayList<AlarmGameData>, private val listener: OnGa
         with(holder.binding) {
 
             gameNameTextView.text = currentData.name
+
             difficultyButton.text = when (currentData.difficulty) {
                 1 -> "Лёгкая"
                 2 -> "Средняя"
                 3 -> "Сложная"
                 else -> ""
             }
+            difficultyButton.setTextColor(
+                MaterialColors.getColor(
+                    root.context,
+                    when (currentData.difficulty) {
+                        1 -> androidx.transition.R.attr.colorPrimary
+                        2 -> com.google.android.material.R.attr.colorSecondary
+                        3 -> com.google.android.material.R.attr.colorTertiary
+                        else -> com.google.android.material.R.attr.colorOnSurface
+                    },
+                    Color.BLACK
+                )
+            )
+
             onOffSwitch.isChecked = currentData.isOn
 
             onOffSwitch.setOnClickListener {
@@ -54,21 +71,45 @@ class GameAdapter(var data: ArrayList<AlarmGameData>, private val listener: OnGa
                         R.id.easyItem -> {
                             currentData.difficulty = 1
                             difficultyButton.text = "Лёгкая"
+                            difficultyButton.setTextColor(
+                                MaterialColors.getColor(
+                                    root.context,
+                                    com.google.android.material.R.attr.colorPrimary,
+                                    Color.BLACK
+                                )
+                            )
                             holder.listener.onChangeDifficultyClickListener(currentData)
                             true
                         }
+
                         R.id.middleItem -> {
                             currentData.difficulty = 2
                             difficultyButton.text = "Средняя"
+                            difficultyButton.setTextColor(
+                                MaterialColors.getColor(
+                                    root.context,
+                                    com.google.android.material.R.attr.colorSecondary,
+                                    Color.BLACK
+                                )
+                            )
                             holder.listener.onChangeDifficultyClickListener(currentData)
                             true
                         }
+
                         R.id.hardItem -> {
                             currentData.difficulty = 3
                             difficultyButton.text = "Сложная"
+                            difficultyButton.setTextColor(
+                                MaterialColors.getColor(
+                                    root.context,
+                                    com.google.android.material.R.attr.colorTertiary,
+                                    Color.BLACK
+                                )
+                            )
                             holder.listener.onChangeDifficultyClickListener(currentData)
                             true
                         }
+
                         else -> true
                     }
                 }

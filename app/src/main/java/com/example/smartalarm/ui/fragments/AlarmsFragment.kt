@@ -204,7 +204,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                     dateViewList[i].setTextsColor(
                         MaterialColors.getColor(
                             requireContext(),
-                            com.google.android.material.R.attr.colorOnErrorContainer,
+                            com.google.android.material.R.attr.colorError,
                             Color.BLACK
                         )
                     )
@@ -212,7 +212,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                     dateViewList[i].setTextsColor(
                         MaterialColors.getColor(
                             requireContext(),
-                            com.google.android.material.R.attr.colorOnPrimaryContainer,
+                            com.google.android.material.R.attr.colorPrimary,
                             Color.BLACK
                         )
                     )
@@ -307,40 +307,5 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     override fun deleteAlarm(alarm: AlarmData) {
         viewModel.deleteAlarmFromDb(alarm.alarmSimpleData)
     }
-
-    override fun getColor(on: Boolean, regular: Boolean): Int =
-        if (on)
-            if (regular)
-                MaterialColors.getColor(
-                    requireContext(),
-                    com.google.android.material.R.attr.colorSurface,
-                    Color.BLACK
-                )
-            else
-                MaterialColors.getColor(
-                    requireContext(),
-                    com.google.android.material.R.attr.colorSurfaceContainer,
-                    Color.BLACK
-                )
-        else
-            MaterialColors.getColor(
-                requireContext(),
-                com.google.android.material.R.attr.colorSurfaceVariant,
-                Color.BLACK
-            )
-
-    override fun getOnViewColor(on: Boolean): Int =
-        if (on)
-            MaterialColors.getColor(
-                requireContext(),
-                com.google.android.material.R.attr.colorOnSurface,
-                Color.BLACK
-            )
-        else
-            MaterialColors.getColor(
-                requireContext(),
-                com.google.android.material.R.attr.colorOnSurfaceVariant,
-                Color.BLACK
-            )
 }
 
