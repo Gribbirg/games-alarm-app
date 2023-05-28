@@ -65,6 +65,10 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        binding.loadAlarmsButton.setOnClickListener {
+            viewModel.loadAlarmsOfCurrentUser()
+        }
+
         viewModel.currentUser.observe(viewLifecycleOwner) {
             setViewAccountData(it)
         }

@@ -3,6 +3,7 @@ package com.example.smartalarm.data.repositories
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.smartalarm.data.data.AccountData
+import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.db.GameData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,18 +24,19 @@ object UsersRealtimeDatabaseRepository {
     suspend fun addUser(account: AccountData?) = withContext(Dispatchers.IO) {
         if (account != null) {
             usersDatabase.child(account.uid!!).get().addOnSuccessListener {
-                Log.i("grib", "GotValue")
+                Log.i("firebase realtime database", "Got value")
                 if (!it.exists())
                     usersDatabase.child(account.uid!!).setValue(account)
             }
         }
     }
 
-    suspend fun getUser(uri: String, user: MutableLiveData<AccountData>) = withContext(Dispatchers.IO) {
-        usersDatabase.child(uri).get().addOnSuccessListener {
-            user.postValue(it.getValue(AccountData::class.java))
+    suspend fun getUser(uri: String, user: MutableLiveData<AccountData>) =
+        withContext(Dispatchers.IO) {
+            usersDatabase.child(uri).get().addOnSuccessListener {
+                user.postValue(it.getValue(AccountData::class.java))
+            }
         }
-    }
 
     suspend fun getTopRecords(userList: MutableLiveData<List<AccountData>>) =
         withContext(Dispatchers.IO) {
@@ -112,6 +114,14 @@ object UsersRealtimeDatabaseRepository {
                     }
 
                 }
+            }
+        }
+
+    suspend fun addAlarmsToUser(account: AccountData, alarms: ArrayList<AlarmData>) =
+        withContext(Dispatchers.IO) {
+            val userAlarms = usersDatabase.child(account.uid!!).child("alarms")
+            for (alarm in alarms) {
+                userAlarms.child(alarm.alarmSimpleData.id.toString()).setValue(alarm)
             }
         }
 }

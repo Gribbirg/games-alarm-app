@@ -73,4 +73,7 @@ interface AlarmsDao {
 
     @Query("DELETE FROM alarm_table")
     fun deleteAllAlarms()
+
+    @Query("SELECT id FROM alarm_table")
+    fun getAlarmsIds(): List<Long>
 }

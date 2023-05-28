@@ -5,7 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
+import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.getRecordsList
+import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
 import com.example.smartalarm.data.repositories.UsersRealtimeDatabaseRepository
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -18,6 +20,10 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
     private val usersRealtimeDatabaseRepository = UsersRealtimeDatabaseRepository
     val currentUser: MutableLiveData<AccountData?> = MutableLiveData()
     val userRecords: MutableLiveData<List<AccountData>> = MutableLiveData()
+
+    private val alarmDbRepository = AlarmDbRepository(
+        AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
+    )
 
     init {
         authRepository.currentAccount.observeForever {
@@ -76,6 +82,13 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
             }
         } else {
             userRecords.postValue(listOf())
+        }
+    }
+
+    fun loadAlarmsOfCurrentUser() {
+        viewModelScope.launch {
+            val alarms = alarmDbRepository.getAllAlarms()
+            usersRealtimeDatabaseRepository.addAlarmsToUser(currentUser.value!!, alarms)
         }
     }
 }

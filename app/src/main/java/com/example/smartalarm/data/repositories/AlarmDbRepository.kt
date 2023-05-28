@@ -47,6 +47,17 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext AlarmData(alarmSimpleData, res)
         }
 
+    suspend fun getAllAlarms(): ArrayList<AlarmData> =
+        withContext(Dispatchers.IO) {
+            val alarmsIds = alarmsDao.getAlarmsIds()
+            val res = ArrayList<AlarmData>()
+
+            for (id in alarmsIds)
+                res.add(getAlarmWithGames(id))
+
+            return@withContext res
+        }
+
     suspend fun getEarliestAlarmsFromDb(currentDate: ArrayList<String>): ArrayList<AlarmSimpleData?> =
         withContext(Dispatchers.IO) {
             val list = ArrayList<AlarmSimpleData?>()
