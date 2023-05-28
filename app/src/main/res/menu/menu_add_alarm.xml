@@ -3,5 +3,6 @@
 
     <item
         android:id="@+id/addAlarmMenuPasteItem"
-        android:title="Вставить" />
+        android:title="Вставить"
+        android:icon="@drawable/baseline_content_paste_go_24"/>
 </menu>

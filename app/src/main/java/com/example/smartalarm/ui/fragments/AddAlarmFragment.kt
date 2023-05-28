@@ -57,24 +57,20 @@ class AddAlarmFragment : Fragment() {
 
         lifecycleScope.launch {
             if (!arguments?.getBoolean("isNew")!!) {
-                whenStarted {
                     viewModel.currentAlarm = viewModel.getAlarm(arguments?.getLong("alarmId")!!)
                     viewModel.gamesList = viewModel.currentAlarm!!.gamesList
                     setStateFromAlarm(viewModel.currentAlarm!!.alarmSimpleData)
-                }
             }
             with(arguments?.getIntegerArrayList("games")) {
                 if (this != null)
                     viewModel.gamesList = this
             }
-        }
-
-        with(requireArguments().getStringArrayList("state")) {
-            if (this != null) {
-                setStateFromAlarm(AlarmSimpleData(this))
+            with(requireArguments().getStringArrayList("state")) {
+                if (this != null) {
+                    setStateFromAlarm(AlarmSimpleData(this))
+                }
             }
         }
-
 
         binding.addAlarmSaveButton.setOnClickListener {
             ringtonePath = RealPathUtil.getRealPath(
@@ -137,7 +133,18 @@ class AddAlarmFragment : Fragment() {
                     else -> true
                 }
             }
-            menu.show()
+            try {
+                val field = PopupMenu::class.java.getDeclaredField("mPopup")
+                field.isAccessible = true
+                val popup = field.get(menu)
+                popup.javaClass
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(popup, true)
+            } catch (e: Exception) {
+                Log.e("Menu", "Error showing menu icons", e)
+            } finally {
+                menu.show()
+            }
         }
 
         setInfoText()

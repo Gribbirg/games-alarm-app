@@ -3,11 +3,14 @@
 
     <item
         android:id="@+id/alarmUnitMenuCopyItem"
-        android:title="Скопировать" />
+        android:title="Скопировать"
+        android:icon="@drawable/baseline_content_copy_24"/>
     <item
         android:id="@+id/alarmUnitMenuEditItem"
+        android:icon="@drawable/baseline_edit_24"
         android:title="Изменить" />
     <item
         android:id="@+id/alarmUnitMenuDeleteItem"
-        android:title="Удалить" />
+        android:title="Удалить"
+        android:icon="@drawable/baseline_delete_forever_24" />
 </menu>

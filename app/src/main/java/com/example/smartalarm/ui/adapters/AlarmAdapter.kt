@@ -3,12 +3,14 @@ package com.example.smartalarm.ui.adapters
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AlarmData
@@ -86,7 +88,7 @@ class AlarmAdapter(
 
             menuButton.setOnClickListener {
                 val menu = PopupMenu(holder.binding.root.context, it)
-                menu.inflate(R.menu.menu_alarm_unit)
+                menu.menuInflater.inflate(R.menu.menu_alarm_unit, menu.menu)
 
                 menu.setOnMenuItemClickListener {
                     when (it.itemId) {
@@ -126,7 +128,18 @@ class AlarmAdapter(
                     }
                 }
 
-                menu.show()
+                try {
+                    val field = PopupMenu::class.java.getDeclaredField("mPopup")
+                    field.isAccessible = true
+                    val popup = field.get(menu)
+                    popup.javaClass
+                        .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                        .invoke(popup, true)
+                } catch (e: Exception) {
+                    Log.e("Menu", "Error showing menu icons", e)
+                } finally {
+                    menu.show()
+                }
             }
         }
     }
