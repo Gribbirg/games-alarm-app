@@ -1,5 +1,9 @@
 package com.example.smartalarm.ui.fragments
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +13,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smartalarm.App
 import com.example.smartalarm.R
+import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
@@ -273,16 +280,32 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             )
     }
 
-    override fun onOnOffSwitchClickListener(alarm: AlarmSimpleData) {
-        viewModel.setAlarmState(alarm)
+    override fun copyAlarm(alarm: AlarmData) {
+        val clipboard =
+            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val intent = Intent(requireContext(), App::class.java)
+        intent.putExtra("alarm simple", alarm.alarmSimpleData.toStringArray())
+        intent.putExtra("alarm games", alarm.gamesList)
+        val clip = ClipData.newIntent("alarm copy", intent)
+        clipboard.setPrimaryClip(clip)
+
+        Toast.makeText(
+            requireContext(),
+            "${alarm.alarmSimpleData.name} скопирован",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
-    override fun openEditMenu(alarm: AlarmSimpleData) {
-        navToAddAlarmFragment(viewModel.addInfoInformationToBundle(null, alarm.id))
+    override fun onOnOffSwitchClickListener(alarm: AlarmData) {
+        viewModel.setAlarmState(alarm.alarmSimpleData)
     }
 
-    override fun deleteAlarm(alarm: AlarmSimpleData) {
-        viewModel.deleteAlarmFromDb(alarm)
+    override fun openEditMenu(alarm: AlarmData) {
+        navToAddAlarmFragment(viewModel.addInfoInformationToBundle(null, alarm.alarmSimpleData.id))
+    }
+
+    override fun deleteAlarm(alarm: AlarmData) {
+        viewModel.deleteAlarmFromDb(alarm.alarmSimpleData)
     }
 
     override fun getColor(on: Boolean, regular: Boolean): Int =

@@ -15,14 +15,14 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
     suspend fun getAlarmsFromDbByDayOfWeek(
         dayOfWeek: Int,
         currentDate: String
-    ): ArrayList<AlarmSimpleData> =
+    ): ArrayList<AlarmData> =
         withContext(Dispatchers.IO) {
             val listDB = ArrayList(alarmsDao.getAlarmsByDay(dayOfWeek))
-            val listAns = ArrayList<AlarmSimpleData>()
+            val listAns = ArrayList<AlarmData>()
 
             for (alarm in listDB) {
                 if (alarm.activateDate == null || alarm.activateDate == currentDate)
-                    listAns.add(alarm)
+                    listAns.add(getAlarmWithGames(alarm.id))
             }
 
             return@withContext listAns
@@ -50,7 +50,7 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
     suspend fun getEarliestAlarmsFromDb(currentDate: ArrayList<String>): ArrayList<AlarmSimpleData?> =
         withContext(Dispatchers.IO) {
             val list = ArrayList<AlarmSimpleData?>()
-            var listDay: ArrayList<AlarmSimpleData>
+            var listDay: ArrayList<AlarmData>
             var alarm: AlarmSimpleData?
 
             for (i in 0..6) {
@@ -61,8 +61,8 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
                     listDay = getAlarmsFromDbByDayOfWeek(i, currentDate[i])
 
                     for (iAlarm in listDay) {
-                        if (iAlarm.isOn) {
-                            list.add(iAlarm)
+                        if (iAlarm.alarmSimpleData.isOn) {
+                            list.add(iAlarm.alarmSimpleData)
                             break
                         }
                     }

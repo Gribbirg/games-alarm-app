@@ -1,5 +1,8 @@
 package com.example.smartalarm.ui.fragments
 
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.media.RingtoneManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,6 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
@@ -118,6 +123,23 @@ class AddAlarmFragment : Fragment() {
             //selectLauncher.launch(arrayOf("audio/*"))
         }
 
+        binding.addAlarmMenuButton.setOnClickListener {
+            val menu = PopupMenu(requireContext(), it)
+            menu.inflate(R.menu.menu_add_alarm)
+
+            menu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.addAlarmMenuPasteItem -> {
+                        pasteAlarm()
+                        true
+                    }
+
+                    else -> true
+                }
+            }
+            menu.show()
+        }
+
         setInfoText()
 
         return binding.root
@@ -224,4 +246,41 @@ class AddAlarmFragment : Fragment() {
 //
 //        Log.i("chosen song", ringtonePath)
 //    }
+
+    private fun pasteAlarm() {
+        val clipboard =
+            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        val pasteIntent: Intent? = clipboard.primaryClip?.getItemAt(0)?.intent
+
+        if (pasteIntent != null) {
+
+            val alarmSimpleDataStringArray = pasteIntent.getStringArrayListExtra("alarm simple")
+            val alarmGamesList = pasteIntent.getIntegerArrayListExtra("alarm games")
+
+            if (alarmSimpleDataStringArray != null && alarmGamesList != null) {
+
+                val copyAlarm = AlarmSimpleData(alarmSimpleDataStringArray)
+                val currentAlarm = getAlarmFromState()
+
+                copyAlarm.dayOfWeek = currentAlarm.dayOfWeek
+                copyAlarm.activateDate = copyAlarm.activateDate
+
+                setStateFromAlarm(copyAlarm)
+                viewModel.gamesList = alarmGamesList
+
+                Toast.makeText(requireContext(), "Будильник вставлен", Toast.LENGTH_LONG).show()
+
+            } else {
+                toastNoCopyAlarm()
+            }
+        } else {
+            toastNoCopyAlarm()
+        }
+    }
+
+    private fun toastNoCopyAlarm() {
+        Toast.makeText(requireContext(), "Нет скопированного будильника", Toast.LENGTH_LONG)
+            .show()
+    }
 }

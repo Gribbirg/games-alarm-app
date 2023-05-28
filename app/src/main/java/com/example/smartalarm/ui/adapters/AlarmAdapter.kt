@@ -1,25 +1,23 @@
 package com.example.smartalarm.ui.adapters
 
-import android.content.res.ColorStateList
-import android.graphics.Color
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.R
+import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.db.AlarmSimpleData
-import com.example.smartalarm.data.db.AlarmsDB
-import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.databinding.AlarmItemBinding
-import com.google.android.material.color.MaterialColors
 
 
 class AlarmAdapter(
-    var data: ArrayList<AlarmSimpleData>,
+    var data: ArrayList<AlarmData>,
     private val listener: OnAlarmClickListener
 ) :
     RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
@@ -56,34 +54,35 @@ class AlarmAdapter(
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
-        val currencyAlarmData = data[position]
+        val alarm = data[position]
+        val alarmSimpleData = alarm.alarmSimpleData
 
         with(holder.binding) {
-            alarmTimeTextView.text = if (currencyAlarmData.timeMinute >= 10)
-                "${currencyAlarmData.timeHour}:${currencyAlarmData.timeMinute}"
+            alarmTimeTextView.text = if (alarmSimpleData.timeMinute >= 10)
+                "${alarmSimpleData.timeHour}:${alarmSimpleData.timeMinute}"
             else
-                "${currencyAlarmData.timeHour}:0${currencyAlarmData.timeMinute}"
-            alarmNameTextView.text = currencyAlarmData.name
+                "${alarmSimpleData.timeHour}:0${alarmSimpleData.timeMinute}"
+            alarmNameTextView.text = alarmSimpleData.name
 
-            if (currencyAlarmData.recordScore != null)
-                recordTextView.text = "Лучший результат: ${currencyAlarmData.recordScore}"
+            if (alarmSimpleData.recordScore != null)
+                recordTextView.text = "Лучший результат: ${alarmSimpleData.recordScore}"
             else
                 recordTextView.text = "Нет данных"
 
-            if (currencyAlarmData.activateDate != null) {
+            if (alarmSimpleData.activateDate != null) {
                 recordTextView.text = "Одноразовый"
             }
 
-            alarmOnOffSwitch.isChecked = currencyAlarmData.isOn
-            holder.setState(alarmOnOffSwitch.isChecked, currencyAlarmData.activateDate == null)
+            alarmOnOffSwitch.isChecked = alarmSimpleData.isOn
+            holder.setState(alarmOnOffSwitch.isChecked, alarmSimpleData.activateDate == null)
             alarmOnOffSwitch.setOnClickListener {
-                currencyAlarmData.isOn = alarmOnOffSwitch.isChecked
-                holder.listener.onOnOffSwitchClickListener(currencyAlarmData)
-                holder.setState(alarmOnOffSwitch.isChecked, currencyAlarmData.activateDate == null)
+                alarmSimpleData.isOn = alarmOnOffSwitch.isChecked
+                holder.listener.onOnOffSwitchClickListener(alarm)
+                holder.setState(alarmOnOffSwitch.isChecked, alarmSimpleData.activateDate == null)
             }
 
-            if (currencyAlarmData.isVibration) vibrationImageView.visibility = View.VISIBLE
-            if (currencyAlarmData.isRisingVolume) volumeUpImageView.visibility = View.VISIBLE
+            if (alarmSimpleData.isVibration) vibrationImageView.visibility = View.VISIBLE
+            if (alarmSimpleData.isRisingVolume) volumeUpImageView.visibility = View.VISIBLE
 
             menuButton.setOnClickListener {
                 val menu = PopupMenu(holder.binding.root.context, it)
@@ -91,8 +90,13 @@ class AlarmAdapter(
 
                 menu.setOnMenuItemClickListener {
                     when (it.itemId) {
+                        R.id.alarmUnitMenuCopyItem -> {
+                            holder.listener.copyAlarm(alarm)
+                            true
+                        }
+
                         R.id.alarmUnitMenuEditItem -> {
-                            holder.listener.openEditMenu(currencyAlarmData)
+                            holder.listener.openEditMenu(alarm)
                             true
                         }
 
@@ -100,12 +104,12 @@ class AlarmAdapter(
                             AlertDialog.Builder(holder.binding.root.context)
                                 .setTitle("Удаление будильника")
                                 .setIcon(R.drawable.baseline_warning_24)
-                                .setMessage("Вы уверены, что хотите удалить ${currencyAlarmData.name}?")
+                                .setMessage("Вы уверены, что хотите удалить ${alarmSimpleData.name}?")
                                 .setPositiveButton("Да") { dialog, _ ->
-                                    holder.listener.deleteAlarm(currencyAlarmData)
+                                    holder.listener.deleteAlarm(alarm)
                                     Toast.makeText(
                                         holder.binding.root.context,
-                                        "${currencyAlarmData.name} удалён",
+                                        "${alarmSimpleData.name} удалён",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     dialog.dismiss()
@@ -132,9 +136,10 @@ class AlarmAdapter(
     }
 
     interface OnAlarmClickListener {
-        fun onOnOffSwitchClickListener(alarm: AlarmSimpleData)
-        fun openEditMenu(alarm: AlarmSimpleData)
-        fun deleteAlarm(alarm: AlarmSimpleData)
+        fun copyAlarm(alarm: AlarmData)
+        fun onOnOffSwitchClickListener(alarm: AlarmData)
+        fun openEditMenu(alarm: AlarmData)
+        fun deleteAlarm(alarm: AlarmData)
         fun getColor(on: Boolean, regular: Boolean): Int
         fun getOnViewColor(on: Boolean): Int
     }

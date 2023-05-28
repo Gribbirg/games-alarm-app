@@ -1,10 +1,16 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.smartalarm.App
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.WeekCalendarData
@@ -26,7 +32,7 @@ class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(appli
     private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
     var weekCalendarData: MutableLiveData<WeekCalendarData> = MutableLiveData()
 
-    var alarmsList: MutableLiveData<ArrayList<AlarmSimpleData>> = MutableLiveData()
+    var alarmsList: MutableLiveData<ArrayList<AlarmData>> = MutableLiveData()
     var earliestAlarmsList: MutableLiveData<ArrayList<AlarmSimpleData?>> = MutableLiveData()
 
     private val alarmDbRepository = AlarmDbRepository(

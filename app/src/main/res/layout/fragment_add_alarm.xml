@@ -9,12 +9,21 @@
     android:focusableInTouchMode="true"
     android:focusable="true">
 
+    <ImageButton
+        android:id="@+id/addAlarmMenuButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/baseline_more_vert_24"
+        android:layout_gravity="right"/>
+
     <TimePicker
         android:id="@+id/addAlarmTimePicker"
         android:layout_width="wrap_content"
         android:layout_height="140sp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="20sp"
+        android:layout_marginBottom="20sp"
         android:timePickerMode="spinner" />
 
     <TextView

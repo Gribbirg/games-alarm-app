@@ -11,7 +11,6 @@ data class AlarmData(
     var alarmSimpleData: AlarmSimpleData,
     var gamesList: ArrayList<Int> = arrayListOf()
 ) {
-//    var localDateTime: LocalDateTime
     var milisTime: Long
 
     init {

@@ -59,6 +59,7 @@ data class AlarmSimpleData(
         strList[11]
     )
 
+    // len = 12
     fun toStringArray(): ArrayList<String> {
         return arrayListOf(
             id.toString(),
