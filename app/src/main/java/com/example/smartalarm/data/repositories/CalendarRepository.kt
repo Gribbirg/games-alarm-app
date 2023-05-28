@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.smartalarm.data.constants.HOLIDAYS
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class CalendarRepository {
@@ -203,6 +205,33 @@ fun getMontNameVinit(monthNum: Int) = when (monthNum) {
     else -> ""
 }
 
+fun getMontName(monthNum: Int) = when (monthNum) {
+    1 -> "Январь"
+    2 -> "Февраль"
+    3 -> "Март"
+    4 -> "Апрель"
+    5 -> "Май"
+    6 -> "Июнь"
+    7 -> "Июль"
+    8 -> "Август"
+    9 -> "Сентябрь"
+    10 -> "Октябрь"
+    11 -> "Ноябрь"
+    12 -> "Декабрь"
+    else -> ""
+}
+
+fun getDayOfWeekName(dayOfWeek: Int) = when (dayOfWeek) {
+    0 -> "понедельник"
+    1 -> "вторник"
+    2 -> "среда"
+    3 -> "четверг"
+    4 -> "пятница"
+    5 -> "суббота"
+    6 -> "воскресенье"
+    else -> ""
+}
+
 fun getDayOfWeekNameVinit(dayOfWeek: Int) = when (dayOfWeek) {
     0 -> "понедельник"
     1 -> "вторник"
@@ -248,4 +277,16 @@ fun checkForHoliday(): Int {
         calendar.add(Calendar.DATE, 1)
     }
     return 0
+}
+
+fun getCurrentTimeString(): String {
+    val currentDateTime = LocalDateTime.now()
+    return currentDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+}
+
+fun getCurrentDateString(): String {
+    val calendar = Calendar.getInstance()
+    return "${getMontName(calendar.get(Calendar.MONTH ) + 1)} " +
+            "${calendar.get(Calendar.DAY_OF_MONTH)}, " +
+            getDayOfWeekName((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7)
 }

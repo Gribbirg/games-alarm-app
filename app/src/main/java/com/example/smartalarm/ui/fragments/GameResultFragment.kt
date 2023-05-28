@@ -58,13 +58,21 @@ class GameResultFragment : Fragment() {
         }
 
         viewModel.currentUser.observe(viewLifecycleOwner) {
-            if (it != null)
-                binding.goodMorningTextView.text = "Доброе утро,\n${it.name}!"
+            binding.goodMorningTextView.text = it
+        }
+
+        viewModel.currentTime.observe(viewLifecycleOwner) {
+            binding.timeTextView.text = it
+            if (it == "00:00") {
+                binding.dateTextView.text = viewModel.getCurrentDate()
+            }
         }
 
         binding.closeButton.setOnClickListener {
             goAway()
         }
+
+        binding.dateTextView.text = viewModel.getCurrentDate()
 
         return binding.root
     }

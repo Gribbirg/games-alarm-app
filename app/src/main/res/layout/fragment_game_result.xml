@@ -6,12 +6,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.GameResultFragment">
 
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/goodMorningTextView"
+        tools:text="08:00"
+        android:textSize="45sp"
+        android:textColor="?attr/colorPrimary"/>
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/timeTextView"
+        android:layout_marginBottom="10dp"
+        tools:text="Октябрь 23, пятница"
+        android:textSize="25sp"
+        android:textColor="?attr/colorSecondary"/>
+
 
     <TextView
         android:id="@+id/goodMorningTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Доброе утро!"
+        tools:text="Доброе утро,\nПавлик Подколозин!"
+        android:textColor="?attr/colorPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +51,8 @@
         android:id="@+id/resultTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Время игры: "
+        tools:text="Время игры: "
+        android:textColor="?attr/colorSecondary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/goodMorningTextView"
@@ -36,7 +63,8 @@
         android:id="@+id/resultScoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Очки: "
+        tools:text="Очки: "
+        android:textColor="?attr/colorSecondary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/resultTimeTextView"

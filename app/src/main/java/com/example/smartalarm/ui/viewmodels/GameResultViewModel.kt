@@ -1,7 +1,6 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,8 +10,12 @@ import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
+import com.example.smartalarm.data.repositories.getCurrentDateString
+import com.example.smartalarm.data.repositories.getCurrentTimeString
 import com.example.smartalarm.data.repositories.getTodayDate
 import kotlinx.coroutines.launch
+import java.util.Timer
+import java.util.TimerTask
 
 class GameResultViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,12 +26,21 @@ class GameResultViewModel(application: Application) : AndroidViewModel(applicati
     private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
     private val authRepository = AuthRepository
 
-    val currentUser: MutableLiveData<AccountData?> = MutableLiveData()
+    val currentUser: MutableLiveData<String> = MutableLiveData()
+
+    val currentTime: MutableLiveData<String> = MutableLiveData()
 
     init {
         authRepository.currentAccount.observeForever {
-            currentUser.postValue(if (it != null) AccountData(it) else null)
+            currentUser.postValue(if (it != null) "Доброе утро,\n${AccountData(it).name}!" else "Доброе утро!")
         }
+
+        val timer = Timer()
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                currentTime.postValue(getCurrentTimeString())
+            }
+        }, 0, 1000)
     }
 
     fun setGameResult(alarmId: Long, gameId: Int, score: Int, time: String) {
@@ -51,5 +63,9 @@ class GameResultViewModel(application: Application) : AndroidViewModel(applicati
                 alarmDbRepository.deleteAlarmFromDb(alarm.alarmSimpleData)
             }
         }
+    }
+
+    fun getCurrentDate(): String {
+        return getCurrentDateString()
     }
 }
