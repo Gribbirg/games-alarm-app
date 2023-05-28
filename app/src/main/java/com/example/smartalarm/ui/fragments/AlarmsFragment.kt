@@ -284,28 +284,28 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         val clipboard =
             requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val intent = Intent(requireContext(), App::class.java)
-        intent.putExtra("alarm simple", alarm.alarmSimpleData.toStringArray())
+        intent.putExtra("alarm simple", AlarmSimpleData(alarm).toStringArray())
         intent.putExtra("alarm games", alarm.gamesList)
         val clip = ClipData.newIntent("alarm copy", intent)
         clipboard.setPrimaryClip(clip)
 
         Toast.makeText(
             requireContext(),
-            "${alarm.alarmSimpleData.name} скопирован",
+            "${alarm.name} скопирован",
             Toast.LENGTH_SHORT
         ).show()
     }
 
     override fun onOnOffSwitchClickListener(alarm: AlarmData) {
-        viewModel.setAlarmState(alarm.alarmSimpleData)
+        viewModel.setAlarmState(AlarmSimpleData(alarm))
     }
 
     override fun openEditMenu(alarm: AlarmData) {
-        navToAddAlarmFragment(viewModel.addInfoInformationToBundle(null, alarm.alarmSimpleData.id))
+        navToAddAlarmFragment(viewModel.addInfoInformationToBundle(null, alarm.id))
     }
 
     override fun deleteAlarm(alarm: AlarmData) {
-        viewModel.deleteAlarmFromDb(alarm.alarmSimpleData)
+        viewModel.deleteAlarmFromDb(AlarmSimpleData(alarm))
     }
 }
 

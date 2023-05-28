@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +47,7 @@ class ProfileFragment : Fragment() {
         )
 
         binding.authButton.setOnClickListener {
+            Log.i("grib", "work")
             if (binding.authButton.text == "ВОЙТИ")
                 singIn()
             else {
@@ -66,11 +68,29 @@ class ProfileFragment : Fragment() {
         }
 
         binding.loadAlarmsButton.setOnClickListener {
-            viewModel.loadAlarmsOfCurrentUser()
+            if (!viewModel.loadAlarmsOfCurrentUser())
+                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.loadAlarmsFromButton.setOnClickListener {
+            if (!viewModel.loadAlarmsFromInternet())
+                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.currentUser.observe(viewLifecycleOwner) {
             setViewAccountData(it)
+        }
+
+        viewModel.loadResult.observe(viewLifecycleOwner) {
+            if (it != null)
+                Toast.makeText(
+                    requireContext(),
+                    if (it)
+                        "Успешно загруженно"
+                    else
+                        "Произошла ошибка. Попробуйте снова",
+                    Toast.LENGTH_LONG
+                ).show()
         }
 
         viewModel.userRecords.observe(viewLifecycleOwner) {
@@ -97,7 +117,11 @@ class ProfileFragment : Fragment() {
                     )
                 )
             else
-                Toast.makeText(context, result.resultCode.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Произошла ошибка. Попробуйте снова",
+                    Toast.LENGTH_LONG
+                ).show()
         }
 
     private fun singIn() {
@@ -147,6 +171,17 @@ class ProfileFragment : Fragment() {
                     )
                 )
             }
+        }
+        setLoadsButtonsState(enter)
+    }
+
+    private fun setLoadsButtonsState(visible: Boolean) {
+        if (visible) {
+            binding.loadAlarmsButton.visibility = View.VISIBLE
+            binding.loadAlarmsFromButton.visibility = View.VISIBLE
+        } else {
+            binding.loadAlarmsButton.visibility = View.INVISIBLE
+            binding.loadAlarmsFromButton.visibility = View.INVISIBLE
         }
     }
 }

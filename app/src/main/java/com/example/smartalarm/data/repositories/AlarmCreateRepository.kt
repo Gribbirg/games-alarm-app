@@ -20,17 +20,17 @@ class AlarmCreateRepository(
 
     fun create(alarm: AlarmData) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("alarm id", alarm.alarmSimpleData.id)
+            putExtra("alarm id", alarm.id)
             putExtra("alarm time", alarm.milisTime)
-            putExtra("alarm name", alarm.alarmSimpleData.name)
-            putExtra("alarm vibration", alarm.alarmSimpleData.isVibration)
-            putExtra("alarm rising volume", alarm.alarmSimpleData.isRisingVolume)
-            putExtra("alarm ringtone path", alarm.alarmSimpleData.ringtonePath)
+            putExtra("alarm name", alarm.name)
+            putExtra("alarm vibration", alarm.isVibration)
+            putExtra("alarm rising volume", alarm.isRisingVolume)
+            putExtra("alarm ringtone path", alarm.ringtonePath)
         }
         Log.i("alarm", "Alarm on create!")
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            alarm.alarmSimpleData.id.toInt(),
+            alarm.id.toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
@@ -47,7 +47,7 @@ class AlarmCreateRepository(
             alarmManager.cancel(
                 PendingIntent.getBroadcast(
                     context,
-                    alarm.alarmSimpleData.id.toInt(),
+                    alarm.id.toInt(),
                     Intent(context, AlarmReceiver::class.java),
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
                 )
@@ -56,7 +56,7 @@ class AlarmCreateRepository(
             alarmManager.cancel(
                 PendingIntent.getBroadcast(
                     context,
-                    alarm.alarmSimpleData.id.toInt(),
+                    alarm.id.toInt(),
                     Intent(context, AlarmReceiver::class.java),
                     PendingIntent.FLAG_UPDATE_CURRENT
                 )

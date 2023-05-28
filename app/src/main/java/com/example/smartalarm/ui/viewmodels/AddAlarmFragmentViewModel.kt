@@ -48,19 +48,19 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
                 alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
                 AlarmData(alarm, gamesList).let(creator::create)
             } else {
-                alarm.id = currentAlarm!!.alarmSimpleData.id
+                alarm.id = currentAlarm!!.id
 
                 if (
-                    currentAlarm!!.alarmSimpleData.timeMinute != alarm.timeMinute ||
-                    currentAlarm!!.alarmSimpleData.timeHour != alarm.timeHour ||
-                    currentAlarm!!.alarmSimpleData.dayOfWeek != alarm.dayOfWeek ||
-                    currentAlarm!!.alarmSimpleData.activateDate != alarm.activateDate
+                    currentAlarm!!.timeMinute != alarm.timeMinute ||
+                    currentAlarm!!.timeHour != alarm.timeHour ||
+                    currentAlarm!!.dayOfWeek != alarm.dayOfWeek ||
+                    currentAlarm!!.activateDate != alarm.activateDate
                 ) {
                     alarm.recordSeconds = null
                     alarm.recordScore = null
                 } else {
-                    alarm.recordSeconds = currentAlarm!!.alarmSimpleData.recordSeconds
-                    alarm.recordScore = currentAlarm!!.alarmSimpleData.recordScore
+                    alarm.recordSeconds = currentAlarm!!.recordSeconds
+                    alarm.recordScore = currentAlarm!!.recordScore
                 }
                 alarmDbRepository.updateAlarmInDbWithGames(AlarmData(alarm, gamesList))
                 AlarmData(alarm, gamesList).let(creator::update)

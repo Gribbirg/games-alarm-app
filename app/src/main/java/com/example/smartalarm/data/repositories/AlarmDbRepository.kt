@@ -72,8 +72,8 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
                     listDay = getAlarmsFromDbByDayOfWeek(i, currentDate[i])
 
                     for (iAlarm in listDay) {
-                        if (iAlarm.alarmSimpleData.isOn) {
-                            list.add(iAlarm.alarmSimpleData)
+                        if (iAlarm.isOn) {
+                            list.add(AlarmSimpleData(iAlarm))
                             break
                         }
                     }
@@ -83,9 +83,15 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext list
         }
 
+    suspend fun insertAlarmsToDb(alarmsList: List<AlarmData>) =
+        withContext(Dispatchers.IO) {
+            for (alarm in alarmsList)
+                insertAlarmToDb(alarm)
+        }
+
     suspend fun insertAlarmToDb(alarm: AlarmData) =
         withContext(Dispatchers.IO) {
-            alarm.alarmSimpleData.id = alarmsDao.insertNewAlarmData(alarm.alarmSimpleData)
+            alarm.id = alarmsDao.insertNewAlarmData(AlarmSimpleData(alarm))
             insertAlarmGame(alarm)
         }
 
@@ -96,20 +102,20 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
 
     suspend fun updateAlarmInDbWithGames(alarm: AlarmData) =
         withContext(Dispatchers.IO) {
-            alarmsDao.updateAlarm(alarm.alarmSimpleData)
-            alarmsDao.deleteAlarmsGames(alarm.alarmSimpleData.id)
+            alarmsDao.updateAlarm(AlarmSimpleData(alarm))
+            alarmsDao.deleteAlarmsGames(alarm.id)
             insertAlarmGame(alarm)
         }
 
     private suspend fun insertAlarmGame(alarm: AlarmData) =
         withContext(Dispatchers.IO) {
             for (i in 1..ALL_GAMES.size) {
-                Log.i("grib", alarm.alarmSimpleData.id.toString())
+                Log.i("grib", alarm.id.toString())
                 if (alarm.gamesList[i - 1] != 0)
                     alarmsDao.insertNewAlarmUserGamesData(
                         AlarmUserGamesData(
                             idGame = i,
-                            idAlarm = alarm.alarmSimpleData.id,
+                            idAlarm = alarm.id,
                             difficulty = alarm.gamesList[i - 1]
                         )
                     )
@@ -129,9 +135,9 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
 
     suspend fun insertRecord(record: RecordsData, alarm: AlarmData) =
         withContext(Dispatchers.IO) {
-            alarm.alarmSimpleData.recordScore = record.recordScore
-            alarm.alarmSimpleData.recordSeconds = record.recordTime
-            alarmsDao.updateAlarm(alarm.alarmSimpleData)
+            alarm.recordScore = record.recordScore
+            alarm.recordSeconds = record.recordTime
+            alarmsDao.updateAlarm(AlarmSimpleData(alarm))
 
             alarmsDao.insertRecordData(record)
             alarmsDao.deleteOldRecords()

@@ -90,34 +90,33 @@ class AlarmAdapter(
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
         val alarm = data[position]
-        val alarmSimpleData = alarm.alarmSimpleData
 
         with(holder.binding) {
-            alarmTimeTextView.text = if (alarmSimpleData.timeMinute >= 10)
-                "${alarmSimpleData.timeHour}:${alarmSimpleData.timeMinute}"
+            alarmTimeTextView.text = if (alarm.timeMinute >= 10)
+                "${alarm.timeHour}:${alarm.timeMinute}"
             else
-                "${alarmSimpleData.timeHour}:0${alarmSimpleData.timeMinute}"
-            alarmNameTextView.text = alarmSimpleData.name
+                "${alarm.timeHour}:0${alarm.timeMinute}"
+            alarmNameTextView.text = alarm.name
 
-            if (alarmSimpleData.recordScore != null)
-                recordTextView.text = "Лучший результат: ${alarmSimpleData.recordScore}"
+            if (alarm.recordScore != null)
+                recordTextView.text = "Лучший результат: ${alarm.recordScore}"
             else
                 recordTextView.text = "Нет данных"
 
-            if (alarmSimpleData.activateDate != null) {
+            if (alarm.activateDate != null) {
                 recordTextView.text = "Одноразовый"
             }
 
-            alarmOnOffSwitch.isChecked = alarmSimpleData.isOn
-            holder.setState(alarmOnOffSwitch.isChecked, alarmSimpleData.activateDate == null)
+            alarmOnOffSwitch.isChecked = alarm.isOn
+            holder.setState(alarmOnOffSwitch.isChecked, alarm.activateDate == null)
             alarmOnOffSwitch.setOnClickListener {
-                alarmSimpleData.isOn = alarmOnOffSwitch.isChecked
+                alarm.isOn = alarmOnOffSwitch.isChecked
                 holder.listener.onOnOffSwitchClickListener(alarm)
-                holder.setState(alarmOnOffSwitch.isChecked, alarmSimpleData.activateDate == null)
+                holder.setState(alarmOnOffSwitch.isChecked, alarm.activateDate == null)
             }
 
-            if (alarmSimpleData.isVibration) vibrationImageView.visibility = View.VISIBLE
-            if (alarmSimpleData.isRisingVolume) volumeUpImageView.visibility = View.VISIBLE
+            if (alarm.isVibration) vibrationImageView.visibility = View.VISIBLE
+            if (alarm.isRisingVolume) volumeUpImageView.visibility = View.VISIBLE
 
             menuButton.setOnClickListener {
                 val menu = PopupMenu(holder.binding.root.context, it)
@@ -139,12 +138,12 @@ class AlarmAdapter(
                             AlertDialog.Builder(holder.binding.root.context)
                                 .setTitle("Удаление будильника")
                                 .setIcon(R.drawable.baseline_warning_24)
-                                .setMessage("Вы уверены, что хотите удалить ${alarmSimpleData.name}?")
+                                .setMessage("Вы уверены, что хотите удалить ${alarm.name}?")
                                 .setPositiveButton("Да") { dialog, _ ->
                                     holder.listener.deleteAlarm(alarm)
                                     Toast.makeText(
                                         holder.binding.root.context,
-                                        "${alarmSimpleData.name} удалён",
+                                        "${alarm.name} удалён",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     dialog.dismiss()

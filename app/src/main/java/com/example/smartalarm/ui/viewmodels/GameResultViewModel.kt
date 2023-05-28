@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
+import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
@@ -57,10 +58,10 @@ class GameResultViewModel(application: Application) : AndroidViewModel(applicati
                 ),
                 alarm
             )
-            if (alarm.alarmSimpleData.activateDate == null) {
+            if (alarm.activateDate == null) {
                 alarmCreateRepository.create(alarm)
             } else {
-                alarmDbRepository.deleteAlarmFromDb(alarm.alarmSimpleData)
+                alarmDbRepository.deleteAlarmFromDb(AlarmSimpleData(alarm))
             }
         }
     }

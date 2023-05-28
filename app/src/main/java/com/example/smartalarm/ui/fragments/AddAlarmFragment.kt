@@ -59,7 +59,7 @@ class AddAlarmFragment : Fragment() {
             if (!arguments?.getBoolean("isNew")!!) {
                     viewModel.currentAlarm = viewModel.getAlarm(arguments?.getLong("alarmId")!!)
                     viewModel.gamesList = viewModel.currentAlarm!!.gamesList
-                    setStateFromAlarm(viewModel.currentAlarm!!.alarmSimpleData)
+                    setStateFromAlarm(AlarmSimpleData(viewModel.currentAlarm!!))
             }
             with(arguments?.getIntegerArrayList("games")) {
                 if (this != null)

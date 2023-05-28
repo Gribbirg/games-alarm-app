@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
+import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.getRecordsList
 import com.example.smartalarm.data.repositories.AlarmDbRepository
@@ -24,6 +25,8 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
     private val alarmDbRepository = AlarmDbRepository(
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
+
+    val loadResult: MutableLiveData<Boolean?> = MutableLiveData(null)
 
     init {
         authRepository.currentAccount.observeForever {
@@ -85,10 +88,35 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 
-    fun loadAlarmsOfCurrentUser() {
-        viewModelScope.launch {
-            val alarms = alarmDbRepository.getAllAlarms()
-            usersRealtimeDatabaseRepository.addAlarmsToUser(currentUser.value!!, alarms)
+    fun loadAlarmsOfCurrentUser(): Boolean {
+        if (currentUser.value != null) {
+            viewModelScope.launch {
+                usersRealtimeDatabaseRepository.addAlarmsToUser(
+                    currentUser.value!!,
+                    alarmDbRepository.getAllAlarms(),
+                    loadResult
+                )
+            }
+            return true
         }
+        return false
+    }
+
+    fun loadAlarmsFromInternet(): Boolean {
+        if (currentUser.value != null) {
+            viewModelScope.launch {
+                val alarmList = MutableLiveData<List<AlarmData>>()
+
+                alarmList.observeForever {
+                    viewModelScope.launch {
+                        alarmDbRepository.insertAlarmsToDb(it)
+                    }
+                }
+
+                usersRealtimeDatabaseRepository.getAlarms(currentUser.value!!, alarmList)
+            }
+            return true
+        }
+        return false
     }
 }

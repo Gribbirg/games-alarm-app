@@ -24,7 +24,7 @@ object UsersRealtimeDatabaseRepository {
     suspend fun addUser(account: AccountData?) = withContext(Dispatchers.IO) {
         if (account != null) {
             usersDatabase.child(account.uid!!).get().addOnSuccessListener {
-                Log.i("firebase realtime database", "Got value")
+                Log.i("firebase", "Got value")
                 if (!it.exists())
                     usersDatabase.child(account.uid!!).setValue(account)
             }
@@ -117,11 +117,40 @@ object UsersRealtimeDatabaseRepository {
             }
         }
 
-    suspend fun addAlarmsToUser(account: AccountData, alarms: ArrayList<AlarmData>) =
+    suspend fun addAlarmsToUser(
+        account: AccountData,
+        alarms: ArrayList<AlarmData>,
+        result: MutableLiveData<Boolean?>
+    ) =
         withContext(Dispatchers.IO) {
+            deleteAlarmsOfUser(account)
             val userAlarms = usersDatabase.child(account.uid!!).child("alarms")
             for (alarm in alarms) {
-                userAlarms.child(alarm.alarmSimpleData.id.toString()).setValue(alarm)
+                userAlarms.child(alarm.id.toString()).setValue(alarm).addOnCompleteListener {
+                    result.postValue(it.isSuccessful)
+                }
             }
+        }
+
+    suspend fun deleteAlarmsOfUser(account: AccountData) = withContext(Dispatchers.IO) {
+        usersDatabase.child(account.uid!!).child("alarms").removeValue()
+    }
+
+    suspend fun getAlarms(account: AccountData, alarmsList: MutableLiveData<List<AlarmData>>) =
+        withContext(Dispatchers.IO) {
+            val userAlarms = usersDatabase.child(account.uid!!).child("alarms")
+            userAlarms.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    alarmsList.postValue(
+                        snapshot.children.map { dataSnapshot ->
+                            dataSnapshot.getValue(AlarmData::class.java)!!
+                        }
+                    )
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("firebase", error.toString())
+                }
+            })
         }
 }

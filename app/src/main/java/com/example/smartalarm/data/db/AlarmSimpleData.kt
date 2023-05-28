@@ -3,6 +3,7 @@ package com.example.smartalarm.data.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.smartalarm.data.data.AlarmData
 
 @Entity(tableName = "alarm_table")
 data class AlarmSimpleData(
@@ -59,6 +60,21 @@ data class AlarmSimpleData(
         strList[11]
     )
 
+    constructor(alarmData: AlarmData) : this(
+        alarmData.id,
+        alarmData.name,
+        alarmData.timeHour,
+        alarmData.timeMinute,
+        alarmData.dayOfWeek,
+        alarmData.activateDate,
+        alarmData.recordScore,
+        alarmData.recordSeconds,
+        alarmData.isVibration,
+        alarmData.isRisingVolume,
+        alarmData.isOn,
+        alarmData.ringtonePath,
+    )
+
     // len = 12
     fun toStringArray(): ArrayList<String> {
         return arrayListOf(
@@ -74,6 +90,6 @@ data class AlarmSimpleData(
             isRisingVolume.toString(),
             isOn.toString(),
             ringtonePath
-            )
+        )
     }
 }
