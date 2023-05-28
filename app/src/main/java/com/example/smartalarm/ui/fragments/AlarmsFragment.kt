@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +21,6 @@ import com.example.smartalarm.databinding.FragmentAlarmsBinding
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
 import com.google.android.material.color.MaterialColors
-import java.time.DayOfWeek
 
 
 class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
@@ -236,9 +234,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         binding.infoTextView.text = viewModel.getInfoLine()
     }
 
-//    private fun setRecyclerData() {
-//        viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek)
-//    }
 
     private fun setNoAlarmsViewsVisibility(isVisible: Boolean) {
         if (isVisible) {
@@ -277,10 +272,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                 NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
             )
     }
-
-//    private fun getEarliestAlarms() {
-//        viewModel.getEarliestAlarmsForAllWeek()
-//    }
 
     override fun onOnOffSwitchClickListener(alarm: AlarmSimpleData) {
         viewModel.setAlarmState(alarm)

@@ -72,9 +72,13 @@ class AddAlarmFragment : Fragment() {
 
 
         binding.addAlarmSaveButton.setOnClickListener {
-            ringtonePath = RealPathUtil.getRealPath(requireContext(),
-                RingtoneManager.getActualDefaultRingtoneUri(context,
-                    RingtoneManager.TYPE_ALARM)).toString()
+            ringtonePath = RealPathUtil.getRealPath(
+                requireContext(),
+                RingtoneManager.getActualDefaultRingtoneUri(
+                    context,
+                    RingtoneManager.TYPE_ALARM
+                )
+            ).toString()
 
             Log.i("chosen song", ringtonePath)
 
@@ -173,10 +177,7 @@ class AddAlarmFragment : Fragment() {
             timeHour = binding.addAlarmTimePicker.hour,
             timeMinute = binding.addAlarmTimePicker.minute,
             dayOfWeek = getNumOfCheckedButton(),
-            name = if (binding.addAlarmAlarmNameText.text.toString() == "")
-                "Будильник"
-            else
-                binding.addAlarmAlarmNameText.text.toString(),
+            name = binding.addAlarmAlarmNameText.text.toString(),
             isVibration = binding.addAlarmSetBuzzSwitch.isChecked,
             isRisingVolume = binding.addAlarmGraduallyIncreaseVolumeSwitch.isChecked,
             ringtonePath = ringtonePath,

@@ -41,6 +41,8 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
         alarm: AlarmSimpleData
     ) {
         viewModelScope.launch {
+            if (alarm.name == "") alarm.name = "Будильник"
+
             if (currentAlarm == null) {
 
                 alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
