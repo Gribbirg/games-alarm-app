@@ -8,7 +8,7 @@ interface AlarmsDao {
     @Insert(entity = GameData::class, onConflict = OnConflictStrategy.IGNORE)
     fun insertGamesData(games: List<GameData>)
 
-    @Insert(entity = AlarmSimpleData::class)
+    @Insert(entity = AlarmSimpleData::class, onConflict = OnConflictStrategy.REPLACE)
     fun insertNewAlarmData(alarmSimpleData: AlarmSimpleData): Long
 
     @Insert(entity = AlarmInfoData::class)
