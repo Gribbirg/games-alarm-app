@@ -16,13 +16,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
+import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
 import com.google.android.material.color.MaterialColors
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 
 
 class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
@@ -58,9 +58,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.getAlarmsFromDbByDayOfWeek(1)
-        }
+//        viewModel.getAlarmsFromDbByDayOfWeek(1)
 
         dateViewList = ArrayList()
 
@@ -125,20 +123,15 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
         for (i in 0..6)
             dateViewList[i].layout.setOnClickListener {
-                viewModel.currentDayOfWeek = i
-                setDay()
-                setRecyclerData()
+                viewModel.setDayOfWeek(i)
+                setDay(i)
             }
 
         binding.nextWeekButton.setOnClickListener {
             viewModel.changeWeek(1)
-            setDaysNumAndMonth()
-            getEarliestAlarms()
         }
         binding.previousWeekButton.setOnClickListener {
             viewModel.changeWeek(-1)
-            setDaysNumAndMonth()
-            getEarliestAlarms()
         }
 
 
@@ -171,18 +164,21 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             setNoAlarmsViewsVisibility(it.isEmpty())
         }
 
-        getEarliestAlarms()
-        setDaysNumAndMonth()
-        setDay()
-        setRecyclerData()
+        viewModel.weekCalendarData.observe(viewLifecycleOwner) {
+            setDaysNumAndMonth(it)
+            viewModel.getEarliestAlarmsForAllWeek()
+            setDay(viewModel.currentDayOfWeek)
+            viewModel.getAlarmsFromDbByDayOfWeek()
+        }
+
         return binding.root
     }
 
-    private fun setDaysNumAndMonth() {
+    private fun setDaysNumAndMonth(weekCalendarData: WeekCalendarData) {
         for (i in 0..6) {
             dateViewList[i].numTextView.text =
-                viewModel.weekCalendarData.daysList[i].dayNumber.toString()
-            with(viewModel.weekCalendarData.daysList[i]) {
+                weekCalendarData.daysList[i].dayNumber.toString()
+            with(weekCalendarData.daysList[i]) {
                 if (today)
                     dateViewList[i].setTextsColor(
                         MaterialColors.getColor(
@@ -217,13 +213,13 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
                     )
             }
         }
-        setMonth()
+        setMonth(weekCalendarData)
         setDay()
-        setRecyclerData()
+        viewModel.getAlarmsFromDbByDayOfWeek()
     }
 
-    private fun setMonth() {
-        val listOfMonth = viewModel.weekCalendarData.monthList
+    private fun setMonth(weekCalendarData: WeekCalendarData) {
+        val listOfMonth = weekCalendarData.monthList
 
         binding.monthStartTextView.text = listOfMonth[0]
         binding.monthTextView.text = listOfMonth[1]
@@ -231,20 +227,18 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     }
 
 
-    private fun setDay() {
+    private fun setDay(dayOfWeek: Int? = null) {
         for (i in 0..6) {
             dateViewList[i].layout.setBackgroundResource(0)
         }
-        if (viewModel.currentDayOfWeek != null)
-            dateViewList[viewModel.currentDayOfWeek!!].layout.setBackgroundResource(R.drawable.rounded_corners_green)
+        if (dayOfWeek != null)
+            dateViewList[dayOfWeek].layout.setBackgroundResource(R.drawable.rounded_corners_green)
         binding.infoTextView.text = viewModel.getInfoLine()
     }
 
-    private fun setRecyclerData() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek)
-        }
-    }
+//    private fun setRecyclerData() {
+//        viewModel.getAlarmsFromDbByDayOfWeek(viewModel.currentDayOfWeek)
+//    }
 
     private fun setNoAlarmsViewsVisibility(isVisible: Boolean) {
         if (isVisible) {
@@ -284,17 +278,12 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             )
     }
 
-    private fun getEarliestAlarms() {
-        lifecycleScope.launch {
-            viewModel.getEarliestAlarmsForAllWeek()
-        }
-    }
+//    private fun getEarliestAlarms() {
+//        viewModel.getEarliestAlarmsForAllWeek()
+//    }
 
     override fun onOnOffSwitchClickListener(alarm: AlarmSimpleData) {
-        lifecycleScope.launch {
-            viewModel.setAlarmStateInDb(alarm)
-            getEarliestAlarms()
-        }
+        viewModel.setAlarmState(alarm)
     }
 
     override fun openEditMenu(alarm: AlarmSimpleData) {
@@ -302,11 +291,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
     }
 
     override fun deleteAlarm(alarm: AlarmSimpleData) {
-        lifecycleScope.launchWhenStarted {
-            viewModel.deleteAlarmFromDb(alarm)
-            setRecyclerData()
-            getEarliestAlarms()
-        }
+        viewModel.deleteAlarmFromDb(alarm)
     }
 
     override fun getColor(on: Boolean, regular: Boolean): Int =
