@@ -45,7 +45,8 @@ class CalcGameFragment : Fragment() {
         viewModel = ViewModelProvider(this)[CalcGameViewModel::class.java]
 
         viewModel.setStartTime(requireArguments().getLong("start time", 0))
-        viewModel.getAlarm(requireArguments().getLong("alarm id"))
+        if (!requireArguments().getBoolean("test"))
+            viewModel.getAlarm(requireArguments().getLong("alarm id"))
 
         viewModel.timeCurrentString.observe(viewLifecycleOwner) {
             binding.calcTimeTextView.text = it
@@ -65,13 +66,16 @@ class CalcGameFragment : Fragment() {
     }
 
     override fun onResume() {
-        val notificationManager = NotificationManagerCompat.from(requireContext())
-        notificationManager.cancel(requireArguments().getLong("alarm id").toInt())
+        if (!requireArguments().getBoolean("test")) {
+            val notificationManager = NotificationManagerCompat.from(requireContext())
+            notificationManager.cancel(requireArguments().getLong("alarm id").toInt())
+        }
         super.onResume()
     }
 
     override fun onPause() {
-        viewModel.startNewAlarm()
+        if (!requireArguments().getBoolean("test"))
+            viewModel.startNewAlarm()
         super.onPause()
     }
 

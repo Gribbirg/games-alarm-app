@@ -81,9 +81,10 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
     private fun showErrorText(on: Boolean) {
         if (on) {
             binding.recordsErrorTextView.visibility = View.VISIBLE
-            binding.recordsErrorTextView.text = "Нет данных"
+            binding.recordsErrorImageView.visibility = View.VISIBLE
         } else {
             binding.recordsErrorTextView.visibility = View.GONE
+            binding.recordsErrorImageView.visibility = View.GONE
         }
     }
 

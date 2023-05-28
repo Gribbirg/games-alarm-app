@@ -80,6 +80,7 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
         val bundle = requireArguments()
         bundle.putBoolean("test", true)
         bundle.putInt("difficulty", gameData.difficulty)
+        bundle.putIntegerArrayList("games", viewModel.getDifficultiesList())
         val navController = Navigation.findNavController(binding.root)
         when (gameData.id) {
             1 -> navController.navigate(
