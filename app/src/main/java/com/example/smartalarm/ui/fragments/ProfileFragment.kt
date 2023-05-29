@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.smartalarm.R
@@ -48,16 +50,6 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
         binding.authButton.setOnClickListener {
             singIn()
         }
-
-//        binding.loadAlarmsButton.setOnClickListener {
-//            if (!viewModel.loadAlarmsOfCurrentUser())
-//                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
-//        }
-
-//        binding.loadAlarmsFromButton.setOnClickListener {
-//            if (!viewModel.loadAlarmsFromInternet())
-//                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
-//        }
 
         viewModel.currentUser.observe(viewLifecycleOwner) {
             setViewAccountData(it)
@@ -114,11 +106,6 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
         launcher.launch(googleSignInClient.signInIntent)
     }
 
-    private fun singOut() {
-        viewModel.singOut()
-        googleSignInClient.signOut()
-    }
-
     private fun setViewAccountData(user: AccountData? = null) {
         if (user == null) {
             binding.userNameTextView.text = "Войдите в аккаунт Google"
@@ -136,44 +123,10 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
         }
     }
 
-//    private fun setAuthButtonState(enter: Boolean) {
-//        with(binding.authButton) {
-//            if (enter) {
-//                text = "ВЫЙТИ"
-//                setTextColor(
-//                    MaterialColors.getColor(
-//                        requireContext(),
-//                        com.google.android.material.R.attr.colorTertiary,
-//                        Color.BLACK
-//                    )
-//                )
-//            } else {
-//                text = "ВОЙТИ"
-//                setTextColor(
-//                    MaterialColors.getColor(
-//                        requireContext(),
-//                        com.google.android.material.R.attr.colorSecondary,
-//                        Color.BLACK
-//                    )
-//                )
-//            }
-//        }
-////        setLoadsButtonsState(enter)
-//    }
-
-//    private fun setLoadsButtonsState(visible: Boolean) {
-//        if (visible) {
-//            binding.loadAlarmsButton.visibility = View.VISIBLE
-//            binding.loadAlarmsFromButton.visibility = View.VISIBLE
-//        } else {
-//            binding.loadAlarmsButton.visibility = View.INVISIBLE
-//            binding.loadAlarmsFromButton.visibility = View.INVISIBLE
-//        }
-//    }
-
     override fun onDeleteClickListener(accountData: AccountData) {
         viewModel.deleteRecord(accountData)
     }
 
     override fun isCurrentUser(accountData: AccountData): Boolean = true
+    override fun onProfileClickListener(accountData: AccountData) {}
 }

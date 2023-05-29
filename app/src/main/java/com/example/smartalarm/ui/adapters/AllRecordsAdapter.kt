@@ -1,17 +1,14 @@
 package com.example.smartalarm.ui.adapters
 
 import android.app.AlertDialog
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.data.RecordInternetData
-import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.databinding.AllRecordsItemBinding
 
 class AllRecordsAdapter(
@@ -74,8 +71,19 @@ class AllRecordsAdapter(
                             .show()
 
                     }
-                }
+                } else {
 
+                    if (currentData.uid != "") {
+                        userPhotoRecordImageView.setOnClickListener {
+                            holder.listener.onProfileClickListener(currentData)
+                        }
+
+                        userNameTextView.setOnClickListener {
+                            holder.listener.onProfileClickListener(currentData)
+                        }
+                    }
+
+                }
             } else {
                 Glide.with(photoRecordHolder.context).load(R.drawable.baseline_no_accounts_24)
                     .into(userPhotoRecordImageView)
@@ -91,5 +99,6 @@ class AllRecordsAdapter(
     interface OnWorldRecordClickListener {
         fun onDeleteClickListener(accountData: AccountData)
         fun isCurrentUser(accountData: AccountData): Boolean
+        fun onProfileClickListener(accountData: AccountData)
     }
 }
