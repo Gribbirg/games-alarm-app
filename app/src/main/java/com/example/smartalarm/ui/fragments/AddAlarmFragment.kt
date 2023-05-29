@@ -4,6 +4,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
@@ -73,13 +75,13 @@ class AddAlarmFragment : Fragment() {
         }
 
         binding.addAlarmSaveButton.setOnClickListener {
-            ringtonePath = RealPathUtil.getRealPath(
-                requireContext(),
-                RingtoneManager.getActualDefaultRingtoneUri(
-                    context,
-                    RingtoneManager.TYPE_ALARM
-                )
-            ).toString()
+//            ringtonePath = RealPathUtil.getRealPath(
+//                requireContext(),
+//                RingtoneManager.getActualDefaultRingtoneUri(
+//                    context,
+//                    RingtoneManager.TYPE_ALARM
+//                )
+//            ).toString()
 
             Log.i("chosen song", ringtonePath)
 
@@ -116,7 +118,7 @@ class AddAlarmFragment : Fragment() {
         }
 
         binding.addAlarmChooseMelodyButton.setOnClickListener {
-            //selectLauncher.launch(arrayOf("audio/*"))
+            selectLauncher.launch(arrayOf("audio/*"))
         }
 
         binding.addAlarmMenuButton.setOnClickListener {
@@ -233,26 +235,28 @@ class AddAlarmFragment : Fragment() {
     }
 
     //TODO("fix ringtone selection methods")
-//    private val selectLauncher =
-//        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-//            try {
-//                uri?.let { selectFile(it) }
-//            } catch (e: Exception) {
-//                Log.i("selection fail", e.toString())
-//            }
-//        }
-//
-//    private fun selectFile(uri: Uri) {
-//        val uriPathHelper = RealPathUtil
-//
-//        ringtonePath = uriPathHelper.getRealPath(requireContext(), uri).toString()
-//        if (ringtonePath == "null") {
-//            selectFile(RingtoneManager.getActualDefaultRingtoneUri(context,
-//                RingtoneManager.TYPE_RINGTONE))
-//        }
-//
-//        Log.i("chosen song", ringtonePath)
-//    }
+    private val selectLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            try {
+                uri?.let { selectFile(it) }
+            } catch (e: Exception) {
+                Log.i("selection fail", e.toString())
+            }
+        }
+
+    private fun selectFile(uri: Uri) {
+        val uriPathHelper = RealPathUtil
+
+        Log.i("chosen song before check", ringtonePath)
+
+        ringtonePath = uriPathHelper.getRealPath(requireContext(), uri).toString()
+        if (ringtonePath == "null") {
+            selectFile(RingtoneManager.getActualDefaultRingtoneUri(context,
+                RingtoneManager.TYPE_RINGTONE))
+        }
+
+        Log.i("chosen song after check", ringtonePath)
+    }
 
     private fun pasteAlarm() {
         val clipboard =
