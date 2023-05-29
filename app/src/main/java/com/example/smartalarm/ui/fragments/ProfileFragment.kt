@@ -46,24 +46,7 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
         )
 
         binding.authButton.setOnClickListener {
-            Log.i("grib", "work")
-            if (binding.authButton.text == "ВОЙТИ")
-                singIn()
-            else {
-                AlertDialog.Builder(context)
-                    .setTitle("Выход из аккаунта")
-                    .setIcon(R.drawable.baseline_warning_24)
-                    .setMessage("Вы уверены, что хотите выйти из аккаунта?")
-                    .setPositiveButton("Да") { dialog, _ ->
-                        singOut()
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("Нет") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .create()
-                    .show()
-            }
+            singIn()
         }
 
 //        binding.loadAlarmsButton.setOnClickListener {
@@ -143,40 +126,40 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
             Glide.with(requireContext())
                 .clear(binding.userPhotoImageView)
             binding.userPhotoImageView.setBackgroundResource(R.drawable.baseline_no_accounts_24)
-            setAuthButtonState(false)
+            binding.authButton.visibility = View.VISIBLE
         } else {
             binding.userNameTextView.text = user.name
             binding.userEmailTextView.text = user.email
             binding.userPhotoImageView.setBackgroundResource(0)
             Glide.with(requireContext()).load(user.photo).into(binding.userPhotoImageView)
-            setAuthButtonState(true)
+            binding.authButton.visibility = View.GONE
         }
     }
 
-    private fun setAuthButtonState(enter: Boolean) {
-        with(binding.authButton) {
-            if (enter) {
-                text = "ВЫЙТИ"
-                setTextColor(
-                    MaterialColors.getColor(
-                        requireContext(),
-                        com.google.android.material.R.attr.colorTertiary,
-                        Color.BLACK
-                    )
-                )
-            } else {
-                text = "ВОЙТИ"
-                setTextColor(
-                    MaterialColors.getColor(
-                        requireContext(),
-                        com.google.android.material.R.attr.colorSecondary,
-                        Color.BLACK
-                    )
-                )
-            }
-        }
-//        setLoadsButtonsState(enter)
-    }
+//    private fun setAuthButtonState(enter: Boolean) {
+//        with(binding.authButton) {
+//            if (enter) {
+//                text = "ВЫЙТИ"
+//                setTextColor(
+//                    MaterialColors.getColor(
+//                        requireContext(),
+//                        com.google.android.material.R.attr.colorTertiary,
+//                        Color.BLACK
+//                    )
+//                )
+//            } else {
+//                text = "ВОЙТИ"
+//                setTextColor(
+//                    MaterialColors.getColor(
+//                        requireContext(),
+//                        com.google.android.material.R.attr.colorSecondary,
+//                        Color.BLACK
+//                    )
+//                )
+//            }
+//        }
+////        setLoadsButtonsState(enter)
+//    }
 
 //    private fun setLoadsButtonsState(visible: Boolean) {
 //        if (visible) {
