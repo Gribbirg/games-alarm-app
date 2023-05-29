@@ -177,8 +177,7 @@
                 android:layout_marginHorizontal="15sp"
                 android:layout_marginBottom="10sp"
                 android:text="@string/addAlarmChooseMelodyButton"
-                android:backgroundTint="?attr/colorSecondary"
-                android:visibility="gone"/>
+                android:backgroundTint="?attr/colorSecondary" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/addAlarmSetBuzzSwitch"

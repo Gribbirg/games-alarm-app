@@ -23,16 +23,18 @@ import java.io.IOException
 class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
-        lateinit var track: Ringtone
+//        lateinit var track: Ringtone
+        var mediaPlayer: MediaPlayer? = null
 
         fun stopAudio() {
-            //if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
-            //    Log.i("music", "music off!")
-            //    mediaPlayer!!.release()
-            //    mediaPlayer = null
-            if (track.isPlaying) {
+            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
                 Log.i("music", "music off!")
-                track.stop()
+                mediaPlayer!!.release()
+                mediaPlayer = null
+//            if (track.isPlaying) {
+//                Log.i("music", "music off!")
+//                track.stop()
+//            }
             }
         }
     }
@@ -99,38 +101,38 @@ class AlarmReceiver : BroadcastReceiver() {
             AlarmVibrator.start(pattern, 0)
         }
 
-//        mediaPlayer = MediaPlayer()
-//        if (isRisingVolume)
-//            mediaPlayer!!.setAudioAttributes(
-//                AudioAttributes.Builder()
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//                    .setUsage(AudioAttributes.USAGE_ALARM)
-//                    .build()
-//            )
-//        else
-//            mediaPlayer!!.setAudioAttributes(
-//                AudioAttributes.Builder()
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//                    .setUsage(AudioAttributes.USAGE_MEDIA)
-//                    .build()
-//            )
+        mediaPlayer = MediaPlayer()
+        if (isRisingVolume)
+            mediaPlayer!!.setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build()
+            )
+        else
+            mediaPlayer!!.setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
+            )
 
-        val ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
-        track = RingtoneManager.getRingtone(context, ringtone)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            track.isLooping = true
-        }
-        track.play()
-
-//        mediaPlayer!!.isLooping = true
-        Log.i("music", "music on!")
-//        try {
-//            mediaPlayer!!.setDataSource(ringtonePath)
-//            mediaPlayer!!.prepare()
-//            mediaPlayer!!.start()
-//
-//        } catch (e: IOException) {
-//            e.printStackTrace()
+//        val ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+//        track = RingtoneManager.getRingtone(context, ringtone)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            track.isLooping = true
 //        }
+//        track.play()
+
+        mediaPlayer!!.isLooping = true
+        Log.i("music", "music on!")
+        try {
+            mediaPlayer!!.setDataSource(ringtonePath)
+            mediaPlayer!!.prepare()
+            mediaPlayer!!.start()
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 }
