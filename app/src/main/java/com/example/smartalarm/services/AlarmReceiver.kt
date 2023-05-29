@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
@@ -113,7 +114,10 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         mediaPlayer = MediaPlayer()
-        if (isRisingVolume)
+        val audioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        if (isRisingVolume || audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) <=
+            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 4)
             mediaPlayer!!.setAudioAttributes(
                 AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -146,6 +150,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 RingtoneManager.getActualDefaultRingtoneUri(context,
                 RingtoneManager.TYPE_RINGTONE)))
         }
+
         mediaPlayer!!.prepare()
         mediaPlayer!!.start()
     }
