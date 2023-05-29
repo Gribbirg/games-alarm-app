@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
 import com.example.smartalarm.data.db.GameData
+import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.databinding.FragmentProfileBinding
 import com.example.smartalarm.databinding.FragmentRecordsBinding
 import com.example.smartalarm.ui.adapters.AllRecordsAdapter
@@ -36,11 +37,13 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
         binding.fromSelectionButtons.check(R.id.myButton)
 
         binding.typeSelectionButtons.addOnButtonCheckedListener { _, _, _ ->
-            setupChange()
+            viewModel.getRecordsFromDb(getNumOfButtonById())
+
         }
 
         binding.fromSelectionButtons.addOnButtonCheckedListener { _, _, _ ->
-            setupChange()
+            viewModel.getRecordsFromDb(getNumOfButtonById())
+
         }
 
         viewModel.myRecordsData.observe(viewLifecycleOwner) {
@@ -53,21 +56,21 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
 
         viewModel.allRecordsData.observe(viewLifecycleOwner) {
             showErrorText(it.isEmpty())
-            binding.allRecordsRecyclerView.apply {
+            binding.recordsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = AllRecordsAdapter(it)
             }
         }
 
         viewModel.getRecordsFromDb(0)
-        setupChange()
+        viewModel.getRecordsFromDb(getNumOfButtonById())
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        setupChange()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        setupChange()
+//    }
 
     private fun getNumOfButtonById(): Int {
         var res = 0
@@ -88,21 +91,21 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
         }
     }
 
-    private fun setupChange() {
-        with(getNumOfButtonById()) {
-            viewModel.getRecordsFromDb(this)
-            if (this < 2) {
-                binding.allRecordsRecyclerView.visibility = View.GONE
-                binding.recordsRecyclerView.visibility = View.VISIBLE
-            } else {
-                binding.recordsRecyclerView.visibility = View.GONE
-                binding.allRecordsRecyclerView.visibility = View.VISIBLE
-            }
-        }
-    }
+//    private fun setupChange() {
+//        with(g) {
+//            viewModel.getRecordsFromDb(getNumOfButtonById())
+//            if (this < 2) {
+//                binding.allRecordsRecyclerView.visibility = View.GONE
+//                binding.recordsRecyclerView.visibility = View.VISIBLE
+//            } else {
+//                binding.recordsRecyclerView.visibility = View.GONE
+//                binding.allRecordsRecyclerView.visibility = View.VISIBLE
+//            }
+//        }
+//    }
 
-    override fun onShareClickListener(gameData: GameData) {
-        if (!viewModel.shareRecord(gameData))
+    override fun onShareClickListener(recordsData: RecordsData) {
+        if (!viewModel.shareRecord(recordsData, getNumOfButtonById()))
             Toast.makeText(context, "Войдите в аккаунт!", Toast.LENGTH_LONG).show()
     }
 }

@@ -1,5 +1,6 @@
 package com.example.smartalarm.data.db
 
+import androidx.core.text.isDigitsOnly
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -28,14 +29,16 @@ data class RecordsData(
     var gameName: String,
 
     @ColumnInfo(name = "date")
-    var date: String,
+    var date: String? = null,
 
     @ColumnInfo(name = "record_score")
-    var recordScore: Int,
+    var recordScore: Int? = null,
 
     @ColumnInfo(name = "record_time")
-    var recordTime: String,
+    var recordTime: String? = null,
 
     @ColumnInfo(name = "record_shared")
     var recordShared: Boolean = false
-)
+) {
+    constructor(gameData: GameData): this (gameId = gameData.id, gameName = gameData.name)
+}

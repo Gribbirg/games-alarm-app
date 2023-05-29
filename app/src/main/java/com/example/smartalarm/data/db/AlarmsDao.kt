@@ -53,7 +53,7 @@ interface AlarmsDao {
     @Insert(entity = RecordsData::class)
     fun insertRecordData(recordsData: RecordsData)
 
-    @Query("DELETE FROM records_table where id NOT IN (SELECT id from records_table ORDER BY id DESC LIMIT 100)")
+    @Query("DELETE FROM records_table where id NOT IN (SELECT id from records_table ORDER BY record_score DESC LIMIT 100)")
     fun deleteOldRecords()
 
     @Update(entity = GameData::class)
@@ -76,4 +76,10 @@ interface AlarmsDao {
 
     @Query("SELECT id FROM alarm_table")
     fun getAlarmsIds(): List<Long>
+
+    @Query("SELECT * FROM records_table WHERE game_id = :gameId ORDER BY record_score DESC LIMIT 1")
+    fun getTopRecordOfGame(gameId: Int): RecordsData?
+
+    @Update(entity = RecordsData::class)
+    fun updateRecord(recordsData: RecordsData)
 }

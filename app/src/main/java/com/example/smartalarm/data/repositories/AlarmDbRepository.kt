@@ -133,6 +133,18 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext alarmsDao.getAllGames()
         }
 
+    suspend fun getTopRecords(): ArrayList<RecordsData> =
+        withContext(Dispatchers.IO) {
+            val games = getGames()
+            val res = ArrayList<RecordsData>()
+            var record: RecordsData?
+            for (game in games) {
+                record = alarmsDao.getTopRecordOfGame(game.id)
+                res.add(record ?: RecordsData(game))
+            }
+            return@withContext res
+        }
+
     suspend fun insertRecord(record: RecordsData, alarm: AlarmData) =
         withContext(Dispatchers.IO) {
             alarm.recordScore = record.recordScore
@@ -142,7 +154,7 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             alarmsDao.insertRecordData(record)
             alarmsDao.deleteOldRecords()
             val game = alarmsDao.getGameById(record.gameId)
-            if (game.record == null || record.recordScore > game.record!!) {
+            if (game.record == null || record.recordScore!! > game.record!!) {
                 game.record = record.recordScore
                 game.recordDate = record.date
                 game.recordTime = record.recordTime
@@ -159,4 +171,10 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
         withContext(Dispatchers.IO) {
             return@withContext alarmsDao.getGameById(gameId)
         }
+
+    suspend fun updateRecord(recordsData: RecordsData) =
+        withContext(Dispatchers.IO) {
+            Log.i("grib", recordsData.recordShared.toString())
+            alarmsDao.updateRecord(recordsData)
+    }
 }

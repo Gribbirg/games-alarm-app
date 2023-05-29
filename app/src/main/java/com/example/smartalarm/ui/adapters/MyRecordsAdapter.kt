@@ -7,12 +7,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.R
 import com.example.smartalarm.data.db.GameData
+import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.databinding.RecordItemBinding
 
-class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecordClickListener) :
+class MyRecordsAdapter(var data: List<RecordsData>, private val listener: OnMyRecordClickListener) :
     RecyclerView.Adapter<MyRecordsAdapter.MyRecordsViewHolder>() {
 
-    class MyRecordsViewHolder(val binding: RecordItemBinding, val listener: OnMyRecordClickListener) :
+    class MyRecordsViewHolder(
+        val binding: RecordItemBinding,
+        val listener: OnMyRecordClickListener
+    ) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyRecordsViewHolder {
@@ -32,17 +36,13 @@ class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecor
         val currentData = data[position]
 
         with(holder.binding) {
-            gameNameRecordsTextView.text = currentData.name
-            if (currentData.recordDate != null)
-                dateRecordTextView.text = currentData.recordDate
-            if (currentData.record != null)
-                recordPointsTextView.text = currentData.record.toString()
-            if (currentData.recordTime != null)
+            gameNameRecordsTextView.text = currentData.gameName
+            if (currentData.date != null) {
+                dateRecordTextView.text = currentData.date
+                recordPointsTextView.text = currentData.recordScore.toString()
                 recordTimeTextView.text = "Время: ${currentData.recordTime}"
-            else
-                shareButton.visibility = View.GONE
-
-            if (currentData.recordShared)
+            }
+            if (currentData.recordShared || currentData.date == null)
                 shareButton.visibility = View.GONE
 
             shareButton.setOnClickListener {
@@ -51,6 +51,7 @@ class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecor
                     .setIcon(R.drawable.baseline_warning_24)
                     .setMessage("Вы уверены, что хотите поделиться данным результатом? Его смогут увидеть другие пользователи")
                     .setPositiveButton("Да") { dialog, _ ->
+                        currentData.recordShared = true
                         listener.onShareClickListener(currentData)
                         dialog.dismiss()
                     }
@@ -64,6 +65,6 @@ class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecor
     }
 
     interface OnMyRecordClickListener {
-        fun onShareClickListener(gameData: GameData)
+        fun onShareClickListener(recordsData: RecordsData)
     }
 }

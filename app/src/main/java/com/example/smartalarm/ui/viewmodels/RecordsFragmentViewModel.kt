@@ -1,12 +1,14 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
+import android.app.RecoverableSecurityException
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.GameData
+import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.data.db.getRecordsList
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
@@ -21,7 +23,7 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
     private val authRepository = AuthRepository
     private val usersRealtimeDatabaseRepository = UsersRealtimeDatabaseRepository
     var currentUser: AccountData? = null
-    val myRecordsData: MutableLiveData<ArrayList<GameData>> = MutableLiveData()
+    val myRecordsData: MutableLiveData<ArrayList<RecordsData>> = MutableLiveData()
     val allRecordsData: MutableLiveData<List<AccountData>> = MutableLiveData()
 
     init {
@@ -34,13 +36,9 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
     fun getRecordsFromDb(state: Int) {
         viewModelScope.launch {
             when (state) {
-                0 -> myRecordsData.postValue(ArrayList(alarmDbRepository.getGames()))
+                0 -> myRecordsData.postValue(alarmDbRepository.getTopRecords())
                 1 -> {
-                    val fromDb = alarmDbRepository.getRecordsByScore()
-                    val res: ArrayList<GameData> = ArrayList()
-                    for (record in fromDb)
-                        res.add(GameData(record))
-                    myRecordsData.postValue(res)
+                    myRecordsData.postValue(ArrayList(alarmDbRepository.getRecordsByScore()))
                 }
 
                 2 -> {
@@ -78,10 +76,12 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 
-    fun shareRecord(gameData: GameData): Boolean {
+    fun shareRecord(recordsData: RecordsData, state: Int): Boolean {
         if (currentUser == null) return false
         viewModelScope.launch {
-            usersRealtimeDatabaseRepository.updateUserRecords(currentUser!!, gameData)
+            usersRealtimeDatabaseRepository.updateUserRecords(currentUser!!, GameData(recordsData))
+            alarmDbRepository.updateRecord(recordsData)
+            getRecordsFromDb(state)
         }
         return true
     }
