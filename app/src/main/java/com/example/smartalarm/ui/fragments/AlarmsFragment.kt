@@ -13,7 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
@@ -25,6 +25,7 @@ import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.FragmentAlarmsBinding
+import com.example.smartalarm.services.AlarmMediaPlayer
 import com.example.smartalarm.ui.adapters.AlarmAdapter
 import com.example.smartalarm.ui.viewmodels.AlarmsFragmentViewModel
 import com.google.android.material.color.MaterialColors
@@ -306,6 +307,10 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
 
     override fun deleteAlarm(alarm: AlarmData) {
         viewModel.deleteAlarmFromDb(AlarmSimpleData(alarm))
+        context?.let {
+            NotificationManagerCompat.from(it).cancel(alarm.id.toInt())
+            if (AlarmMediaPlayer.currentAlarmId == alarm.id.toInt()) AlarmMediaPlayer.stopAudio()
+        }
     }
 }
 

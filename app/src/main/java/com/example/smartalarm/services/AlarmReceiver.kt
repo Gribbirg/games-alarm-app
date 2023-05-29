@@ -6,102 +6,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.AudioAttributes
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.media.Ringtone
-import android.media.RingtoneManager
 import android.os.Build
-import android.os.Vibrator
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smartalarm.R
-import com.example.smartalarm.data.utils.RealPathUtil
 import com.example.smartalarm.ui.activities.GamesActivity
-import com.example.smartalarm.ui.adapters.AlarmAdapter
-import java.io.IOException
 
 class AlarmReceiver : BroadcastReceiver() {
-
-    companion object {
-//        lateinit var track: Ringtone
-        var mediaPlayer: MediaPlayer? = null
-
-        fun stopAudio() {
-            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
-                Log.i("music", "music off!")
-                mediaPlayer!!.release()
-                mediaPlayer = null
-//            if (track.isPlaying) {
-//                Log.i("music", "music off!")
-//                track.stop()
-//            }
-            }
-        }
-
-        fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean,
-                      ringtonePath: String) {
-
-            val ringtonePathFinal: String? = if (ringtonePath == "null") {
-                RealPathUtil.getRealPath(context!!, RingtoneManager.getActualDefaultRingtoneUri(context,
-                    RingtoneManager.TYPE_RINGTONE))
-            } else {
-                ringtonePath
-            }
-
-            Log.i("chosen song after check", ringtonePathFinal!!)
-
-            AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
-
-            if (vibrationRequired) {
-                val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
-                AlarmVibrator.start(pattern, 0)
-            }
-
-            mediaPlayer = MediaPlayer()
-            val audioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-            if (isRisingVolume || audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) <=
-                audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 4)
-                mediaPlayer!!.setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .build()
-                )
-            else
-                mediaPlayer!!.setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .build()
-                )
-
-//        val ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
-//        track = RingtoneManager.getRingtone(context, ringtone)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            track.isLooping = true
-//        }
-//        track.play()
-
-            mediaPlayer!!.isLooping = true
-            Log.i("music", "music on!")
-            try {
-                mediaPlayer!!.setDataSource(ringtonePathFinal)
-
-            } catch (e: IOException) {
-                e.printStackTrace()
-                mediaPlayer!!.setDataSource(RealPathUtil.getRealPath(context,
-                    RingtoneManager.getActualDefaultRingtoneUri(context,
-                        RingtoneManager.TYPE_RINGTONE)))
-            }
-
-            mediaPlayer!!.prepare()
-            mediaPlayer!!.start()
-        }
-    }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.i("alarm", "Alarm on start!")
@@ -152,6 +65,8 @@ class AlarmReceiver : BroadcastReceiver() {
         ) {
             notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
         }
-        playAudio(context, alarmRisingVolume, alarmVibration, alarmRingtone!!)
+
+        AlarmMediaPlayer.currentAlarmId = alarmId.toInt()
+        AlarmMediaPlayer.playAudio(context, alarmRisingVolume, alarmVibration, alarmRingtone!!)
     }
 }

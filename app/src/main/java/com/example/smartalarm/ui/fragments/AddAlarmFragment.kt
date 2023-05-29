@@ -3,7 +3,6 @@ package com.example.smartalarm.ui.fragments
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -18,7 +17,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenStarted
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
@@ -51,7 +49,6 @@ class AddAlarmFragment : Fragment() {
         if (ringtonePath != "null") {
             binding.addAlarmChosenMelodyText.setText("Выбранная мелодия: ".plus(ringtonePath.substringAfterLast("/")))
         }
-        Log.i("resume_update textView", "it resumed")
     }
 
     override fun onCreateView(
