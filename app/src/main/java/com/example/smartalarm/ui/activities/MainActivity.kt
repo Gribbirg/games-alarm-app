@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val NOTIFICATION_REQUEST_CODE = 100;
     private val VIBRATION_REQUEST_CODE = 101;
     private val READ_EXTERNAL_STORAGE_REQUEST_CODE = 102;
+    private val READ_MEDIA_AUDIO_REQUEST_CODE = 103;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,20 +38,25 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.POST_NOTIFICATIONS,
                 "показ уведомлений"
             )
+
+            checkPermission(
+                READ_MEDIA_AUDIO_REQUEST_CODE,
+                android.Manifest.permission.READ_MEDIA_AUDIO,
+                "чтение аудио-файлов для выбора мелодии"
+            )
         }
 
-            checkPermission(
-                VIBRATION_REQUEST_CODE,
-                android.Manifest.permission.VIBRATE,
-                "вибрацию"
-            )
+        checkPermission(
+            VIBRATION_REQUEST_CODE,
+            android.Manifest.permission.VIBRATE,
+            "вызов вибрации"
+        )
 
-            checkPermission(
-                READ_EXTERNAL_STORAGE_REQUEST_CODE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                "чтение файлов для выбора мелодии"
-            )
-
+        checkPermission(
+            READ_EXTERNAL_STORAGE_REQUEST_CODE,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            "чтение файлов для выбора мелодии"
+        )
 
         val navController = supportFragmentManager
             .findFragmentById(R.id.fragment)
