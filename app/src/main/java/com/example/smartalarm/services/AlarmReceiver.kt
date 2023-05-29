@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
@@ -17,7 +18,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smartalarm.R
+import com.example.smartalarm.data.utils.RealPathUtil
 import com.example.smartalarm.ui.activities.GamesActivity
+import com.example.smartalarm.ui.adapters.AlarmAdapter
 import java.io.IOException
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -94,6 +97,15 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean,
                           ringtonePath: String) {
 
+        val ringtonePathFinal: String? = if (ringtonePath == "null") {
+            RealPathUtil.getRealPath(context!!, RingtoneManager.getActualDefaultRingtoneUri(context,
+                RingtoneManager.TYPE_RINGTONE))
+        } else {
+            ringtonePath
+        }
+
+        Log.i("chosen song after check", ringtonePathFinal!!)
+
         AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
 
         if (vibrationRequired) {
@@ -102,7 +114,10 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         mediaPlayer = MediaPlayer()
-        if (isRisingVolume)
+        val audioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        if (isRisingVolume || audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) <=
+            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 4)
             mediaPlayer!!.setAudioAttributes(
                 AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -127,12 +142,16 @@ class AlarmReceiver : BroadcastReceiver() {
         mediaPlayer!!.isLooping = true
         Log.i("music", "music on!")
         try {
-            mediaPlayer!!.setDataSource(ringtonePath)
-            mediaPlayer!!.prepare()
-            mediaPlayer!!.start()
+            mediaPlayer!!.setDataSource(ringtonePathFinal)
 
         } catch (e: IOException) {
             e.printStackTrace()
+            mediaPlayer!!.setDataSource(RealPathUtil.getRealPath(context,
+                RingtoneManager.getActualDefaultRingtoneUri(context,
+                RingtoneManager.TYPE_RINGTONE)))
         }
+
+        mediaPlayer!!.prepare()
+        mediaPlayer!!.start()
     }
 }

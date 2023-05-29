@@ -46,6 +46,14 @@ class AddAlarmFragment : Fragment() {
             })
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (ringtonePath != "null") {
+            binding.addAlarmChosenMelodyText.setText("Выбранная мелодия: ".plus(ringtonePath.substringAfterLast("/")))
+        }
+        Log.i("resume_update textView", "it resumed")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -234,7 +242,6 @@ class AddAlarmFragment : Fragment() {
         }
     }
 
-    //TODO("fix ringtone selection methods")
     private val selectLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             try {
@@ -248,13 +255,7 @@ class AddAlarmFragment : Fragment() {
         val uriPathHelper = RealPathUtil
 
         Log.i("chosen song before check", ringtonePath)
-
         ringtonePath = uriPathHelper.getRealPath(requireContext(), uri).toString()
-        if (ringtonePath == "null") {
-            selectFile(RingtoneManager.getActualDefaultRingtoneUri(context,
-                RingtoneManager.TYPE_RINGTONE))
-        }
-
         Log.i("chosen song after check", ringtonePath)
     }
 
