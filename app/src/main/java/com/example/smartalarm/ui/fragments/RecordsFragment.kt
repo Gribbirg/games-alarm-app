@@ -69,10 +69,6 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener,
         return binding.root
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        setupChange()
-//    }
 
     private fun getNumOfButtonById(): Int {
         var res = 0
@@ -93,18 +89,6 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener,
         }
     }
 
-//    private fun setupChange() {
-//        with(g) {
-//            viewModel.getRecordsFromDb(getNumOfButtonById())
-//            if (this < 2) {
-//                binding.allRecordsRecyclerView.visibility = View.GONE
-//                binding.recordsRecyclerView.visibility = View.VISIBLE
-//            } else {
-//                binding.recordsRecyclerView.visibility = View.GONE
-//                binding.allRecordsRecyclerView.visibility = View.VISIBLE
-//            }
-//        }
-//    }
 
     override fun onShareClickListener(recordsData: RecordsData) {
         if (!viewModel.shareRecord(recordsData, getNumOfButtonById()))

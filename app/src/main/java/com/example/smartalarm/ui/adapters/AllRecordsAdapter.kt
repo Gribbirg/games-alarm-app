@@ -1,5 +1,6 @@
 package com.example.smartalarm.ui.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -55,8 +56,23 @@ class AllRecordsAdapter(
 
                 if (holder.listener.isCurrentUser(currentData)) {
                     deleteRecordButton.visibility = View.VISIBLE
+
                     deleteRecordButton.setOnClickListener {
-                        listener.onDeleteClickListener(currentData)
+
+                        AlertDialog.Builder(holder.binding.root.context)
+                            .setTitle("Удаление рекорда")
+                            .setIcon(R.drawable.baseline_warning_24)
+                            .setMessage("Вы уверены, что хотите удалить данный результат с сервера?")
+                            .setPositiveButton("Да") { dialog, _ ->
+                                listener.onDeleteClickListener(currentData)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Нет") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+
                     }
                 }
 

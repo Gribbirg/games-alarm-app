@@ -25,6 +25,7 @@ data class RecordInternetData(
     }
 
     constructor(record: RecordsData) : this(
+        id = record.id,
         gameId = record.gameId,
         name = record.gameName,
         record = record.recordScore,

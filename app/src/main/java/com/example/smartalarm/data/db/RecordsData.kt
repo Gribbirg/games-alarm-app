@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
 data class RecordsData(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id: Int = 0,
+    var id: Long = 0L,
 
     @ColumnInfo(name = "game_id")
     var gameId: Int,
@@ -36,9 +36,6 @@ data class RecordsData(
 
     @ColumnInfo(name = "record_time")
     var recordTime: String? = null,
-
-    @ColumnInfo(name = "record_shared")
-    var recordShared: Boolean = false
 ) {
     constructor(gameData: GameData): this (gameId = gameData.id, gameName = gameData.name)
 }
