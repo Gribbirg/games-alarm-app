@@ -16,7 +16,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/baseline_more_vert_24"
-        android:layout_gravity="right"/>
+        android:layout_gravity="end"/>
 
     <TimePicker
         android:id="@+id/addAlarmTimePicker"
@@ -178,6 +178,19 @@
                 android:layout_marginBottom="10sp"
                 android:text="@string/addAlarmChooseMelodyButton"
                 android:backgroundTint="?attr/colorSecondary" />
+
+            <TextView
+                android:id="@+id/addAlarmChosenMelodyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
+                android:layout_marginEnd="20sp"
+                android:layout_marginBottom="10sp"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnBackground"
+                tools:text="Выбранная мелодия: по умолчанию"
+                android:text="@string/addAlarmChosenMelodyText" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/addAlarmSetBuzzSwitch"
