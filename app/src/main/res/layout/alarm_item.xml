@@ -104,15 +104,26 @@
                 app:layout_constraintGuide_begin="20dp" />
 
             <TextView
-                android:id="@+id/gameCounterTextView"
+                android:id="@+id/gameCounterTextTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Игр:\n"
+                android:text="Игр:"
                 android:textSize="20sp"
                 android:gravity="center"
                 app:layout_constraintRight_toLeftOf="@+id/alarmOnOffSwitch"
-                app:layout_constraintTop_toBottomOf="@id/alarmNameTextView"
+                app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
                 app:layout_constraintLeft_toRightOf="@id/alarmTimeTextView"/>
+
+            <TextView
+                android:id="@+id/gameCounterTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="8"
+                android:textSize="20sp"
+                android:gravity="center"
+                app:layout_constraintLeft_toLeftOf="@id/gameCounterTextTextView"
+                app:layout_constraintRight_toRightOf="@id/gameCounterTextTextView"
+                app:layout_constraintTop_toBottomOf="@id/gameCounterTextTextView"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

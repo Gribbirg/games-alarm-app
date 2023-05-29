@@ -42,6 +42,9 @@ class MyRecordsAdapter(var data: List<GameData>, private val listener: OnMyRecor
             else
                 shareButton.visibility = View.GONE
 
+            if (currentData.recordShared)
+                shareButton.visibility = View.GONE
+
             shareButton.setOnClickListener {
                 AlertDialog.Builder(holder.binding.root.context)
                     .setTitle("Поделиться результатом")

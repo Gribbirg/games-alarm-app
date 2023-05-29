@@ -34,5 +34,8 @@ data class RecordsData(
     var recordScore: Int,
 
     @ColumnInfo(name = "record_time")
-    var recordTime: String
+    var recordTime: String,
+
+    @ColumnInfo(name = "record_shared")
+    var recordShared: Boolean = false
 )

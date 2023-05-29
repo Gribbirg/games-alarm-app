@@ -32,10 +32,29 @@ class AlarmAdapter(
             with(binding) {
                 val onColor = getOnViewColor(on)
                 alarmMaterialCardView.setCardBackgroundColor(getColor(on, regular))
-                alarmTimeTextView.setTextColor(onColor)
+                alarmTimeTextView.setTextColor(
+                    MaterialColors.getColor(
+                        binding.root.context,
+                        if (on)
+                            com.google.android.material.R.attr.colorPrimary
+                        else
+                            com.google.android.material.R.attr.colorOnSurfaceVariant,
+                        Color.BLACK
+                    )
+                )
                 alarmNameTextView.setTextColor(onColor)
                 recordTextView.setTextColor(onColor)
-                gameCounterTextView.setTextColor(onColor)
+                gameCounterTextView.setTextColor(
+                    MaterialColors.getColor(
+                        binding.root.context,
+                        if (on)
+                            com.google.android.material.R.attr.colorTertiary
+                        else
+                            com.google.android.material.R.attr.colorOnSurfaceVariant,
+                        Color.BLACK
+                    )
+                )
+                gameCounterTextTextView.setTextColor(onColor)
                 if (on) {
                     menuButton.setBackgroundResource(R.drawable.ic_baseline_more_horiz_24)
                     vibrationImageView.setBackgroundResource(R.drawable.ic_baseline_vibration_24)
@@ -124,7 +143,7 @@ class AlarmAdapter(
                 if (game != 0)
                     gameCount++
 
-            gameCounterTextView.text = "Игр:\n$gameCount"
+            gameCounterTextView.text = gameCount.toString()
 
 
             menuButton.setOnClickListener {

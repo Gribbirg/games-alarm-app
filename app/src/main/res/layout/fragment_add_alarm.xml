@@ -161,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:autofillHints="Будильник"
                 android:ems="10"
+                android:maxLength="20"
                 android:inputType="textPersonName"
                 android:hint="@string/addAlarmAlarmNameText"
                 android:textSize="21sp"

@@ -1,6 +1,5 @@
 package com.example.smartalarm.data.db
 
-import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -21,7 +20,10 @@ data class GameData(
     var recordTime: String? = null,
 
     @ColumnInfo(name = "record_date")
-    var recordDate: String? = null
+    var recordDate: String? = null,
+
+    @ColumnInfo(name = "record_shared")
+    var recordShared: Boolean = false
 ) {
     constructor(record: RecordsData) : this(
         id = record.gameId,
