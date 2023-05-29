@@ -40,6 +40,67 @@ class AlarmReceiver : BroadcastReceiver() {
 //            }
             }
         }
+
+        fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean,
+                      ringtonePath: String) {
+
+            val ringtonePathFinal: String? = if (ringtonePath == "null") {
+                RealPathUtil.getRealPath(context!!, RingtoneManager.getActualDefaultRingtoneUri(context,
+                    RingtoneManager.TYPE_RINGTONE))
+            } else {
+                ringtonePath
+            }
+
+            Log.i("chosen song after check", ringtonePathFinal!!)
+
+            AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
+
+            if (vibrationRequired) {
+                val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
+                AlarmVibrator.start(pattern, 0)
+            }
+
+            mediaPlayer = MediaPlayer()
+            val audioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+            if (isRisingVolume || audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) <=
+                audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 4)
+                mediaPlayer!!.setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .build()
+                )
+            else
+                mediaPlayer!!.setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
+
+//        val ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+//        track = RingtoneManager.getRingtone(context, ringtone)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            track.isLooping = true
+//        }
+//        track.play()
+
+            mediaPlayer!!.isLooping = true
+            Log.i("music", "music on!")
+            try {
+                mediaPlayer!!.setDataSource(ringtonePathFinal)
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+                mediaPlayer!!.setDataSource(RealPathUtil.getRealPath(context,
+                    RingtoneManager.getActualDefaultRingtoneUri(context,
+                        RingtoneManager.TYPE_RINGTONE)))
+            }
+
+            mediaPlayer!!.prepare()
+            mediaPlayer!!.start()
+        }
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -92,66 +153,5 @@ class AlarmReceiver : BroadcastReceiver() {
             notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
         }
         playAudio(context, alarmRisingVolume, alarmVibration, alarmRingtone!!)
-    }
-
-    private fun playAudio(context: Context?, isRisingVolume: Boolean, vibrationRequired: Boolean,
-                          ringtonePath: String) {
-
-        val ringtonePathFinal: String? = if (ringtonePath == "null") {
-            RealPathUtil.getRealPath(context!!, RingtoneManager.getActualDefaultRingtoneUri(context,
-                RingtoneManager.TYPE_RINGTONE))
-        } else {
-            ringtonePath
-        }
-
-        Log.i("chosen song after check", ringtonePathFinal!!)
-
-        AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
-
-        if (vibrationRequired) {
-            val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
-            AlarmVibrator.start(pattern, 0)
-        }
-
-        mediaPlayer = MediaPlayer()
-        val audioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-        if (isRisingVolume || audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) <=
-            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 4)
-            mediaPlayer!!.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .build()
-            )
-        else
-            mediaPlayer!!.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-
-//        val ringtone = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
-//        track = RingtoneManager.getRingtone(context, ringtone)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            track.isLooping = true
-//        }
-//        track.play()
-
-        mediaPlayer!!.isLooping = true
-        Log.i("music", "music on!")
-        try {
-            mediaPlayer!!.setDataSource(ringtonePathFinal)
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-            mediaPlayer!!.setDataSource(RealPathUtil.getRealPath(context,
-                RingtoneManager.getActualDefaultRingtoneUri(context,
-                RingtoneManager.TYPE_RINGTONE)))
-        }
-
-        mediaPlayer!!.prepare()
-        mediaPlayer!!.start()
     }
 }

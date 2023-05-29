@@ -35,6 +35,10 @@ class LoadGameFragment : Fragment() {
 
         val bundle = Bundle()
 
+        viewModel.path.observe(viewLifecycleOwner) {
+            bundle.putString("music path", it)
+        }
+
         viewModel.currentGame.observe(viewLifecycleOwner) {
             val navController = Navigation.findNavController(binding.root)
 
