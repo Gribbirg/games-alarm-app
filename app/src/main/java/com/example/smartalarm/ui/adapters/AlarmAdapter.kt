@@ -35,6 +35,7 @@ class AlarmAdapter(
                 alarmTimeTextView.setTextColor(onColor)
                 alarmNameTextView.setTextColor(onColor)
                 recordTextView.setTextColor(onColor)
+                gameCounterTextView.setTextColor(onColor)
                 if (on) {
                     menuButton.setBackgroundResource(R.drawable.ic_baseline_more_horiz_24)
                     vibrationImageView.setBackgroundResource(R.drawable.ic_baseline_vibration_24)
@@ -117,6 +118,14 @@ class AlarmAdapter(
 
             if (alarm.isVibration) vibrationImageView.visibility = View.VISIBLE
             if (alarm.isRisingVolume) volumeUpImageView.visibility = View.VISIBLE
+
+            var gameCount = 0
+            for (game in alarm.gamesList)
+                if (game != 0)
+                    gameCount++
+
+            gameCounterTextView.text = "Игр:\n$gameCount"
+
 
             menuButton.setOnClickListener {
                 val menu = PopupMenu(holder.binding.root.context, it)

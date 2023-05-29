@@ -107,10 +107,9 @@
                 android:id="@+id/gameCounterTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Игр:\n2"
+                android:text="Игр:\n"
                 android:textSize="20sp"
                 android:gravity="center"
-                android:visibility="gone"
                 app:layout_constraintRight_toLeftOf="@+id/alarmOnOffSwitch"
                 app:layout_constraintTop_toBottomOf="@id/alarmNameTextView"
                 app:layout_constraintLeft_toRightOf="@id/alarmTimeTextView"/>
