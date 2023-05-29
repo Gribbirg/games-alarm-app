@@ -82,7 +82,7 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
         }
 
         viewModel.loadResult.observe(viewLifecycleOwner) {
-            if (it != null)
+            if (it != null) {
                 Toast.makeText(
                     requireContext(),
                     if (it)
@@ -91,6 +91,10 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
                         "Произошла ошибка. Попробуйте снова",
                     Toast.LENGTH_LONG
                 ).show()
+                viewModel.resetLoadResult()
+                viewModel.getUserRecords()
+            }
+
         }
 
         viewModel.userRecords.observe(viewLifecycleOwner) {

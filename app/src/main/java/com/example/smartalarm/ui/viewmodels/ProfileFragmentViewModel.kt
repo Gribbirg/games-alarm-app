@@ -26,7 +26,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
 
-    val loadResult: MutableLiveData<Boolean?> = MutableLiveData(null)
+    val loadResult: MutableLiveData<Boolean?> = MutableLiveData()
 
     init {
         authRepository.currentAccount.observeForever {
@@ -36,6 +36,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
                 getUserRecords()
             }
         }
+        loadResult.postValue(null)
     }
 
     fun handleAuthResult(task: Task<GoogleSignInAccount>) {
@@ -124,7 +125,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
                     }
                 }
 
-                usersRealtimeDatabaseRepository.getAlarms(currentUser.value!!, alarmList)
+                usersRealtimeDatabaseRepository.getAlarms(currentUser.value!!, alarmList, loadResult)
             }
             return true
         }
@@ -136,5 +137,9 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
             usersRealtimeDatabaseRepository.deleteRecordOfUser(accountData)
             loadAlarmsFromInternet()
         }
+    }
+
+    fun resetLoadResult() {
+        loadResult.postValue(null)
     }
 }

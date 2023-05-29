@@ -42,8 +42,6 @@ class MyRecordsAdapter(var data: List<RecordsData>, private val listener: OnMyRe
                 recordPointsTextView.text = currentData.recordScore.toString()
                 recordTimeTextView.text = "Время: ${currentData.recordTime}"
             }
-            if (currentData.recordShared || currentData.date == null)
-                shareButton.visibility = View.GONE
 
             shareButton.setOnClickListener {
                 AlertDialog.Builder(holder.binding.root.context)
@@ -51,7 +49,6 @@ class MyRecordsAdapter(var data: List<RecordsData>, private val listener: OnMyRe
                     .setIcon(R.drawable.baseline_warning_24)
                     .setMessage("Вы уверены, что хотите поделиться данным результатом? Его смогут увидеть другие пользователи")
                     .setPositiveButton("Да") { dialog, _ ->
-                        currentData.recordShared = true
                         listener.onShareClickListener(currentData)
                         dialog.dismiss()
                     }

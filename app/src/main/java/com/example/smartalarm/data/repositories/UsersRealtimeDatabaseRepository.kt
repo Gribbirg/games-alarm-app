@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.math.log
 
 object UsersRealtimeDatabaseRepository {
     private val usersDatabase = FirebaseDatabase
@@ -84,12 +85,19 @@ object UsersRealtimeDatabaseRepository {
                 val current = it.getValue(AccountData::class.java)
 
                 if (current?.records == "null") {
-                    recordInternetData.id = 0
                     current.records = recordInternetData.toString()
                 } else {
                     val recordsList = getRecordsList(current?.records!!)
-                    recordInternetData.id = recordsList[recordsList.size - 1]?.id!! + 1
-                    current.records += "/$recordInternetData"
+                    var add = false
+                    for (i in recordsList.indices) {
+                        if (recordsList[i]?.id == recordInternetData.id) {
+                            recordsList[i] = recordInternetData
+                            add = true
+                            break
+                        }
+                    }
+                    if (!add)
+                        current.records += "/$recordInternetData"
                 }
 
                 recordUserDb.updateChildren(
@@ -134,17 +142,26 @@ object UsersRealtimeDatabaseRepository {
             deleteAlarmsOfUser(account)
             val userAlarms = usersDatabase.child(account.uid!!).child("alarms")
             for (alarm in alarms) {
-                userAlarms.child(alarm.id.toString()).setValue(alarm).addOnCompleteListener {
-                    result.postValue(it.isSuccessful)
+                userAlarms.child(alarm.id.toString()).setValue(alarm).addOnSuccessListener {
+                    result.postValue(true)
+                }.addOnCanceledListener {
+                    result.postValue(false)
+                }.addOnFailureListener {
+                    Log.e("firebase", it.toString())
+                    result.postValue(false)
                 }
             }
         }
 
-    suspend fun deleteAlarmsOfUser(account: AccountData) = withContext(Dispatchers.IO) {
+    private suspend fun deleteAlarmsOfUser(account: AccountData) = withContext(Dispatchers.IO) {
         usersDatabase.child(account.uid!!).child("alarms").removeValue()
     }
 
-    suspend fun getAlarms(account: AccountData, alarmsList: MutableLiveData<List<AlarmData>>) =
+    suspend fun getAlarms(
+        account: AccountData,
+        alarmsList: MutableLiveData<List<AlarmData>>,
+        result: MutableLiveData<Boolean?>
+    ) =
         withContext(Dispatchers.IO) {
             val userAlarms = usersDatabase.child(account.uid!!).child("alarms")
             userAlarms.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -154,10 +171,12 @@ object UsersRealtimeDatabaseRepository {
                             dataSnapshot.getValue(AlarmData::class.java)!!
                         }
                     )
+                    result.postValue(true)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.e("firebase", error.toString())
+                    result.postValue(false)
                 }
             })
         }
@@ -185,8 +204,10 @@ object UsersRealtimeDatabaseRepository {
                     currentTop.name = "Аноним"
                     currentTop.uid = ""
                     currentTop.email = ""
-                    currentTop.photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHH_48-fhI2OTTKlHo-FagFrwi3LcF6gf8jx142YctSw&s"
+                    currentTop.photo =
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHH_48-fhI2OTTKlHo-FagFrwi3LcF6gf8jx142YctSw&s"
                 }
+                topOfGame.setValue(currentTop)
             }
         }
 }

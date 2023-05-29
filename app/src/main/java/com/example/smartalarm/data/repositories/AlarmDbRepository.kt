@@ -169,7 +169,6 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
 
     suspend fun updateRecord(recordsData: RecordsData) =
         withContext(Dispatchers.IO) {
-            Log.i("grib", recordsData.recordShared.toString())
             alarmsDao.updateRecord(recordsData)
         }
 
