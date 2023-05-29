@@ -186,7 +186,7 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
     }
 
     override fun onDeleteClickListener(accountData: AccountData) {
-
+        viewModel.deleteRecord(accountData)
     }
 
     override fun isCurrentUser(accountData: AccountData): Boolean = true

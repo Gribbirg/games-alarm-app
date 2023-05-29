@@ -6,9 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.data.AlarmData
-import com.example.smartalarm.data.db.AlarmsDB
-import com.example.smartalarm.data.db.getRecordsList
-import com.example.smartalarm.data.repositories.AlarmDbRepository
+import com.example.smartalarm.data.data.getRecordsList
+import com.example.smartalarm.data.db.AlarmsDB import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
 import com.example.smartalarm.data.repositories.UsersRealtimeDatabaseRepository
 import com.example.smartalarm.data.repositories.isAhead
@@ -77,7 +76,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
                                 )
                             }
                         }
-                        records.sortBy { -it.records!!.split(';')[2].toInt() }
+                        records.sortBy { -it.records!!.split(';')[3].toInt() }
                         userRecords.postValue(records)
                     } else {
                         userRecords.postValue(listOf())
@@ -130,5 +129,12 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
             return true
         }
         return false
+    }
+
+    fun deleteRecord(accountData: AccountData) {
+        viewModelScope.launch {
+            usersRealtimeDatabaseRepository.deleteRecordOfUser(accountData)
+            loadAlarmsFromInternet()
+        }
     }
 }

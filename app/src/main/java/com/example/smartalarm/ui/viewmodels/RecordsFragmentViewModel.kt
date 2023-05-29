@@ -6,11 +6,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
+import com.example.smartalarm.data.data.RecordInternetData
+import com.example.smartalarm.data.data.getRecordsList
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.GameData
-import com.example.smartalarm.data.db.RecordsData
-import com.example.smartalarm.data.db.getRecordsList
-import com.example.smartalarm.data.repositories.AlarmDbRepository
+import com.example.smartalarm.data.db.RecordsData import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
 import com.example.smartalarm.data.repositories.UsersRealtimeDatabaseRepository
 import kotlinx.coroutines.launch
@@ -79,7 +79,7 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
     fun shareRecord(recordsData: RecordsData, state: Int): Boolean {
         if (currentUser == null) return false
         viewModelScope.launch {
-            usersRealtimeDatabaseRepository.updateUserRecords(currentUser!!, GameData(recordsData))
+            usersRealtimeDatabaseRepository.updateUserRecords(currentUser!!, RecordInternetData(recordsData))
             alarmDbRepository.updateRecord(recordsData)
             getRecordsFromDb(state)
         }
