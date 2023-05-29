@@ -19,10 +19,10 @@ import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val NOTIFICATION_REQUEST_CODE = 100;
-    private val VIBRATION_REQUEST_CODE = 101;
-    private val READ_EXTERNAL_STORAGE_REQUEST_CODE = 102;
-    private val READ_MEDIA_AUDIO_REQUEST_CODE = 103;
+    private val notificationRequestCode = 100;
+    private val vibrationRequestCode = 101;
+    private val readExternalStorageRequestCode = 102;
+    private val readMediaAudioRequestCode = 103;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,26 +34,26 @@ class MainActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkPermission(
-                NOTIFICATION_REQUEST_CODE,
+                notificationRequestCode,
                 android.Manifest.permission.POST_NOTIFICATIONS,
                 "показ уведомлений"
             )
 
             checkPermission(
-                READ_MEDIA_AUDIO_REQUEST_CODE,
+                readMediaAudioRequestCode,
                 android.Manifest.permission.READ_MEDIA_AUDIO,
                 "чтение аудио-файлов для выбора мелодии"
             )
         }
 
         checkPermission(
-            VIBRATION_REQUEST_CODE,
+            vibrationRequestCode,
             android.Manifest.permission.VIBRATE,
             "вызов вибрации"
         )
 
         checkPermission(
-            READ_EXTERNAL_STORAGE_REQUEST_CODE,
+            readExternalStorageRequestCode,
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             "чтение файлов для выбора мелодии"
         )
@@ -141,5 +141,9 @@ class MainActivity : AppCompatActivity() {
 
             else -> ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }
