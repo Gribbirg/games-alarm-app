@@ -25,6 +25,7 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[SettingsFragmentViewModel::class.java]
         googleSignInClient = GoogleSignIn.getClient(
