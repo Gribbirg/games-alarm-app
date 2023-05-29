@@ -39,22 +39,21 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-            checkPermission(
-                VIBRATION_REQUEST_CODE,
-                android.Manifest.permission.VIBRATE,
-                "вибрацию"
-            )
+        checkPermission(
+            VIBRATION_REQUEST_CODE,
+            android.Manifest.permission.VIBRATE,
+            "вибрацию"
+        )
 
-            checkPermission(
-                READ_EXTERNAL_STORAGE_REQUEST_CODE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                "чтение файлов для выбора мелодии"
-            )
+        checkPermission(
+            READ_EXTERNAL_STORAGE_REQUEST_CODE,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            "чтение файлов для выбора мелодии"
+        )
 
 
-        val navController = supportFragmentManager
-            .findFragmentById(R.id.fragment)
-            ?.findNavController()
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.fragment)?.findNavController()
 
         binding.bottomNavigationView.setupWithNavController(navController!!)
 

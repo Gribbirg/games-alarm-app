@@ -1,60 +1,195 @@
 package com.example.smartalarm.ui.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.example.smartalarm.R
+import com.example.smartalarm.databinding.FragmentSettingsBinding
+import com.example.smartalarm.ui.viewmodels.SettingsFragmentViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentSettingsBinding
+    private lateinit var viewModel: SettingsFragmentViewModel
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+    ): View {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[SettingsFragmentViewModel::class.java]
+        googleSignInClient = GoogleSignIn.getClient(
+            requireActivity(),
+            GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        )
+
+        viewModel.loadResult.observe(viewLifecycleOwner) {
+            if (it != null) {
+                Toast.makeText(
+                    requireContext(),
+                    if (it)
+                        "Успешно"
+                    else
+                        "Произошла ошибка. Попробуйте снова",
+                    Toast.LENGTH_LONG
+                ).show()
+                viewModel.resetLoadResult()
+            }
+        }
+
+        binding.loadAlarmsButton.setOnClickListener {
+            if (!viewModel.loadAlarmsOfCurrentUser())
+                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.loadAlarmsFromButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Подтверждение")
+                .setIcon(R.drawable.baseline_warning_24)
+                .setMessage("Вы уверены, что хотите загрузить будильники?\nВсе текущие будильники будут удалены.")
+                .setPositiveButton("Да") { dialog, _ ->
+                    if (!viewModel.loadAlarmsFromInternet())
+                        Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT)
+                            .show()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Нет") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+        binding.deleteAlarmsFromCloudButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Удаление будильников")
+                .setIcon(R.drawable.baseline_warning_24)
+                .setMessage("Вы уверены, что хотите удалить все будильники из облака?")
+                .setPositiveButton("Да") { dialog, _ ->
+                    if (!viewModel.deleteAlarmsFromCloud())
+                        Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT)
+                            .show()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Нет") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+        binding.deleteAllRecordsFromAccountButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Удаление результатов")
+                .setIcon(R.drawable.baseline_warning_24)
+                .setMessage("Вы уверены, что хотите удалить все результы из облака?")
+                .setPositiveButton("Да") { dialog, _ ->
+                    if (!viewModel.deleteRecordsFromCloud())
+                        Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT)
+                            .show()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Нет") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+        binding.deleteAccountButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Удаление аккаунта")
+                .setIcon(R.drawable.baseline_warning_24)
+                .setMessage("Вы уверены, что хотите удалить аккаунт?")
+                .setPositiveButton("Да") { dialog, _ ->
+                    if (!viewModel.deleteAccountCloud()) {
+                        Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        googleSignInClient.signOut()
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Нет") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+        binding.exitButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Выход из аккаунта")
+                .setIcon(R.drawable.baseline_warning_24)
+                .setMessage("Вы уверены, что хотите выйти из аккаунта?")
+                .setPositiveButton("Да") { dialog, _ ->
+                    singOut()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Нет") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+        binding.deleteAllRecordsButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Удаление результов")
+                .setIcon(R.drawable.baseline_warning_24)
+                .setMessage("Вы уверены, что хотите удалить все результаты с устройства?")
+                .setPositiveButton("Да") { dialog, _ ->
+                    viewModel.deleteAllRecordsFromDb()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Нет") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+        binding.deleteAllAlarmsButton.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Удаление будильников")
+                .setIcon(R.drawable.baseline_warning_24)
+                .setMessage("Вы уверены, что хотите удалить все будильники с устройства?")
+                .setPositiveButton("Да") { dialog, _ ->
+                    viewModel.deleteAllAlarmsFromDb()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Нет") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun singOut() {
+        if (!viewModel.exitFromAccount())
+            Toast.makeText(
+                requireContext(),
+                "Сначала войдите в аккаунт!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        else
+            googleSignInClient.signOut()
     }
 }

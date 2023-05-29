@@ -80,4 +80,9 @@
             android:id="@+id/action_taskGameFragment2_to_gameResultFragment2"
             app:destination="@id/gameResultFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.smartalarm.ui.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

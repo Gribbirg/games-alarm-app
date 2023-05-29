@@ -177,4 +177,15 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             alarmsDao.deleteAllUserGames()
             alarmsDao.deleteAllAlarms()
         }
+
+    suspend fun deleteAllRecords() =
+        withContext(Dispatchers.IO) {
+            alarmsDao.deleteAllRecords()
+            val alarms = alarmsDao.getAlarms()
+            for (alarm in alarms) {
+                alarm.recordScore = null
+                alarm.recordSeconds = null
+                alarmsDao.updateAlarm(alarm)
+            }
+        }
 }
