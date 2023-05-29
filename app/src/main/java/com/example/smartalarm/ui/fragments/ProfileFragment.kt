@@ -36,7 +36,6 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[ProfileFragmentViewModel::class.java]
-
         googleSignInClient = GoogleSignIn.getClient(
             requireActivity(),
             GoogleSignInOptions
@@ -67,15 +66,15 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
             }
         }
 
-        binding.loadAlarmsButton.setOnClickListener {
-            if (!viewModel.loadAlarmsOfCurrentUser())
-                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
-        }
+//        binding.loadAlarmsButton.setOnClickListener {
+//            if (!viewModel.loadAlarmsOfCurrentUser())
+//                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
+//        }
 
-        binding.loadAlarmsFromButton.setOnClickListener {
-            if (!viewModel.loadAlarmsFromInternet())
-                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
-        }
+//        binding.loadAlarmsFromButton.setOnClickListener {
+//            if (!viewModel.loadAlarmsFromInternet())
+//                Toast.makeText(requireContext(), "Войдите в аккаунт!", Toast.LENGTH_SHORT).show()
+//        }
 
         viewModel.currentUser.observe(viewLifecycleOwner) {
             setViewAccountData(it)
@@ -176,18 +175,18 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
                 )
             }
         }
-        setLoadsButtonsState(enter)
+//        setLoadsButtonsState(enter)
     }
 
-    private fun setLoadsButtonsState(visible: Boolean) {
-        if (visible) {
-            binding.loadAlarmsButton.visibility = View.VISIBLE
-            binding.loadAlarmsFromButton.visibility = View.VISIBLE
-        } else {
-            binding.loadAlarmsButton.visibility = View.INVISIBLE
-            binding.loadAlarmsFromButton.visibility = View.INVISIBLE
-        }
-    }
+//    private fun setLoadsButtonsState(visible: Boolean) {
+//        if (visible) {
+//            binding.loadAlarmsButton.visibility = View.VISIBLE
+//            binding.loadAlarmsFromButton.visibility = View.VISIBLE
+//        } else {
+//            binding.loadAlarmsButton.visibility = View.INVISIBLE
+//            binding.loadAlarmsFromButton.visibility = View.INVISIBLE
+//        }
+//    }
 
     override fun onDeleteClickListener(accountData: AccountData) {
         viewModel.deleteRecord(accountData)

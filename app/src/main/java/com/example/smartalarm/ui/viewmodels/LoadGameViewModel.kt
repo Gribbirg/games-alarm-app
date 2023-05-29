@@ -16,12 +16,14 @@ class LoadGameViewModel(application: Application) : AndroidViewModel(application
     )
 
     var currentGame: MutableLiveData<List<Int>> = MutableLiveData()
+    var path = MutableLiveData<String>()
 
     fun getAlarm(alarmId: Long) {
         if (alarmId.toInt() == -1) return
 
         viewModelScope.launch {
             val alarm = alarmDbRepository.getAlarmWithGames(alarmId)
+            path.postValue(alarm.ringtonePath)
             val gamesActive = ArrayList<Int>()
             for (i in alarm.gamesList.indices) {
                 if (alarm.gamesList[i] != 0)

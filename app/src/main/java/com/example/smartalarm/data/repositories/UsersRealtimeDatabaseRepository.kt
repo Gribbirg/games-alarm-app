@@ -7,6 +7,7 @@ import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.RecordInternetData
 import com.example.smartalarm.data.data.arrayToString
 import com.example.smartalarm.data.data.getRecordsList
+import com.example.smartalarm.data.db.GameData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -139,7 +140,7 @@ object UsersRealtimeDatabaseRepository {
         result: MutableLiveData<Boolean?>
     ) =
         withContext(Dispatchers.IO) {
-            deleteAlarmsOfUser(account)
+            deleteAlarmsOfUser(account, MutableLiveData())
             val userAlarms = usersDatabase.child(account.uid!!).child("alarms")
             for (alarm in alarms) {
                 userAlarms.child(alarm.id.toString()).setValue(alarm).addOnSuccessListener {
@@ -153,9 +154,18 @@ object UsersRealtimeDatabaseRepository {
             }
         }
 
-    private suspend fun deleteAlarmsOfUser(account: AccountData) = withContext(Dispatchers.IO) {
-        usersDatabase.child(account.uid!!).child("alarms").removeValue()
-    }
+    suspend fun deleteAlarmsOfUser(account: AccountData, result: MutableLiveData<Boolean?>) =
+        withContext(Dispatchers.IO) {
+            usersDatabase.child(account.uid!!).child("alarms").removeValue()
+                .addOnSuccessListener {
+                    result.postValue(true)
+                }.addOnCanceledListener {
+                    result.postValue(false)
+                }.addOnFailureListener {
+                    Log.e("firebase", it.toString())
+                    result.postValue(false)
+                }
+        }
 
     suspend fun getAlarms(
         account: AccountData,
@@ -194,20 +204,73 @@ object UsersRealtimeDatabaseRepository {
                 }
                 userRecords.setValue(arrayToString(records))
             }
+            deleteTopRecordIfNeed(accountData, newRecord, MutableLiveData())
+        }
 
-            val topOfGame = topRecordsDatabase.child(newRecord.gameId.toString())
-            topOfGame.get().addOnSuccessListener {
-                val currentTop = it.getValue(AccountData::class.java)
-                val currentRecord = RecordInternetData(currentTop?.records!!)
+    private fun deleteTopRecordIfNeed(
+        account: AccountData,
+        recordInternetData: RecordInternetData,
+        result: MutableLiveData<Boolean?>
+    ) {
+        val topOfGame = topRecordsDatabase.child(recordInternetData.gameId.toString())
+        topOfGame.get().addOnSuccessListener {
+            val currentTop = it.getValue(AccountData::class.java)
+            val currentRecord = RecordInternetData(currentTop?.records!!)
 
-                if (currentTop.uid == accountData.uid && currentRecord.id == newRecord.id) {
-                    currentTop.name = "Аноним"
-                    currentTop.uid = ""
-                    currentTop.email = ""
-                    currentTop.photo =
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHH_48-fhI2OTTKlHo-FagFrwi3LcF6gf8jx142YctSw&s"
-                }
-                topOfGame.setValue(currentTop)
+            if (currentTop.uid == account.uid && currentRecord.id == recordInternetData.id) {
+                currentTop.name = "Аноним"
+                currentTop.uid = ""
+                currentTop.email = ""
+                currentTop.photo =
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHH_48-fhI2OTTKlHo-FagFrwi3LcF6gf8jx142YctSw&s"
             }
+            topOfGame.setValue(currentTop).addOnSuccessListener {
+                result.postValue(true)
+            }.addOnCanceledListener {
+                result.postValue(false)
+            }.addOnFailureListener {
+                Log.e("firebase", it.toString())
+                result.postValue(false)
+            }
+        }
+    }
+
+    suspend fun deleteRecordsOfUser(account: AccountData, result: MutableLiveData<Boolean?>) =
+        withContext(Dispatchers.IO) {
+            val recordDb = usersDatabase.child(account.uid!!).child("records")
+            recordDb.get()
+                .addOnSuccessListener {
+
+                    val current = it.getValue(String::class.java)
+
+                    if (current != "null") {
+
+                        val records = getRecordsList(current!!)
+                        for (record in records)
+                            deleteTopRecordIfNeed(account, record!!, result)
+
+                        recordDb.setValue("null")
+                    } else
+                        result.postValue(true)
+
+                }.addOnCanceledListener {
+                    result.postValue(false)
+                }.addOnFailureListener {
+                    Log.e("firebase", it.toString())
+                    result.postValue(false)
+                }
+        }
+
+    suspend fun deleteAccount(account: AccountData, result: MutableLiveData<Boolean?>) =
+        withContext(Dispatchers.IO) {
+            usersDatabase.child(account.uid!!).removeValue()
+                .addOnSuccessListener {
+                    result.postValue(true)
+                }.addOnCanceledListener {
+                    result.postValue(false)
+                }.addOnFailureListener {
+                    Log.e("firebase", it.toString())
+                    result.postValue(false)
+                }
         }
 }
