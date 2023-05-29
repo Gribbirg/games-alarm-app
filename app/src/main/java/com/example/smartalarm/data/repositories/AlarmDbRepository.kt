@@ -83,12 +83,6 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext list
         }
 
-    suspend fun insertAlarmsToDb(alarmsList: List<AlarmData>) =
-        withContext(Dispatchers.IO) {
-            for (alarm in alarmsList)
-                insertAlarmToDb(alarm)
-        }
-
     suspend fun insertAlarmToDb(alarm: AlarmData) =
         withContext(Dispatchers.IO) {
             alarm.id = alarmsDao.insertNewAlarmData(AlarmSimpleData(alarm))
@@ -176,5 +170,11 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
         withContext(Dispatchers.IO) {
             Log.i("grib", recordsData.recordShared.toString())
             alarmsDao.updateRecord(recordsData)
-    }
+        }
+
+    suspend fun deleteAllAlarms() =
+        withContext(Dispatchers.IO) {
+            alarmsDao.deleteAllUserGames()
+            alarmsDao.deleteAllAlarms()
+        }
 }

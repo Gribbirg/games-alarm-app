@@ -11,6 +11,7 @@ import com.example.smartalarm.data.db.getRecordsList
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
 import com.example.smartalarm.data.repositories.UsersRealtimeDatabaseRepository
+import com.example.smartalarm.data.repositories.isAhead
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.launch
@@ -109,7 +110,18 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
 
                 alarmList.observeForever {
                     viewModelScope.launch {
-                        alarmDbRepository.insertAlarmsToDb(it)
+                        alarmDbRepository.deleteAllAlarms()
+                        for (alarm in it) {
+                            if (alarm.activateDate != null)
+                                if (!isAhead(
+                                        alarm.activateDate!!,
+                                        alarm.timeHour,
+                                        alarm.timeMinute
+                                    )
+                                )
+                                    continue
+                            alarmDbRepository.insertAlarmToDb(alarm)
+                        }
                     }
                 }
 
