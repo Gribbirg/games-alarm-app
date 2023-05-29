@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.data.AlarmData
-import com.example.smartalarm.data.db.GameData
+import com.example.smartalarm.data.data.RecordInternetData
+import com.example.smartalarm.data.data.arrayToString
+import com.example.smartalarm.data.data.getRecordsList
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -74,38 +76,44 @@ object UsersRealtimeDatabaseRepository {
             })
         }
 
-    suspend fun updateUserRecords(account: AccountData, gameData: GameData) =
+    suspend fun updateUserRecords(account: AccountData, recordInternetData: RecordInternetData) =
         withContext(Dispatchers.IO) {
             val recordUserDb = usersDatabase.child(account.uid!!)
-            val topRecordDb = topRecordsDatabase.child(gameData.id.toString())
+            val topRecordDb = topRecordsDatabase.child(recordInternetData.gameId.toString())
             recordUserDb.get().addOnSuccessListener {
                 val current = it.getValue(AccountData::class.java)
 
-                if (current?.records == "null")
-                    current.records = gameData.toString()
-                else
-                    current?.records += "/$gameData"
+                if (current?.records == "null") {
+                    recordInternetData.id = 0
+                    current.records = recordInternetData.toString()
+                } else {
+                    val recordsList = getRecordsList(current?.records!!)
+                    recordInternetData.id = recordsList[recordsList.size - 1]?.id!! + 1
+                    current.records += "/$recordInternetData"
+                }
 
                 recordUserDb.updateChildren(
                     mapOf(
-                        "email" to current?.email,
-                        "name" to current?.name,
-                        "photo" to current?.photo,
-                        "records" to current?.records,
-                        "uid" to current?.uid
+                        "email" to current.email,
+                        "name" to current.name,
+                        "photo" to current.photo,
+                        "records" to current.records,
+                        "uid" to current.uid
                     )
                 ).addOnSuccessListener {
                     topRecordDb.get().addOnSuccessListener {
-                        current?.records = gameData.toString()
+                        current.records = recordInternetData.toString()
                         if (it.exists()) {
-                            if (GameData(it.getValue(AccountData::class.java)?.records!!).record!! < gameData.record!!)
+                            if (RecordInternetData(it.getValue(AccountData::class.java)?.records!!).record!! <
+                                recordInternetData.record!!
+                            )
                                 topRecordDb.updateChildren(
                                     mapOf(
-                                        "email" to current?.email,
-                                        "name" to current?.name,
-                                        "photo" to current?.photo,
-                                        "records" to current?.records,
-                                        "uid" to current?.uid
+                                        "email" to current.email,
+                                        "name" to current.name,
+                                        "photo" to current.photo,
+                                        "records" to current.records,
+                                        "uid" to current.uid
                                     )
                                 )
                         } else {
@@ -152,5 +160,33 @@ object UsersRealtimeDatabaseRepository {
                     Log.e("firebase", error.toString())
                 }
             })
+        }
+
+    suspend fun deleteRecordOfUser(accountData: AccountData) =
+        withContext(Dispatchers.IO) {
+            val newRecord = RecordInternetData(accountData.records!!)
+            val userRecords = usersDatabase.child(accountData.uid!!).child("records")
+            userRecords.get().addOnSuccessListener {
+                val current = it.getValue(String::class.java)
+                val records = getRecordsList(current!!)
+                for (i in records.indices) {
+                    if (records[i]?.id!! == newRecord.id)
+                        records.removeAt(i)
+                }
+                userRecords.setValue(arrayToString(records))
+            }
+
+            val topOfGame = topRecordsDatabase.child(newRecord.gameId.toString())
+            topOfGame.get().addOnSuccessListener {
+                val currentTop = it.getValue(AccountData::class.java)
+                val currentRecord = RecordInternetData(currentTop?.records!!)
+
+                if (currentTop.uid == accountData.uid && currentRecord.id == newRecord.id) {
+                    currentTop.name = "Аноним"
+                    currentTop.uid = ""
+                    currentTop.email = ""
+                    currentTop.photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHH_48-fhI2OTTKlHo-FagFrwi3LcF6gf8jx142YctSw&s"
+                }
+            }
         }
 }

@@ -9,6 +9,7 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AccountData
+import com.example.smartalarm.data.data.RecordInternetData
 import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.databinding.AllRecordsItemBinding
 
@@ -43,7 +44,7 @@ class AllRecordsAdapter(
         with(holder.binding) {
 
             if (currentData != null) {
-                val game = GameData(currentData.records!!)
+                val game = RecordInternetData(currentData.records!!)
                 Glide.with(photoRecordHolder.context).load(currentData.photo)
                     .into(userPhotoRecordImageView)
                 userNameTextView.text = currentData.name
