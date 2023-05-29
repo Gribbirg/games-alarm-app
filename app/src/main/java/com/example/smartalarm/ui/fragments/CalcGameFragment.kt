@@ -14,6 +14,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.FragmentCalcGameBinding
+import com.example.smartalarm.services.AlarmMediaPlayer
 import com.example.smartalarm.services.AlarmReceiver
 import com.example.smartalarm.ui.viewmodels.CalcGameViewModel
 
@@ -53,7 +54,7 @@ class CalcGameFragment : Fragment() {
             binding.calcTimeTextView.text = it
             with(it.split(".")) {
                 if (this[0].toInt() % 2 == 0 && this[1].toInt() == 0 && this[0].toInt() != 0) {
-                    AlarmReceiver.playAudio(
+                    AlarmMediaPlayer.playAudio(
                         context,
                         false,
                         false,
@@ -65,7 +66,7 @@ class CalcGameFragment : Fragment() {
         }
 
         binding.musicOffButton.setOnClickListener {
-            AlarmReceiver.stopAudio()
+            AlarmMediaPlayer.stopAudio()
             binding.musicOffButton.visibility = View.GONE
         }
 
