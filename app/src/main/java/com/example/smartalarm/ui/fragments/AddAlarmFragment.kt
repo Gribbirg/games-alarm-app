@@ -248,13 +248,7 @@ class AddAlarmFragment : Fragment() {
         val uriPathHelper = RealPathUtil
 
         Log.i("chosen song before check", ringtonePath)
-
         ringtonePath = uriPathHelper.getRealPath(requireContext(), uri).toString()
-        if (ringtonePath == "null") {
-            selectFile(RingtoneManager.getActualDefaultRingtoneUri(context,
-                RingtoneManager.TYPE_RINGTONE))
-        }
-
         Log.i("chosen song after check", ringtonePath)
     }
 
