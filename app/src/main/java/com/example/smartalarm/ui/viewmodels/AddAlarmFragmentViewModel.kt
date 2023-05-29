@@ -45,7 +45,7 @@ class AddAlarmFragmentViewModel(application: Application) : AndroidViewModel(app
 
             if (currentAlarm == null) {
 
-                alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
+                alarm.id = alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
                 AlarmData(alarm, gamesList).let(creator::create)
             } else {
                 alarm.id = currentAlarm!!.id

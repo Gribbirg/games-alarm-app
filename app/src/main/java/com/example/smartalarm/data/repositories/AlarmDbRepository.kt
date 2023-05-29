@@ -83,10 +83,11 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext list
         }
 
-    suspend fun insertAlarmToDb(alarm: AlarmData) =
+    suspend fun insertAlarmToDb(alarm: AlarmData): Long =
         withContext(Dispatchers.IO) {
             alarm.id = alarmsDao.insertNewAlarmData(AlarmSimpleData(alarm))
             insertAlarmGame(alarm)
+            return@withContext alarm.id
         }
 
     suspend fun updateAlarmInDb(alarm: AlarmSimpleData) =

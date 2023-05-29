@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
         GameData::class,
         RecordsData::class
     ],
-    version = 18
+    version = 19
 )
 abstract class AlarmsDB : RoomDatabase() {
 

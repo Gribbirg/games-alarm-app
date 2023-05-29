@@ -12,10 +12,16 @@ import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.databinding.AllRecordsItemBinding
 
-class AllRecordsAdapter(var data: List<AccountData?>) :
+class AllRecordsAdapter(
+    var data: List<AccountData?>,
+    private val listener: OnWorldRecordClickListener
+) :
     RecyclerView.Adapter<AllRecordsAdapter.AllRecordsViewHolder>() {
 
-    class AllRecordsViewHolder(val binding: AllRecordsItemBinding) :
+    class AllRecordsViewHolder(
+        val binding: AllRecordsItemBinding,
+        val listener: OnWorldRecordClickListener
+    ) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllRecordsViewHolder {
@@ -24,7 +30,7 @@ class AllRecordsAdapter(var data: List<AccountData?>) :
             parent,
             false
         )
-        return AllRecordsViewHolder(binding)
+        return AllRecordsViewHolder(binding, listener)
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +43,6 @@ class AllRecordsAdapter(var data: List<AccountData?>) :
         with(holder.binding) {
 
             if (currentData != null) {
-
                 val game = GameData(currentData.records!!)
                 Glide.with(photoRecordHolder.context).load(currentData.photo)
                     .into(userPhotoRecordImageView)
@@ -46,6 +51,14 @@ class AllRecordsAdapter(var data: List<AccountData?>) :
                 dateRecordTextView.text = game.recordDate
                 recordTimeTextView.text = "Время: ${game.recordTime}"
                 recordPointsTextView.text = game.record.toString()
+
+                if (holder.listener.isCurrentUser(currentData)) {
+                    deleteRecordButton.visibility = View.VISIBLE
+                    deleteRecordButton.setOnClickListener {
+                        listener.onDeleteClickListener(currentData)
+                    }
+                }
+
             } else {
                 Glide.with(photoRecordHolder.context).load(R.drawable.baseline_no_accounts_24)
                     .into(userPhotoRecordImageView)
@@ -56,5 +69,10 @@ class AllRecordsAdapter(var data: List<AccountData?>) :
                 recordPointsTextView.visibility = View.INVISIBLE
             }
         }
+    }
+
+    interface OnWorldRecordClickListener {
+        fun onDeleteClickListener(accountData: AccountData)
+        fun isCurrentUser(accountData: AccountData): Boolean
     }
 }

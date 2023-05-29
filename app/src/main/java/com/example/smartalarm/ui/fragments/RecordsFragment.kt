@@ -11,6 +11,7 @@ import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
+import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.databinding.FragmentProfileBinding
@@ -21,7 +22,8 @@ import com.example.smartalarm.ui.adapters.MyRecordsAdapter
 import com.example.smartalarm.ui.viewmodels.RecordsFragmentViewModel
 
 
-class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
+class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener,
+    AllRecordsAdapter.OnWorldRecordClickListener {
 
     lateinit var binding: FragmentRecordsBinding
     lateinit var viewModel: RecordsFragmentViewModel
@@ -58,7 +60,7 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
             showErrorText(it.isEmpty())
             binding.recordsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = AllRecordsAdapter(it)
+                adapter = AllRecordsAdapter(it, this@RecordsFragment)
             }
         }
 
@@ -108,4 +110,8 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener {
         if (!viewModel.shareRecord(recordsData, getNumOfButtonById()))
             Toast.makeText(context, "Войдите в аккаунт!", Toast.LENGTH_LONG).show()
     }
+
+    override fun onDeleteClickListener(accountData: AccountData) {}
+
+    override fun isCurrentUser(accountData: AccountData): Boolean = false
 }

@@ -25,7 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.color.MaterialColors
 import com.google.firebase.auth.FirebaseAuth
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var viewModel: ProfileFragmentViewModel
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -96,7 +96,7 @@ class ProfileFragment : Fragment() {
         viewModel.userRecords.observe(viewLifecycleOwner) {
             binding.userRecordsRecycler.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = AllRecordsAdapter(it)
+                adapter = AllRecordsAdapter(it, this@ProfileFragment)
             }
         }
 
@@ -184,4 +184,10 @@ class ProfileFragment : Fragment() {
             binding.loadAlarmsFromButton.visibility = View.INVISIBLE
         }
     }
+
+    override fun onDeleteClickListener(accountData: AccountData) {
+
+    }
+
+    override fun isCurrentUser(accountData: AccountData): Boolean = true
 }
