@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.os.Vibrator
+import android.util.Log
 import com.example.smartalarm.data.utils.RealPathUtil
 import java.io.IOException
 
@@ -38,7 +39,8 @@ class AlarmMediaPlayer {
                 ringtonePath
             }
 
-            AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
+            AlarmVibrator.setVibrator(context?.getSystemService(Context.VIBRATOR_SERVICE)
+                    as Vibrator)
 
             if (vibrationRequired) {
                 val pattern: LongArray = longArrayOf(1000, 1000, 1000, 1000)
@@ -90,6 +92,7 @@ class AlarmMediaPlayer {
 
         fun resetAudio() {
             if (mediaPlayer != null) mediaPlayer!!.start()
+            Log.i("RSET!!!!", "IT WORKED!!!!!!!!!!!")
         }
     }
 }

@@ -144,8 +144,4 @@ class MainActivity : AppCompatActivity() {
             else -> ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }
