@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AccountData
@@ -98,4 +100,13 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener,
     override fun onDeleteClickListener(accountData: AccountData) {}
 
     override fun isCurrentUser(accountData: AccountData): Boolean = false
+    override fun onProfileClickListener(accountData: AccountData) {
+        val bundle = Bundle()
+        bundle.putString("user uid", accountData.uid)
+        Navigation.findNavController(binding.root).navigate(
+            R.id.action_recordsFragment_to_profileOtherFragment,
+            bundle,
+            NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+        )
+    }
 }

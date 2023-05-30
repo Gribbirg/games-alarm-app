@@ -22,7 +22,11 @@
         android:id="@+id/recordsFragment"
         android:name="com.example.smartalarm.ui.fragments.RecordsFragment"
         android:label="fragment_records"
-        tools:layout="@layout/fragment_records" />
+        tools:layout="@layout/fragment_records" >
+        <action
+            android:id="@+id/action_recordsFragment_to_profileOtherFragment"
+            app:destination="@id/profileOtherFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addAlarmFragment"
         android:name="com.example.smartalarm.ui.fragments.AddAlarmFragment"
@@ -85,4 +89,13 @@
         android:name="com.example.smartalarm.ui.fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/profileOtherFragment"
+        android:name="com.example.smartalarm.ui.fragments.ProfileOtherFragment"
+        android:label="fragment_profile_other"
+        tools:layout="@layout/fragment_profile_other" >
+        <action
+            android:id="@+id/action_profileOtherFragment_to_recordsFragment"
+            app:destination="@id/recordsFragment" />
+    </fragment>
 </navigation>

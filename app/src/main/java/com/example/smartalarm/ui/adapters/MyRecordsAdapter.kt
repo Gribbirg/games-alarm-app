@@ -41,6 +41,8 @@ class MyRecordsAdapter(var data: List<RecordsData>, private val listener: OnMyRe
                 dateRecordTextView.text = currentData.date
                 recordPointsTextView.text = currentData.recordScore.toString()
                 recordTimeTextView.text = "Время: ${currentData.recordTime}"
+            } else {
+                shareButton.visibility = View.GONE
             }
 
             shareButton.setOnClickListener {

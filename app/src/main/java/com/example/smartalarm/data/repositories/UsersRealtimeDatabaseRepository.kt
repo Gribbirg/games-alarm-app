@@ -35,9 +35,9 @@ object UsersRealtimeDatabaseRepository {
         }
     }
 
-    suspend fun getUser(uri: String, user: MutableLiveData<AccountData>) =
+    suspend fun getUser(uid: String, user: MutableLiveData<AccountData>) =
         withContext(Dispatchers.IO) {
-            usersDatabase.child(uri).get().addOnSuccessListener {
+            usersDatabase.child(uid).get().addOnSuccessListener {
                 user.postValue(it.getValue(AccountData::class.java))
             }
         }
