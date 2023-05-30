@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.activities.GamesActivity
+import com.example.smartalarm.ui.activities.MainActivity
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -28,7 +29,9 @@ class AlarmReceiver : BroadcastReceiver() {
         Log.i("alarm", "Vibration: $alarmVibration")
         Log.i("alarm", "Ringtone: $alarmRingtone")
 
-        val intentToActivity = Intent(context, GamesActivity::class.java)
+        val intentToActivity = Intent(context, GamesActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         intentToActivity.putExtra("alarm id", alarmId)
         intentToActivity.putExtra("start time", alarmTime)
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

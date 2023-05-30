@@ -180,6 +180,7 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
         return binding.root
     }
 
+    
     private fun setDaysNumAndMonth(weekCalendarData: WeekCalendarData) {
         for (i in 0..6) {
             dateViewList[i].numTextView.text =
