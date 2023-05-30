@@ -65,8 +65,6 @@ class AlarmsFragment : Fragment(), AlarmAdapter.OnAlarmClickListener {
             }
         }
 
-//        viewModel.getAlarmsFromDbByDayOfWeek(1)
-
         dateViewList = ArrayList()
 
         with(dateViewList) {

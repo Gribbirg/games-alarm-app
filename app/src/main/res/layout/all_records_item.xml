@@ -39,12 +39,17 @@
 
             <TextView
                 android:id="@+id/userNameTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toRightOf="@id/photoRecordHolder"
                 app:layout_constraintTop_toTopOf="@id/photoRecordHolder"
-                tools:text="Я собака"
-                android:textSize="20dp"
+                app:layout_constraintRight_toLeftOf="@id/recordPointsTextView"
+                android:layout_marginRight="2dp"
+                tools:text="Я собакаЯ собакаЯ собакаЯ собакаЯ собакаЯ собака"
+                android:textSize="20sp"
+                android:maxLines="2"
+                android:maxLength="36"
+                android:ellipsize="end"
                 android:layout_marginStart="15dp"
                 android:textColor="?attr/colorOnSurface"/>
 
@@ -104,7 +109,8 @@
                 android:textColor="?attr/colorError"
                 android:textSize="11sp"
                 android:text="Удалить"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

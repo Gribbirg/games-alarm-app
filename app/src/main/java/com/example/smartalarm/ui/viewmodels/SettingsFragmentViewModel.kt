@@ -18,7 +18,6 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     private val authRepository = AuthRepository
     private val usersRealtimeDatabaseRepository = UsersRealtimeDatabaseRepository
     var currentUser: AccountData? = null
-    val userRecords: MutableLiveData<List<AccountData>> = MutableLiveData()
 
     private val alarmDbRepository = AlarmDbRepository(
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!

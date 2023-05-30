@@ -66,11 +66,33 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener,
             }
         }
 
-        viewModel.getRecordsFromDb(0)
+        viewModel.shareResult.observe(viewLifecycleOwner) {
+            if (it != null) {
+                Toast.makeText(
+                    requireContext(),
+                    if (it)
+                        "Успешно"
+                    else
+                        "Произошла ошибка. Попробуйте снова",
+                    Toast.LENGTH_LONG
+                ).show()
+                viewModel.resetShareResult()
+            }
+        }
+
+        if (arguments?.getInt("saved state") != null)
+            setState(requireArguments().getInt("saved state"))
+
         viewModel.getRecordsFromDb(getNumOfButtonById())
         return binding.root
     }
 
+    private fun setState(state: Int) {
+        if (state % 2 == 1)
+            binding.typeSelectionButtons.check(R.id.lastsButton)
+        if (state >= 2)
+            binding.fromSelectionButtons.check(R.id.allButton)
+    }
 
     private fun getNumOfButtonById(): Int {
         var res = 0
@@ -103,6 +125,7 @@ class RecordsFragment : Fragment(), MyRecordsAdapter.OnMyRecordClickListener,
     override fun onProfileClickListener(accountData: AccountData) {
         val bundle = Bundle()
         bundle.putString("user uid", accountData.uid)
+        bundle.putInt("saved state", getNumOfButtonById())
         Navigation.findNavController(binding.root).navigate(
             R.id.action_recordsFragment_to_profileOtherFragment,
             bundle,

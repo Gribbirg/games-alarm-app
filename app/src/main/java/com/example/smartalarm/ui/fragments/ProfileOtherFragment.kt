@@ -29,7 +29,7 @@ class ProfileOtherFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickLis
                 override fun handleOnBackPressed() {
                     Navigation.findNavController(binding.root).navigate(
                         R.id.action_profileOtherFragment_to_recordsFragment,
-                        null,
+                        requireArguments(),
                         NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
                     )
                 }

@@ -10,7 +10,7 @@
     <string name="saturday">СБ</string>
     <string name="sunday">ВС</string>
     <string name="addAlarmMakeRepetitiveSwitch">Сделать постоянным:</string>
-    <string name="addAlarmAlarmNameText">Название:</string>
+    <string name="addAlarmAlarmNameText">Название будильника:</string>
     <string name="addAlarmChooseMelodyButton">Мелодия будильника</string>
     <string name="addAlarmChosenMelodyText">Выбранная мелодия: по умолчанию</string>
     <string name="addAlarmSetBuzzSwitch">Вибрация:</string>

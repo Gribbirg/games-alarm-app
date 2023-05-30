@@ -78,7 +78,11 @@ object UsersRealtimeDatabaseRepository {
             })
         }
 
-    suspend fun updateUserRecords(account: AccountData, recordInternetData: RecordInternetData) =
+    suspend fun updateUserRecords(
+        account: AccountData,
+        recordInternetData: RecordInternetData,
+        result: MutableLiveData<Boolean?>
+    ) =
         withContext(Dispatchers.IO) {
             val recordUserDb = usersDatabase.child(account.uid!!)
             val topRecordDb = topRecordsDatabase.child(recordInternetData.gameId.toString())
@@ -128,9 +132,24 @@ object UsersRealtimeDatabaseRepository {
                         } else {
                             topRecordDb.setValue(current)
                         }
+                        result.postValue(true)
+                    }.addOnCanceledListener {
+                        result.postValue(false)
+                    }.addOnFailureListener {
+                        Log.e("firebase", it.toString())
+                        result.postValue(false)
                     }
-
+                }.addOnCanceledListener {
+                    result.postValue(false)
+                }.addOnFailureListener {
+                    Log.e("firebase", it.toString())
+                    result.postValue(false)
                 }
+            }.addOnCanceledListener {
+                result.postValue(false)
+            }.addOnFailureListener {
+                Log.e("firebase", it.toString())
+                result.postValue(false)
             }
         }
 

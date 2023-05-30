@@ -10,7 +10,8 @@ import com.example.smartalarm.data.data.RecordInternetData
 import com.example.smartalarm.data.data.getRecordsList
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.db.GameData
-import com.example.smartalarm.data.db.RecordsData import com.example.smartalarm.data.repositories.AlarmDbRepository
+import com.example.smartalarm.data.db.RecordsData
+import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
 import com.example.smartalarm.data.repositories.UsersRealtimeDatabaseRepository
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
     var currentUser: AccountData? = null
     val myRecordsData: MutableLiveData<ArrayList<RecordsData>> = MutableLiveData()
     val allRecordsData: MutableLiveData<List<AccountData>> = MutableLiveData()
+    val shareResult: MutableLiveData<Boolean?> = MutableLiveData()
 
     init {
         authRepository.currentAccount.observeForever {
@@ -79,10 +81,18 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
     fun shareRecord(recordsData: RecordsData, state: Int): Boolean {
         if (currentUser == null) return false
         viewModelScope.launch {
-            usersRealtimeDatabaseRepository.updateUserRecords(currentUser!!, RecordInternetData(recordsData))
+            usersRealtimeDatabaseRepository.updateUserRecords(
+                currentUser!!,
+                RecordInternetData(recordsData),
+                shareResult
+            )
             alarmDbRepository.updateRecord(recordsData)
             getRecordsFromDb(state)
         }
         return true
+    }
+
+    fun resetShareResult() {
+        shareResult.postValue(null)
     }
 }
