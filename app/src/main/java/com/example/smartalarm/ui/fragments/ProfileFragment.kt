@@ -72,6 +72,13 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
         }
 
         viewModel.userRecords.observe(viewLifecycleOwner) {
+            if (it.isEmpty() && viewModel.currentUser.value != null) {
+                binding.noRecordsTextView.visibility = View.VISIBLE
+                binding.noRecordsImageView.visibility = View.VISIBLE
+            } else {
+                binding.noRecordsTextView.visibility = View.GONE
+                binding.noRecordsImageView.visibility = View.GONE
+            }
             binding.userRecordsRecycler.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = AllRecordsAdapter(it, this@ProfileFragment)

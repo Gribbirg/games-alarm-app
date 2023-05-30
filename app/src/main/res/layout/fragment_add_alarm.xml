@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.fragments.AddAlarmFragment"
+    android:focusable="true"
     android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:orientation="vertical"
+    tools:context=".ui.fragments.AddAlarmFragment">
 
     <ImageButton
         android:id="@+id/addAlarmMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/baseline_more_vert_24"
-        android:layout_gravity="end"/>
+        android:background="@drawable/baseline_more_vert_24" />
 
     <TimePicker
         android:id="@+id/addAlarmTimePicker"
@@ -33,214 +33,235 @@
         android:layout_marginStart="20sp"
         android:layout_marginEnd="20sp"
         android:layout_marginBottom="10sp"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="21sp"
         android:textStyle="italic"
-        android:textColor="?attr/colorOnBackground"
         tools:text="Завтра, 22 февраля" />
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:focusable="true">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="0dp"
+            android:focusable="true"
             android:focusableInTouchMode="true"
-            android:focusable="true">
+            app:layout_constraintBottom_toTopOf="@id/addAlarmSaveButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="15dp">
 
-            <TextView
-                android:id="@+id/addAlarmDayOfWeekText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:layout_marginEnd="20sp"
-                android:textSize="21sp"
-                android:textStyle="italic"
-                android:textColor="?attr/colorOnBackground"
-                android:text="@string/dayOfWeek" />
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/addAlarmDaysToggleGroup"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15sp"
-                app:selectionRequired="true"
-                app:singleSelection="true">
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <Button
-                    android:id="@+id/addAlarmMondayButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <TextView
+                    android:id="@+id/addAlarmDayOfWeekText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/monday"
-                    android:textSize="11sp" />
+                    android:layout_marginStart="20sp"
+                    android:layout_marginEnd="20sp"
+                    android:text="@string/dayOfWeek"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="21sp"
+                    android:textStyle="italic" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/addAlarmDaysToggleGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15sp"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <Button
+                        android:id="@+id/addAlarmMondayButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/monday"
+                        android:textSize="11sp" />
+
+                    <Button
+                        android:id="@+id/addAlarmTuesdayButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/tuesday"
+                        android:textSize="11sp" />
+
+                    <Button
+                        android:id="@+id/addAlarmWednesdayButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/wednesday"
+                        android:textSize="11sp" />
+
+                    <Button
+                        android:id="@+id/addAlarmThursdayButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/thursday"
+                        android:textSize="11sp" />
+
+                    <Button
+                        android:id="@+id/addAlarmFridayButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/friday"
+                        android:textSize="11sp" />
+
+                    <Button
+                        android:id="@+id/addAlarmSaturdayButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/saturday"
+                        android:textSize="11sp" />
+
+                    <Button
+                        android:id="@+id/addAlarmSundayButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sunday"
+                        android:textSize="11sp" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/addAlarmMakeRepetitiveSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15sp"
+                    android:layout_marginBottom="10sp"
+                    android:checked="true"
+                    android:text="@string/addAlarmMakeRepetitiveSwitch"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="21sp"
+                    android:textStyle="italic"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15sp"
+                    android:layout_marginBottom="5sp">
+
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addAlarmAlarmNameText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="Будильник"
+                        android:ems="10"
+                        android:hint="@string/addAlarmAlarmNameText"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textSize="21sp"
+                        android:textStyle="italic" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <Button
-                    android:id="@+id/addAlarmTuesdayButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/addAlarmChooseMelodyButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/tuesday"
-                    android:textSize="11sp" />
+                    android:layout_marginHorizontal="15sp"
+                    android:layout_marginBottom="10sp"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:text="@string/addAlarmChooseMelodyButton" />
+
+                <TextView
+                    android:id="@+id/addAlarmChosenMelodyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20sp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_marginBottom="10sp"
+                    android:text="@string/addAlarmChosenMelodyText"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="16sp"
+                    tools:text="Выбранная мелодия: по умолчанию" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/addAlarmSetBuzzSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15sp"
+                    android:layout_marginBottom="10sp"
+                    android:text="@string/addAlarmSetBuzzSwitch"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="21sp"
+                    android:textStyle="italic"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/addAlarmGraduallyIncreaseVolumeSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15sp"
+                    android:layout_marginBottom="10sp"
+                    android:text="@string/addAlarmGraduallyIncreaseVolumeSwitch"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="21sp"
+                    android:textStyle="italic"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <Button
-                    android:id="@+id/addAlarmWednesdayButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/addAlarmInformationButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/wednesday"
-                    android:textSize="11sp" />
+                    android:layout_marginHorizontal="15sp"
+                    android:text="@string/addAlarmInformationButton"
+                    android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/addAlarmThursdayButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addAlarmGamesButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/thursday"
-                    android:textSize="11sp" />
-
-                <Button
-                    android:id="@+id/addAlarmFridayButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/friday"
-                    android:textSize="11sp" />
-
-                <Button
-                    android:id="@+id/addAlarmSaturdayButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/saturday"
-                    android:textSize="11sp" />
-
-                <Button
-                    android:id="@+id/addAlarmSundayButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/sunday"
-                    android:textSize="11sp" />
-
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/addAlarmMakeRepetitiveSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15sp"
-                android:layout_marginBottom="10sp"
-                android:text="@string/addAlarmMakeRepetitiveSwitch"
-                android:textSize="21sp"
-                android:textStyle="italic"
-                android:textColor="?attr/colorOnBackground"
-                tools:ignore="TouchTargetSizeCheck"
-                android:checked="true"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15sp"
-                android:layout_marginBottom="5sp">
+                    android:layout_marginHorizontal="15sp"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:text="@string/addAlarmGamesButton" />
 
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addAlarmAlarmNameText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="Будильник"
-                android:ems="10"
-                android:maxLength="20"
-                android:inputType="textPersonName"
-                android:hint="@string/addAlarmAlarmNameText"
-                android:textSize="21sp"
-                android:textStyle="italic" />
+            </LinearLayout>
+        </ScrollView>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/addAlarmSaveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/addAlarmSaveButton"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/addAlarmChooseMelodyButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15sp"
-                android:layout_marginBottom="10sp"
-                android:text="@string/addAlarmChooseMelodyButton"
-                android:backgroundTint="?attr/colorSecondary" />
-
-            <TextView
-                android:id="@+id/addAlarmChosenMelodyText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"
-                android:textSize="16sp"
-                android:textAlignment="center"
-                android:textColor="?attr/colorOnBackground"
-                tools:text="Выбранная мелодия: по умолчанию"
-                android:text="@string/addAlarmChosenMelodyText" />
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/addAlarmSetBuzzSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15sp"
-                android:layout_marginBottom="10sp"
-                android:text="@string/addAlarmSetBuzzSwitch"
-                android:textSize="21sp"
-                android:textStyle="italic"
-                android:textColor="?attr/colorOnBackground"
-                tools:ignore="TouchTargetSizeCheck" />
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/addAlarmGraduallyIncreaseVolumeSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15sp"
-                android:layout_marginBottom="10sp"
-                android:text="@string/addAlarmGraduallyIncreaseVolumeSwitch"
-                android:textSize="21sp"
-                android:textStyle="italic"
-                tools:ignore="TouchTargetSizeCheck"
-                android:textColor="?attr/colorOnBackground"/>
-
-            <Button
-                android:id="@+id/addAlarmInformationButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15sp"
-                android:text="@string/addAlarmInformationButton"
-                android:visibility="gone"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/addAlarmGamesButton"
-                android:backgroundTint="?attr/colorSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15sp"
-                android:text="@string/addAlarmGamesButton" />
-
-            <Button
-                android:id="@+id/addAlarmSaveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/addAlarmSaveButton"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:textSize="15sp"/>
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>
