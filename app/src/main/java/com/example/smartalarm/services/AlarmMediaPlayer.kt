@@ -87,5 +87,9 @@ class AlarmMediaPlayer {
             mediaPlayer!!.prepare()
             mediaPlayer!!.start()
         }
+
+        fun resetAudio() {
+            if (mediaPlayer != null) mediaPlayer!!.start()
+        }
     }
 }

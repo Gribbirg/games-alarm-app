@@ -10,10 +10,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import android.util.LogPrinter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.smartalarm.services.AlarmMediaPlayer
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
 
 
