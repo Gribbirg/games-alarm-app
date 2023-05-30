@@ -47,7 +47,7 @@ class AddAlarmFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (ringtonePath != "null") {
-            binding.addAlarmChosenMelodyText.setText("Выбранная мелодия: ".plus(ringtonePath.substringAfterLast("/")))
+            binding.addAlarmChosenMelodyText.text = "Выбранная мелодия: ".plus(ringtonePath.substringAfterLast("/"))
         }
     }
 
@@ -236,6 +236,9 @@ class AddAlarmFragment : Fragment() {
             addAlarmGraduallyIncreaseVolumeSwitch.isChecked = alarm.isRisingVolume
             addAlarmDaysToggleGroup.check(getDayOfWeekButtonByNum(alarm.dayOfWeek))
             ringtonePath = alarm.ringtonePath
+            if (ringtonePath != "null") {
+                addAlarmChosenMelodyText.text = "Выбранная мелодия: ".plus(ringtonePath.substringAfterLast("/"))
+            }
         }
     }
 

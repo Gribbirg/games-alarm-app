@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.startActivity
 import com.example.smartalarm.R
 import com.example.smartalarm.ui.activities.GamesActivity
 import com.example.smartalarm.ui.activities.MainActivity
@@ -70,6 +71,8 @@ class AlarmReceiver : BroadcastReceiver() {
         ) {
             notificationManager.notify(alarmId.toInt(), notificationBuilder.build())
         }
+
+        startActivity(context, intentToActivity, null)
 
         AlarmMediaPlayer.currentAlarmId = alarmId.toInt()
         AlarmMediaPlayer.playAudio(context, alarmRisingVolume, alarmVibration, alarmRingtone!!)

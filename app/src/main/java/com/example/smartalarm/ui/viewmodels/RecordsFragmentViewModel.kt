@@ -2,6 +2,7 @@ package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
 import android.app.RecoverableSecurityException
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -70,7 +71,9 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
                                 }
                             }
                         }
-                        records.sortBy { -it.records!!.split(';')[2].toInt() }
+                        records.sortBy {
+                            -it.records!!.split(';')[3].toInt()
+                        }
                         allRecordsData.postValue(records)
                     }
                 }

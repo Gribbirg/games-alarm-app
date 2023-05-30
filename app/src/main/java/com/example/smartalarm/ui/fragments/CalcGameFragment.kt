@@ -53,12 +53,16 @@ class CalcGameFragment : Fragment() {
         viewModel.timeCurrentString.observe(viewLifecycleOwner) {
             binding.calcTimeTextView.text = it
             with(it.split(".")) {
-                if (this[0].toInt() % 2 == 0 && this[1].toInt() == 0 && this[0].toInt() != 0) {
+                if (this[0].toInt() % 2 == 0 &&
+                    this[1].toInt() == 0 &&
+                    this[0].toInt() != 0 &&
+                    !requireArguments().getBoolean("test")
+                ) {
                     AlarmMediaPlayer.playAudio(
                         context,
-                        false,
-                        false,
-                        requireArguments().getString("music path")!!
+                        isRisingVolume = false,
+                        vibrationRequired = false,
+                        ringtonePath = requireArguments().getString("music path")!!
                     )
                     binding.musicOffButton.visibility = View.VISIBLE
                 }

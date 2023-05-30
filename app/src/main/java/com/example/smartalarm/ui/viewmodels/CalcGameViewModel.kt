@@ -26,7 +26,12 @@ class CalcGameViewModel(application: Application) : AndroidViewModel(application
     private var runnable = object : Runnable {
         override fun run() {
             timeCurrent = System.currentTimeMillis() - timeStarted
-            timeCurrentString.postValue("${timeCurrent / 60000}.${(timeCurrent / 1000) % 60}")
+            timeCurrentString.postValue(
+                "${timeCurrent / 60000}.${
+                    if ((timeCurrent / 1000) % 60 < 10) "0"
+                    else ""
+                }${(timeCurrent / 1000) % 60}"
+            )
             handler.postDelayed(this, 1000)
         }
     }
