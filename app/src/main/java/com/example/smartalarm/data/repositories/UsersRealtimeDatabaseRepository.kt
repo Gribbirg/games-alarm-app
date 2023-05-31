@@ -162,15 +162,14 @@ object UsersRealtimeDatabaseRepository {
             deleteAlarmsOfUser(account, MutableLiveData())
             val userAlarms = usersDatabase.child(account.uid!!).child("alarms")
             for (alarm in alarms) {
-                userAlarms.child(alarm.id.toString()).setValue(alarm).addOnSuccessListener {
-                    result.postValue(true)
-                }.addOnCanceledListener {
+                userAlarms.child(alarm.id.toString()).setValue(alarm).addOnCanceledListener {
                     result.postValue(false)
                 }.addOnFailureListener {
                     Log.e("firebase", it.toString())
                     result.postValue(false)
                 }
             }
+            result.postValue(true)
         }
 
     suspend fun deleteAlarmsOfUser(account: AccountData, result: MutableLiveData<Boolean?>) =
