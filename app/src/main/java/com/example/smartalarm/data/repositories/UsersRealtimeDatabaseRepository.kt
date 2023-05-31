@@ -265,9 +265,16 @@ object UsersRealtimeDatabaseRepository {
 
                         val records = getRecordsList(current!!)
                         for (record in records)
-                            deleteTopRecordIfNeed(account, record!!, result)
+                            deleteTopRecordIfNeed(account, record!!, MutableLiveData())
 
-                        recordDb.setValue("null")
+                        recordDb.setValue("null").addOnSuccessListener {
+                            result.postValue(true)
+                        }.addOnCanceledListener {
+                            result.postValue(false)
+                        }.addOnFailureListener {
+                            Log.e("firebase", it.toString())
+                            result.postValue(false)
+                        }
                     } else
                         result.postValue(true)
 
