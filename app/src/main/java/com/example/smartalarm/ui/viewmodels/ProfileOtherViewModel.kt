@@ -46,7 +46,7 @@ class ProfileOtherViewModel(application: Application) : AndroidViewModel(applica
                         }
                     }
                 }
-                records.sortBy { -it.records!!.split(';')[2].toInt() }
+                records.sortBy { -it.records!!.split(';')[3].toInt() }
                 userRecords.postValue(records)
             }
         }
