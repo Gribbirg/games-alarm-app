@@ -1,21 +1,20 @@
 package com.example.smartalarm.ui.fragments
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smartalarm.ui.viewmodels.GameChoiceViewModel
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AlarmGameData
 import com.example.smartalarm.databinding.FragmentGameChoiceBinding
 import com.example.smartalarm.ui.adapters.GameAdapter
+import com.example.smartalarm.ui.viewmodels.GameChoiceViewModel
 
 class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
 

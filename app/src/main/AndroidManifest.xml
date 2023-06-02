@@ -32,7 +32,8 @@
 
         <activity
             android:name=".ui.activities.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,7 +46,8 @@
         <activity
             android:name=".ui.activities.GamesActivity"
             android:parentActivityName=".ui.activities.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".services.AlarmReceiver" />
     </application>

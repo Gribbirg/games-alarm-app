@@ -1,6 +1,5 @@
 package com.example.smartalarm.data.data
 
-import com.example.smartalarm.data.db.AlarmUserGamesData
 import com.example.smartalarm.data.db.GameData
 
 data class AlarmGameData(

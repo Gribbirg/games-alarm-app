@@ -1,29 +1,21 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.smartalarm.App
-import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.WeekCalendarData
-
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
+import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.CalendarRepository
 import com.example.smartalarm.data.repositories.getDayOfWeekNameVinit
 import com.example.smartalarm.data.repositories.getMontNameVinit
 import com.example.smartalarm.data.repositories.getTodayNumInWeek
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 
 class AlarmsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 

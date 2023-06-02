@@ -103,14 +103,13 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
         return false
     }
 
-    fun loadAlarmsFromInternet(): Boolean {
+    private fun loadAlarmsFromInternet(): Boolean {
         if (currentUser.value != null) {
             viewModelScope.launch {
                 val alarmList = MutableLiveData<List<AlarmData>>()
 
                 alarmList.observeForever {
                     viewModelScope.launch {
-                        alarmDbRepository.deleteAllAlarms()
                         for (alarm in it) {
                             if (alarm.activateDate != null)
                                 if (!isAhead(

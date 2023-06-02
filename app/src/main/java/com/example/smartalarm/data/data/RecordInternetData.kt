@@ -1,8 +1,5 @@
 package com.example.smartalarm.data.data
 
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
-import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.data.db.RecordsData
 
 data class RecordInternetData(

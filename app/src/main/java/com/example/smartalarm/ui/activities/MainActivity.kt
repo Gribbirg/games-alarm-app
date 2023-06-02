@@ -1,21 +1,19 @@
 package com.example.smartalarm.ui.activities
 
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartalarm.R
 import com.example.smartalarm.databinding.ActivityMainBinding
-import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import android.util.Log
-import android.util.LogPrinter
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import com.example.smartalarm.services.AlarmMediaPlayer
 import com.example.smartalarm.ui.viewmodels.MainActivityViewModel
 
 

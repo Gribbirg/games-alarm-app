@@ -1,8 +1,6 @@
 package com.example.smartalarm.data.data
 
 import android.util.Log
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.repositories.dateListFromString
 import com.example.smartalarm.data.repositories.getNearestDate

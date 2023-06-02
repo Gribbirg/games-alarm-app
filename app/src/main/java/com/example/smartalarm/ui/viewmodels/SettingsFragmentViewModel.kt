@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.db.AlarmsDB
+import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository
 import com.example.smartalarm.data.repositories.UsersRealtimeDatabaseRepository
@@ -17,6 +18,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
 
     private val authRepository = AuthRepository
     private val usersRealtimeDatabaseRepository = UsersRealtimeDatabaseRepository
+    private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
     var currentUser: AccountData? = null
 
     private val alarmDbRepository = AlarmDbRepository(
@@ -38,7 +40,11 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
 
                 alarmList.observeForever {
                     viewModelScope.launch {
+                        val alarms = alarmDbRepository.getAllAlarms()
+                        for (alarm in alarms)
+                            alarmCreateRepository.cancel(alarm)
                         alarmDbRepository.deleteAllAlarms()
+
                         for (alarm in it) {
                             if (alarm.activateDate != null)
                                 if (!isAhead(
@@ -49,6 +55,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
                                 )
                                     continue
                             alarmDbRepository.insertAlarmToDb(alarm)
+                            alarmCreateRepository.create(alarm)
                         }
                     }
                 }

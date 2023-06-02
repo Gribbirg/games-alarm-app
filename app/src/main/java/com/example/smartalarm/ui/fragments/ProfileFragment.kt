@@ -1,19 +1,14 @@
 package com.example.smartalarm.ui.fragments
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.smartalarm.R
@@ -22,10 +17,8 @@ import com.example.smartalarm.databinding.FragmentProfileBinding
 import com.example.smartalarm.ui.adapters.AllRecordsAdapter
 import com.example.smartalarm.ui.viewmodels.ProfileFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.material.color.MaterialColors
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener {
     private lateinit var binding: FragmentProfileBinding

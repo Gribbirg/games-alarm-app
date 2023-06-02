@@ -1,8 +1,5 @@
 package com.example.smartalarm.ui.adapters
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,11 +8,9 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AlarmData
-import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.databinding.AlarmItemBinding
 import com.google.android.material.color.MaterialColors
 

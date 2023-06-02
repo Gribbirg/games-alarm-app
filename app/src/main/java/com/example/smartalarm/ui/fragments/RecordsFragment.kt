@@ -1,25 +1,20 @@
 package com.example.smartalarm.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.children
-import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smartalarm.R
 import com.example.smartalarm.data.data.AccountData
-import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.data.db.RecordsData
-import com.example.smartalarm.databinding.FragmentProfileBinding
 import com.example.smartalarm.databinding.FragmentRecordsBinding
 import com.example.smartalarm.ui.adapters.AllRecordsAdapter
-import com.example.smartalarm.ui.adapters.GameAdapter
 import com.example.smartalarm.ui.adapters.MyRecordsAdapter
 import com.example.smartalarm.ui.viewmodels.RecordsFragmentViewModel
 

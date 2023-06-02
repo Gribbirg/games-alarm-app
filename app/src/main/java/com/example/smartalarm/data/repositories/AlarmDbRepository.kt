@@ -174,6 +174,7 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
 
     suspend fun deleteAllAlarms() =
         withContext(Dispatchers.IO) {
+            Log.i("database", "delete all alarms")
             alarmsDao.deleteAllUserGames()
             alarmsDao.deleteAllAlarms()
         }

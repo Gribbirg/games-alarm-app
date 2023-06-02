@@ -1,6 +1,5 @@
 package com.example.smartalarm.data.db
 
-import androidx.core.text.isDigitsOnly
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey

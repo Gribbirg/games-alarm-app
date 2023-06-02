@@ -1,14 +1,8 @@
 package com.example.smartalarm.ui.activities
 
-import android.content.Context
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Vibrator
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
 import com.example.smartalarm.databinding.ActivityGamesBinding
-import com.google.android.material.color.MaterialColors
 
 class GamesActivity : AppCompatActivity() {
     lateinit var binding: ActivityGamesBinding

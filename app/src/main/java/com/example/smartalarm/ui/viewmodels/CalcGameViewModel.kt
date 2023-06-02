@@ -6,7 +6,6 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.ArifData
@@ -14,7 +13,6 @@ import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class CalcGameViewModel(application: Application) : AndroidViewModel(application) {
     private var timeStarted: Long = 0

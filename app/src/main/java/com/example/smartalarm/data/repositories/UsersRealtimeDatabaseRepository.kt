@@ -7,14 +7,12 @@ import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.RecordInternetData
 import com.example.smartalarm.data.data.arrayToString
 import com.example.smartalarm.data.data.getRecordsList
-import com.example.smartalarm.data.db.GameData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.math.log
 
 object UsersRealtimeDatabaseRepository {
     private val usersDatabase = FirebaseDatabase
@@ -167,6 +165,8 @@ object UsersRealtimeDatabaseRepository {
                 }.addOnFailureListener {
                     Log.e("firebase", it.toString())
                     result.postValue(false)
+                }.addOnSuccessListener {
+                    Log.i("grib", "f")
                 }
             }
             result.postValue(true)

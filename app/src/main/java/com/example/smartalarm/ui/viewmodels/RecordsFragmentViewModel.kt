@@ -1,8 +1,6 @@
 package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
-import android.app.RecoverableSecurityException
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,7 +8,6 @@ import com.example.smartalarm.data.data.AccountData
 import com.example.smartalarm.data.data.RecordInternetData
 import com.example.smartalarm.data.data.getRecordsList
 import com.example.smartalarm.data.db.AlarmsDB
-import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.AuthRepository

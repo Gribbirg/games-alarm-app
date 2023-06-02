@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartalarm.R
-import com.example.smartalarm.data.db.GameData
 import com.example.smartalarm.data.db.RecordsData
 import com.example.smartalarm.databinding.RecordItemBinding
 
