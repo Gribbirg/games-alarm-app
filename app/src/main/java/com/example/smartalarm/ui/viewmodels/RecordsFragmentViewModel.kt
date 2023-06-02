@@ -54,7 +54,6 @@ class RecordsFragmentViewModel(application: Application) : AndroidViewModel(appl
                             for (record in getRecordsList(user.records!!)) {
 
                                 if (record != null) {
-
                                     records.add(
                                         AccountData(
                                             user.uid,
