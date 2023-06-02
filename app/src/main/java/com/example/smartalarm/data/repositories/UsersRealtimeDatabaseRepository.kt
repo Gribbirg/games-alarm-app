@@ -217,8 +217,10 @@ object UsersRealtimeDatabaseRepository {
                 val current = it.getValue(String::class.java)
                 val records = getRecordsList(current!!)
                 for (i in records.indices) {
-                    if (records[i]?.id!! == newRecord.id)
+                    if (records[i]?.id!! == newRecord.id) {
                         records.removeAt(i)
+                        break
+                    }
                 }
                 userRecords.setValue(arrayToString(records))
             }

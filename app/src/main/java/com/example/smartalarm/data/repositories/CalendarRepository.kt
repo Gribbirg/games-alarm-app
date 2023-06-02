@@ -149,7 +149,7 @@ fun isAhead(date: String, hour: Int, minute: Int): Boolean {
         false
     else if (hour > currentCalendar.get(Calendar.HOUR_OF_DAY))
         true
-    else minute >= currentCalendar.get(Calendar.MINUTE)
+    else minute > currentCalendar.get(Calendar.MINUTE)
 }
 
 fun getTodayDate(): String {
