@@ -7,6 +7,7 @@ import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.RecordInternetData
 import com.example.smartalarm.data.data.arrayToString
 import com.example.smartalarm.data.data.getRecordsList
+import com.example.smartalarm.data.db.RecordsData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -300,4 +301,15 @@ object UsersRealtimeDatabaseRepository {
                     result.postValue(false)
                 }
         }
+
+
+    suspend fun getUserRecords(
+        account: AccountData,
+        records: MutableLiveData<ArrayList<RecordInternetData?>>
+    ) = withContext(Dispatchers.IO) {
+        usersDatabase.child(account.uid!!).child("records").get().addOnSuccessListener {
+            val current = it.getValue(String::class.java)
+            records.postValue(if (current == "null") null else getRecordsList(current!!))
+        }
+    }
 }

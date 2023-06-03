@@ -44,7 +44,7 @@ class ProfileOtherFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickLis
         viewModel = ViewModelProvider(this)[ProfileOtherViewModel::class.java]
 
         viewModel.user.observe(viewLifecycleOwner) {
-            viewModel.getRecords()
+            viewModel.getRecords(it)
             binding.userNameOtherTextView.text = it.name
             binding.userEmailOtherTextView.text = it.email
             binding.userPhotoOtherImageView.setBackgroundResource(0)

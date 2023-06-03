@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AccountData
+import com.example.smartalarm.data.data.RecordInternetData
 import com.example.smartalarm.data.data.getRecordsList
 import com.example.smartalarm.data.repositories.UsersRealtimeDatabaseRepository
 import kotlinx.coroutines.launch
@@ -22,32 +23,28 @@ class ProfileOtherViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun getRecords() {
+    fun getRecords(user: AccountData) {
         viewModelScope.launch {
-            val users = MutableLiveData<List<AccountData>>()
-            usersRealtimeDatabaseRepository.getAllUsers(users)
-            users.observeForever {
-                val records = mutableListOf<AccountData>()
-                for (user in it) {
-                    for (record in getRecordsList(user.records!!)) {
-
-                        if (record != null) {
-
-                            records.add(
-                                AccountData(
-                                    user.uid,
-                                    user.email,
-                                    user.name,
-                                    user.photo,
-                                    record.toString()
-                                )
+            val records = MutableLiveData<ArrayList<RecordInternetData?>>()
+            usersRealtimeDatabaseRepository.getUserRecords(user, records)
+            records.observeForever {
+                val recordsSort = mutableListOf<AccountData>()
+                for (record in it) {
+                    if (record != null) {
+                        recordsSort.add(
+                            AccountData(
+                                user.uid,
+                                user.email,
+                                user.name,
+                                user.photo,
+                                record.toString()
                             )
+                        )
 
-                        }
                     }
                 }
-                records.sortBy { -it.records!!.split(';')[3].toInt() }
-                userRecords.postValue(records)
+                recordsSort.sortBy { -it.records!!.split(';')[3].toInt() }
+                userRecords.postValue(recordsSort)
             }
         }
     }
