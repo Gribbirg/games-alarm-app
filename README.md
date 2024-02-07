@@ -25,12 +25,14 @@
 
 ### Установка
 
-Apk-файл доступен в <a href="https://github.com/Gribbirg/games-alarm-app/releases">последнем релизе</a>.
+Apk-файл доступен в <a href="https://github.com/Gribbirg/games-alarm-app/releases">последнем
+релизе</a>.
 
 # Alarm with games
 
 - Android application;
-- Graduation project of the track "Mobile Development" of the educational program "IT Academy Samsung".
+- Graduation project of the track "Mobile Development" of the educational program "IT Academy
+  Samsung".
 
 ### Features
 
@@ -53,22 +55,22 @@ Apk-файл доступен в <a href="https://github.com/Gribbirg/games-alar
 
 ### Installation
 
-Apk file is available via <a href="https://github.com/Gribbirg/games-alarm-app/releases">latest release</a>.
+Apk file is available via <a href="https://github.com/Gribbirg/games-alarm-app/releases">latest
+release</a>.
 
 ## Скриншоты (Screenshots)
 
-<p float="left">
-  <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/1a842c82-3be6-4812-a4ce-7ead381bdf88" width="240px" />
-  <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/cdb1ab37-a6c4-4e94-824b-ac1d5c1805c8" width="240px" />
-  <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/33ffa7e6-ae14-4d7f-b9be-020556cbab20" width="240px" />
-  <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/a295d149-216d-441f-8622-35f0281cf1d7" width="240px" />
-  <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/43097668-7527-4440-a98e-a8724dba6a45" width="240px" />
-  <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/6c58916c-bc64-4953-9741-a9c1e148e658" width="240px" />
-  <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/0255233c-5466-4746-bd79-5030e05a34d2" width="240px" />
-</p>
+<img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/1a842c82-3be6-4812-a4ce-7ead381bdf88" width="240px" alt="Screenshot" />
+<img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/cdb1ab37-a6c4-4e94-824b-ac1d5c1805c8" width="240px" alt="Screenshot" />
+<img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/33ffa7e6-ae14-4d7f-b9be-020556cbab20" width="240px" alt="Screenshot" />
+<img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/a295d149-216d-441f-8622-35f0281cf1d7" width="240px" alt="Screenshot" />
+<img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/43097668-7527-4440-a98e-a8724dba6a45" width="240px" alt="Screenshot" />
+<img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/6c58916c-bc64-4953-9741-a9c1e148e658" width="240px" alt="Screenshot" />
+<img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/0255233c-5466-4746-bd79-5030e05a34d2" width="240px" alt="Screenshot" />
 
 ## Видео (Video)
-https://github.com/Gribbirg/games-alarm-app/assets/115590353/b7cd536a-2099-4cb9-a9fc-2116b01fdb30
+
+<video src='https://github.com/Gribbirg/games-alarm-app/assets/115590353/b7cd536a-2099-4cb9-a9fc-2116b01fdb30' width=180></video>
 
 ## Технологический стек (Stack)
 
@@ -83,9 +85,10 @@ https://github.com/Gribbirg/games-alarm-app/assets/115590353/b7cd536a-2099-4cb9-
 9. Alarm Manager.
 
 ## Разработчики (Сontributors)
+
 <a href="https://github.com/Gribbirg/games-alarm-app/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Gribbirg/games-alarm-app" />
+  <img src="https://contrib.rocks/image?repo=Gribbirg/games-alarm-app" alt="contributor" />
 </a>
 <a href="https://github.com/IlyaPodkolzin">
-  <img src="https://contrib.rocks/image?repo=IlyaPodkolzin/DevelopmentOfClientPartsOfInternetResourses" />
+  <img src="https://contrib.rocks/image?repo=IlyaPodkolzin/DevelopmentOfClientPartsOfInternetResourses" alt="contributor" />
 </a>
