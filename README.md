@@ -70,7 +70,7 @@ release</a>.
 
 ## Видео (Video)
 
-<video src='https://github.com/Gribbirg/games-alarm-app/assets/115590353/b7cd536a-2099-4cb9-a9fc-2116b01fdb30' width=180></video>
+[Click here](https://github.com/Gribbirg/games-alarm-app/assets/115590353/b7cd536a-2099-4cb9-a9fc-2116b01fdb30)
 
 ## Технологический стек (Stack)
 
