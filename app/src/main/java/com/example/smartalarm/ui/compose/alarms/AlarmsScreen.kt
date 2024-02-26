@@ -1,5 +1,6 @@
 package com.example.smartalarm.ui.compose.alarms
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,29 +17,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
+import com.example.smartalarm.ui.compose.alarms.view.calendar.OnCalendarViewClickListener
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlarmsScreen(
     state: AlarmsState,
-
-    ) {
+    listener: OnAlarmsScreenClickListener
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "РазБудильник") }) },
     ) {
-        Column (
+        Column(
             modifier = Modifier
                 .padding(it)
                 .fillMaxWidth()
-                .fillMaxHeight()
-            ,
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CalendarView(data = state.weekCalendarData)
+            CalendarView(listener, state.weekCalendarData, state.selectedDay)
         }
     }
+}
+
+interface OnAlarmsScreenClickListener : OnCalendarViewClickListener {
+
 }
 
 @Preview(
@@ -48,7 +53,10 @@ fun AlarmsScreen(
 @Composable
 fun AlarmsScreenPreview() {
     GamesAlarmTheme {
-        AlarmsScreen(state = AlarmsState(WeekCalendarData.getDefaultList()))
+        AlarmsScreen(
+            AlarmsState(WeekCalendarData.getDefaultList(), WeekCalendarData.Date(0, 0, 0)),
+            PreviewListener()
+        )
     }
 }
 
@@ -59,6 +67,15 @@ fun AlarmsScreenPreview() {
 @Composable
 fun AlarmsScreenDarkPreview() {
     GamesAlarmTheme(darkTheme = true) {
-        AlarmsScreen(state = AlarmsState((WeekCalendarData.getDefaultList())))
+        AlarmsScreen(
+            AlarmsState(WeekCalendarData.getDefaultList(), WeekCalendarData.Date(0, 0, 0)),
+            PreviewListener()
+        )
+    }
+}
+
+class PreviewListener : OnAlarmsScreenClickListener {
+    override fun onDayViewClick(day: WeekCalendarData.Date) {
+        Log.d("Preview", "onDayViewClick: $day")
     }
 }

@@ -30,6 +30,7 @@ class AlarmsFragment : Fragment() {
             val state by viewModel.state.collectAsState()
             GamesAlarmTheme {
                 AlarmsScreen(
+                    listener = viewModel,
                     state = state
                 )
             }

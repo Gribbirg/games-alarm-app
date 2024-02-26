@@ -2,6 +2,7 @@ package com.example.smartalarm.ui.compose.alarms
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,15 +14,24 @@ import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.CalendarRepository
 import com.example.smartalarm.data.repositories.getDayOfWeekNameVinit
+import com.example.smartalarm.data.repositories.getDefaultWeekDataList
 import com.example.smartalarm.data.repositories.getMontNameVinit
+import com.example.smartalarm.data.repositories.getToday
 import com.example.smartalarm.data.repositories.getTodayNumInWeek
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AlarmsViewModel(application: Application) : AndroidViewModel(application) {
-//    Todo
-    private val _state = MutableStateFlow(AlarmsState(WeekCalendarData.getDefaultList()))
+class AlarmsViewModel(application: Application) : AndroidViewModel(application),
+    OnAlarmsScreenClickListener {
+
+    private val _state = MutableStateFlow(
+        AlarmsState(
+            getDefaultWeekDataList(100),
+            getToday()
+        )
+    )
     val state = _state.asStateFlow()
 
     var currentDayOfWeek: Int? = getTodayNumInWeek()
@@ -159,5 +169,13 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         for (i in 0..6)
             list.add(getCurrentDateOfWeekString(i))
         return list
+    }
+
+    override fun onDayViewClick(day: WeekCalendarData.Date) {
+        viewModelScope.launch {
+            _state.update { state ->
+                state.copy(selectedDay = day)
+            }
+        }
     }
 }

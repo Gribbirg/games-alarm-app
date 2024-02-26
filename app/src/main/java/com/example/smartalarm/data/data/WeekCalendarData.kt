@@ -1,16 +1,53 @@
 package com.example.smartalarm.data.data
 
+import android.util.Log
+
 class WeekCalendarData(val weekOfYear: Int) {
     val daysList = ArrayList<DateUnit>()
     val monthList = ArrayList<String>()
 
-    class DateUnit(
+    open class Date(
         var dayNumber: Int,
         var monthNumber: Int,
         var yearNumber: Int,
+
+
+    ) {
+        override fun equals(other: Any?): Boolean {
+
+            if (this === other) return true
+            if (other !is Date) {
+                return false
+            }
+
+            if (dayNumber != other.dayNumber) return false
+            if (monthNumber != other.monthNumber) return false
+            return yearNumber == other.yearNumber
+        }
+
+        override fun hashCode(): Int {
+            var result = dayNumber
+            result = 31 * result + monthNumber
+            result = 31 * result + yearNumber
+            return result
+        }
+
+        override fun toString(): String {
+            return "${dayNumber}.${monthNumber}.${yearNumber}"
+        }
+    }
+
+    class DateUnit(
+        dayNumber: Int,
+        monthNumber: Int,
+        yearNumber: Int,
         var today: Boolean = false,
         var isWeekend: Boolean = false,
         var isHoliday: Boolean = false
+    ) : Date(
+        dayNumber,
+        monthNumber,
+        yearNumber,
     ) {
 
         fun getMonthName(): String =
@@ -29,10 +66,6 @@ class WeekCalendarData(val weekOfYear: Int) {
                 12 -> "Декабрь"
                 else -> ""
             }
-
-        override fun toString(): String {
-            return "${dayNumber}.${monthNumber}.${yearNumber}"
-        }
     }
 
     fun addDate(
@@ -88,3 +121,4 @@ class WeekCalendarData(val weekOfYear: Int) {
         }
     }
 }
+

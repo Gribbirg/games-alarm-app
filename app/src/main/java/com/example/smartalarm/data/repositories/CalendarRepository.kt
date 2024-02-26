@@ -152,6 +152,20 @@ fun isAhead(date: String, hour: Int, minute: Int): Boolean {
     else minute > currentCalendar.get(Calendar.MINUTE)
 }
 
+fun getToday(): WeekCalendarData.Date {
+    val currentCalendar = Calendar.getInstance()
+    Log.d("test", "getToday: ${WeekCalendarData.Date(
+        currentCalendar.get(Calendar.DAY_OF_MONTH),
+        currentCalendar.get(Calendar.MONTH) + 1,
+        currentCalendar.get(Calendar.YEAR)
+    )}")
+    return WeekCalendarData.Date(
+        currentCalendar.get(Calendar.DAY_OF_MONTH),
+        currentCalendar.get(Calendar.MONTH) + 1,
+        currentCalendar.get(Calendar.YEAR)
+    )
+}
+
 fun getTodayDate(): String {
     val currentCalendar = Calendar.getInstance()
     return "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +
@@ -286,7 +300,7 @@ fun getCurrentTimeString(): String {
 
 fun getCurrentDateString(): String {
     val calendar = Calendar.getInstance()
-    return "${getMontName(calendar.get(Calendar.MONTH ) + 1)} " +
+    return "${getMontName(calendar.get(Calendar.MONTH) + 1)} " +
             "${calendar.get(Calendar.DAY_OF_MONTH)}, " +
             getDayOfWeekName((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7)
 }
@@ -299,4 +313,15 @@ fun getDefaultWeekDataList(size: Int = 100): List<WeekCalendarData> {
         rep.changeWeek(1)
     }
     return res
+}
+
+fun getDayOfWeekShortName(dayOfWeek: Int) = when (dayOfWeek) {
+    0 -> "Пн"
+    1 -> "Вт"
+    2 -> "Ср"
+    3 -> "Чт"
+    4 -> "Пт"
+    5 -> "Сб"
+    6 -> "Вс"
+    else -> ""
 }
