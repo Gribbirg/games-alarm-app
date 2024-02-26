@@ -290,3 +290,13 @@ fun getCurrentDateString(): String {
             "${calendar.get(Calendar.DAY_OF_MONTH)}, " +
             getDayOfWeekName((calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7)
 }
+
+fun getDefaultWeekDataList(size: Int = 100): List<WeekCalendarData> {
+    val rep = CalendarRepository()
+    val res = ArrayList<WeekCalendarData>()
+    repeat(size) {
+        res.add(rep.getWeek())
+        rep.changeWeek(1)
+    }
+    return res
+}

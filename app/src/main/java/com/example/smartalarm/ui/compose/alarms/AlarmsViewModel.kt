@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AlarmsViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val _state = MutableStateFlow(AlarmsState())
+//    Todo
+    private val _state = MutableStateFlow(AlarmsState(WeekCalendarData.getDefaultList()))
     val state = _state.asStateFlow()
 
     var currentDayOfWeek: Int? = getTodayNumInWeek()

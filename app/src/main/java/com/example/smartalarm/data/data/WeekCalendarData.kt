@@ -4,15 +4,16 @@ class WeekCalendarData(val weekOfYear: Int) {
     val daysList = ArrayList<DateUnit>()
     val monthList = ArrayList<String>()
 
-    class DateUnit(var dayNumber: Int,
-                   var monthNumber: Int,
-                   var yearNumber: Int,
-                   var today: Boolean = false,
-                   var isWeekend: Boolean= false,
-                   var isHoliday: Boolean = false
+    class DateUnit(
+        var dayNumber: Int,
+        var monthNumber: Int,
+        var yearNumber: Int,
+        var today: Boolean = false,
+        var isWeekend: Boolean = false,
+        var isHoliday: Boolean = false
     ) {
 
-        fun getMonthName() : String =
+        fun getMonthName(): String =
             when (monthNumber) {
                 1 -> "Январь"
                 2 -> "Февраль"
@@ -34,14 +35,24 @@ class WeekCalendarData(val weekOfYear: Int) {
         }
     }
 
-    fun addDate(_dayNumber: Int,
-                _monthNumber: Int,
-                _yearNumber: Int,
-                _today: Boolean = false,
-                _isWeekend: Boolean= false,
-                _isHoliday: Boolean = false)
-    {
-        daysList.add(DateUnit(_dayNumber, _monthNumber, _yearNumber, _today, _isWeekend, _isHoliday))
+    fun addDate(
+        _dayNumber: Int,
+        _monthNumber: Int,
+        _yearNumber: Int,
+        _today: Boolean = false,
+        _isWeekend: Boolean = false,
+        _isHoliday: Boolean = false
+    ) {
+        daysList.add(
+            DateUnit(
+                _dayNumber,
+                _monthNumber,
+                _yearNumber,
+                _today,
+                _isWeekend,
+                _isHoliday
+            )
+        )
     }
 
     fun getListLen() = daysList.size
@@ -55,5 +66,25 @@ class WeekCalendarData(val weekOfYear: Int) {
 
     override fun toString(): String {
         return "$daysList $monthList"
+    }
+
+    companion object {
+        fun getDefault(): WeekCalendarData = WeekCalendarData(1).apply {
+            addDate(1, 1, 2024, true)
+            addDate(2, 1, 2024)
+            addDate(3, 1, 2024)
+            addDate(4, 1, 2024)
+            addDate(5, 1, 2024, _isHoliday = true)
+            addDate(6, 1, 2024, _isWeekend = true)
+            addDate(7, 1, 2024, _isWeekend = true)
+
+            monthList.add("Январь")
+            monthList.add("")
+            monthList.add("Февраль")
+        }
+
+        fun getDefaultList(size: Int = 10): List<WeekCalendarData> = List(size) {
+            getDefault()
+        }
     }
 }

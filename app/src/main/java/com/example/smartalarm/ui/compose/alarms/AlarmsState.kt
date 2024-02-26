@@ -1,4 +1,5 @@
 package com.example.smartalarm.ui.compose.alarms
 
-class AlarmsState {
-}
+import com.example.smartalarm.data.data.WeekCalendarData
+
+data class AlarmsState(val weekCalendarData: List<WeekCalendarData>) {}
