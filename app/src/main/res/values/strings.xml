@@ -25,4 +25,5 @@
     <string name="noAlarmsToAdd">Будильников нет!\nЧтобы добавить новый будильник, нажмите +</string>
     <string name="dayOfWeek">День недели:</string>
     <string name="cancelAlarm">Выключить будильник</string>
+    <string name="settings_name">Настройки</string>
 </resources>

@@ -6,7 +6,7 @@
     app:startDestination="@id/alarmsFragment">
     <fragment
         android:id="@+id/alarmsFragment"
-        android:name="com.example.smartalarm.ui.fragments.AlarmsFragment"
+        android:name="com.example.smartalarm.ui.compose.alarms.AlarmsFragment"
         android:label="fragment_alarms"
         tools:layout="@layout/fragment_alarms" >
         <action

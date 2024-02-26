@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 class AlarmsFragment : Fragment() {
 
@@ -27,9 +28,11 @@ class AlarmsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         composeView.setContent {
             val state by viewModel.state.collectAsState()
-            AlarmsScreen(
-                state = state
-            )
+            GamesAlarmTheme {
+                AlarmsScreen(
+                    state = state
+                )
+            }
         }
     }
 }
