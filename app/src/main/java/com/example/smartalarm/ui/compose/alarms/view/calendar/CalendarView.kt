@@ -113,7 +113,7 @@ fun CalendarViewPreview() {
                 CalendarView(
                     PreviewListener(),
                     getDefaultWeekDataList(100),
-                    WeekCalendarData.Date(0, 0, 0)
+                    WeekCalendarData.Date(0, 0, 0, 0)
                 )
             }
         }
@@ -131,7 +131,7 @@ fun CalendarViewDarkPreview() {
                 CalendarView(
                     PreviewListener(),
                     getDefaultWeekDataList(100),
-                    WeekCalendarData.Date(0, 0, 0)
+                    WeekCalendarData.Date(0, 0, 0, 0)
                 )
             }
         }

@@ -12,6 +12,7 @@ import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
+import com.example.smartalarm.data.repositories.CalendarIsAhead
 import com.example.smartalarm.data.repositories.CalendarRepository
 import com.example.smartalarm.data.repositories.getDayOfWeekNameVinit
 import com.example.smartalarm.data.repositories.getDefaultWeekDataList
@@ -29,7 +30,8 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
     private val _state = MutableStateFlow(
         AlarmsState(
             getDefaultWeekDataList(100),
-            getToday()
+            getToday(),
+            getInfoLine(getToday())
         )
     )
     val state = _state.asStateFlow()
@@ -111,7 +113,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
                     weekCalendarData.value!!.daysList[currentDayOfWeek!!].yearNumber
                 )
             )
-            putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
+//            putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
             putStringArrayList("infoCurrentDayOfWeek", getDateOfWeekStringForAllWeek())
             putStringArrayList("datesOfWeek", weekCalendarData.value!!.toStringArray())
             putBoolean("isNew", id == null)
@@ -133,48 +135,43 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         weekCalendarData.postValue(calendarRepository.getWeekOfDay(dayInfo[1], dayInfo[2]))
     }
 
-    fun getInfoLine() =
-        if (currentDayOfWeek == null)
-            "Выберите день"
-        else
-            "Будильники на ${getCurrentDateOfWeekString(currentDayOfWeek!!)},\n${
-                getCurrentDateString(
-                    currentDayOfWeek!!
-                )
-            }:"
+    private fun getInfoLine(day: WeekCalendarData.Date) =
+        "Будильники на ${getCurrentDateOfWeekString(day)},\n${
+            getCurrentDateString(day)
+        }:"
 
-    private fun getCurrentDateString(dayOfWeek: Int) =
-        weekCalendarData.value!!.daysList[dayOfWeek].dayNumber.toString() + " " +
-                getMontNameVinit(weekCalendarData.value!!.daysList[dayOfWeek].monthNumber)
+    private fun getCurrentDateString(day: WeekCalendarData.Date) =
+        day.dayNumber.toString() + " " + getMontNameVinit(day.monthNumber)
 
-    private fun getCurrentDateOfWeekString(dayOfWeek: Int) =
-        if (weekCalendarData.value!!.daysList[dayOfWeek].today)
-            "сегодня"
-        else if (calendarRepository.isAhead(dayOfWeek, 1))
-            "завтра"
-        else if (calendarRepository.isAhead(dayOfWeek, 2))
-            "послезавтра"
-        else
-            getDayOfWeekNameVinit(dayOfWeek)
+    private fun getCurrentDateOfWeekString(day: WeekCalendarData.Date): String =
+        when (val ahead = CalendarRepository.isAhead(day)) {
+            CalendarIsAhead.FAR -> getDayOfWeekNameVinit(day.dayOfWeek)
+            else -> ahead.toString()
+        }
+//            getDayOfWeekNameVinit(day.dayOfWeek)
 
-    private fun getCurrentDateStringForAllWeek(): ArrayList<String> {
-        val list = ArrayList<String>()
-        for (i in 0..6)
-            list.add(getCurrentDateString(i))
-        return list
-    }
+//    private fun getCurrentDateStringForAllWeek(): ArrayList<String> {
+//        val list = ArrayList<String>()
+//        for (i in 0..6)
+//            list.add(getCurrentDateString(i))
+//        return list
+//    }
 
     private fun getDateOfWeekStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
-        for (i in 0..6)
-            list.add(getCurrentDateOfWeekString(i))
+        for (i in 0..6) {
+        }
+//            list.add(getCurrentDateOfWeekString(i))
         return list
     }
 
     override fun onDayViewClick(day: WeekCalendarData.Date) {
         viewModelScope.launch {
             _state.update { state ->
-                state.copy(selectedDay = day)
+                state.copy(
+                    selectedDay = day,
+                    dayInfoText = getInfoLine(day)
+                )
             }
         }
     }

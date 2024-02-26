@@ -54,7 +54,8 @@ class CalendarRepository {
             weekCalendarData.addDate(
                 calendar.get(Calendar.DAY_OF_MONTH),
                 calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.YEAR)
+                calendar.get(Calendar.YEAR),
+                (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
             )
 
             for (holiday in HOLIDAYS) {
@@ -130,6 +131,35 @@ class CalendarRepository {
 
         return getWeek()
     }
+
+    companion object {
+        fun isAhead(day: WeekCalendarData.Date): CalendarIsAhead {
+            val calendar = Calendar.getInstance()
+            if (WeekCalendarData.Date(calendar) == day)
+                return CalendarIsAhead.TODAY
+            calendar.add(Calendar.DATE, 1)
+            if (WeekCalendarData.Date(calendar) == day)
+                return CalendarIsAhead.TOMORROW
+            calendar.add(Calendar.DATE, 1)
+            if (WeekCalendarData.Date(calendar) == day)
+                return CalendarIsAhead.AFTER_TOMORROW
+            return CalendarIsAhead.FAR
+        }
+    }
+}
+
+enum class CalendarIsAhead {
+    TODAY,
+    TOMORROW,
+    AFTER_TOMORROW,
+    FAR;
+
+    override fun toString(): String = when (this) {
+        TODAY -> "сегодня"
+        TOMORROW -> "завтра"
+        AFTER_TOMORROW -> "послезавтра"
+        FAR -> ""
+    }
 }
 
 fun isAhead(date: String, hour: Int, minute: Int): Boolean {
@@ -152,19 +182,7 @@ fun isAhead(date: String, hour: Int, minute: Int): Boolean {
     else minute > currentCalendar.get(Calendar.MINUTE)
 }
 
-fun getToday(): WeekCalendarData.Date {
-    val currentCalendar = Calendar.getInstance()
-    Log.d("test", "getToday: ${WeekCalendarData.Date(
-        currentCalendar.get(Calendar.DAY_OF_MONTH),
-        currentCalendar.get(Calendar.MONTH) + 1,
-        currentCalendar.get(Calendar.YEAR)
-    )}")
-    return WeekCalendarData.Date(
-        currentCalendar.get(Calendar.DAY_OF_MONTH),
-        currentCalendar.get(Calendar.MONTH) + 1,
-        currentCalendar.get(Calendar.YEAR)
-    )
-}
+fun getToday(): WeekCalendarData.Date = WeekCalendarData.Date(Calendar.getInstance())
 
 fun getTodayDate(): String {
     val currentCalendar = Calendar.getInstance()

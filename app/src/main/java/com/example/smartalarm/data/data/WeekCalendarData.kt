@@ -1,6 +1,6 @@
 package com.example.smartalarm.data.data
 
-import android.util.Log
+import java.util.Calendar
 
 class WeekCalendarData(val weekOfYear: Int) {
     val daysList = ArrayList<DateUnit>()
@@ -10,9 +10,16 @@ class WeekCalendarData(val weekOfYear: Int) {
         var dayNumber: Int,
         var monthNumber: Int,
         var yearNumber: Int,
-
-
+        var dayOfWeek: Int
     ) {
+
+        constructor(calendar: Calendar) : this(
+            calendar.get(Calendar.DAY_OF_MONTH),
+            calendar.get(Calendar.MONTH) + 1,
+            calendar.get(Calendar.YEAR),
+            (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
+        )
+
         override fun equals(other: Any?): Boolean {
 
             if (this === other) return true
@@ -22,6 +29,7 @@ class WeekCalendarData(val weekOfYear: Int) {
 
             if (dayNumber != other.dayNumber) return false
             if (monthNumber != other.monthNumber) return false
+            if (dayOfWeek != other.dayOfWeek) return false
             return yearNumber == other.yearNumber
         }
 
@@ -32,15 +40,14 @@ class WeekCalendarData(val weekOfYear: Int) {
             return result
         }
 
-        override fun toString(): String {
-            return "${dayNumber}.${monthNumber}.${yearNumber}"
-        }
+        override fun toString(): String = "$dayNumber.$monthNumber.$yearNumber; weekday: $dayOfWeek"
     }
 
     class DateUnit(
         dayNumber: Int,
         monthNumber: Int,
         yearNumber: Int,
+        dayOfWeek: Int,
         var today: Boolean = false,
         var isWeekend: Boolean = false,
         var isHoliday: Boolean = false
@@ -48,6 +55,7 @@ class WeekCalendarData(val weekOfYear: Int) {
         dayNumber,
         monthNumber,
         yearNumber,
+        dayOfWeek
     ) {
 
         fun getMonthName(): String =
@@ -72,6 +80,7 @@ class WeekCalendarData(val weekOfYear: Int) {
         _dayNumber: Int,
         _monthNumber: Int,
         _yearNumber: Int,
+        _dayOfWeek: Int,
         _today: Boolean = false,
         _isWeekend: Boolean = false,
         _isHoliday: Boolean = false
@@ -81,6 +90,7 @@ class WeekCalendarData(val weekOfYear: Int) {
                 _dayNumber,
                 _monthNumber,
                 _yearNumber,
+                _dayOfWeek,
                 _today,
                 _isWeekend,
                 _isHoliday
@@ -103,13 +113,13 @@ class WeekCalendarData(val weekOfYear: Int) {
 
     companion object {
         fun getDefault(): WeekCalendarData = WeekCalendarData(1).apply {
-            addDate(1, 1, 2024, true)
-            addDate(2, 1, 2024)
-            addDate(3, 1, 2024)
-            addDate(4, 1, 2024)
-            addDate(5, 1, 2024, _isHoliday = true)
-            addDate(6, 1, 2024, _isWeekend = true)
-            addDate(7, 1, 2024, _isWeekend = true)
+            addDate(1, 1, 2024, 0, true)
+            addDate(2, 1, 2024, 1)
+            addDate(3, 1, 2024, 2)
+            addDate(4, 1, 2024, 3)
+            addDate(5, 1, 2024, 4, _isHoliday = true)
+            addDate(6, 1, 2024, 5, _isWeekend = true)
+            addDate(7, 1, 2024, 6, _isWeekend = true)
 
             monthList.add("Январь")
             monthList.add("")
