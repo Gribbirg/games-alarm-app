@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.OnCalendarViewClickListener
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
@@ -58,6 +59,7 @@ fun AlarmsScreen(
                     Icon(Icons.Filled.Add, contentDescription = "Добавить будильник")
                 }
             }
+            AlarmsListView(state = state.alarmsListState)
         }
     }
 }
