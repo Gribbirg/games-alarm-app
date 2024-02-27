@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,16 +37,22 @@ import kotlinx.coroutines.launch
 fun CalendarView(
     listener: OnCalendarViewClickListener,
     data: List<WeekCalendarData>,
-    selectedDay: Date
+    selectedDayNum: Int
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = {
         data.size
     })
+
+    LaunchedEffect(selectedDayNum) {
+        pagerState.animateScrollToPage(selectedDayNum / 7)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -78,12 +85,13 @@ fun CalendarView(
             ) {
                 Spacer(modifier = Modifier.width(2.dp))
                 repeat(7) { num ->
+                    val dayNum = page * 7 + num
                     CalendarDayView(
                         Modifier.weight(1f),
                         listener,
                         data[page].daysList[num],
-                        num,
-                        selectedDay == (data[page].daysList[num] as Date)
+                        dayNum,
+                        selectedDayNum == dayNum
                     )
                 }
                 Spacer(modifier = Modifier.width(2.dp))
@@ -107,7 +115,7 @@ fun CalendarViewPreview() {
                 CalendarView(
                     PreviewListener(),
                     getDefaultWeekDataList(100),
-                    Date(0, 0, 0, 0)
+                    0
                 )
             }
         }
@@ -125,7 +133,7 @@ fun CalendarViewDarkPreview() {
                 CalendarView(
                     PreviewListener(),
                     getDefaultWeekDataList(100),
-                    Date(0, 0, 0, 0)
+                    0
                 )
             }
         }

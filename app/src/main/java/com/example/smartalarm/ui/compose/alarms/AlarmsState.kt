@@ -6,7 +6,7 @@ import com.example.smartalarm.data.data.WeekCalendarData
 
 data class AlarmsState(
     val weekCalendarData: List<WeekCalendarData>,
-    var selectedDay: Date,
+    var selectedDayNum: Int,
     var dayInfoText: String,
     var alarmsListState: AlarmsListState
 )

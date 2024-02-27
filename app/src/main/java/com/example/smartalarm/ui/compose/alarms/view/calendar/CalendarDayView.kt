@@ -43,7 +43,7 @@ fun CalendarDayView(
             defaultElevation = if (isSelected) 5.dp else 0.dp,
             pressedElevation = 2.dp
         ),
-        onClick = { listener.onDayViewClick(data) },
+        onClick = { listener.onDayViewClick(num) },
     ) {
         Column(
             modifier = Modifier
@@ -53,7 +53,7 @@ fun CalendarDayView(
         ) {
             val textColor = getTextColor(data)
             Text(text = data.dayNumber.toString(), fontSize = 25.sp, color = textColor)
-            Text(text = getDayOfWeekShortName(num), color = textColor)
+            Text(text = getDayOfWeekShortName(data.dayOfWeek), color = textColor)
             Text(text = "", color = textColor)
         }
     }
@@ -69,5 +69,5 @@ private fun getTextColor(data: WeekCalendarData.DateUnit): Color = when {
 }
 
 interface OnDayViewClickListener {
-    fun onDayViewClick(day: Date)
+    fun onDayViewClick(dayNum: Int)
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListListener
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.OnCalendarViewClickListener
@@ -46,7 +47,7 @@ fun AlarmsScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CalendarView(listener, state.weekCalendarData, state.selectedDay)
+            CalendarView(listener, state.weekCalendarData, state.selectedDayNum)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -59,12 +60,16 @@ fun AlarmsScreen(
                     Icon(Icons.Filled.Add, contentDescription = "Добавить будильник")
                 }
             }
-            AlarmsListView(state = state.alarmsListState)
+            AlarmsListView(
+                state = state.alarmsListState,
+                listener = listener,
+                dayNum = state.selectedDayNum
+            )
         }
     }
 }
 
-interface OnAlarmsScreenClickListener : OnCalendarViewClickListener {
+interface OnAlarmsScreenClickListener : OnCalendarViewClickListener, AlarmsListListener {
 
 }
 
@@ -80,7 +85,7 @@ fun AlarmsScreenPreview() {
         AlarmsScreen(
             AlarmsState(
                 WeekCalendarData.getDefaultList(),
-                Date(0, 0, 0, 0),
+                0,
                 "Будильники на сегодня, 1 января",
                 AlarmsListLoadingState()
             ),
@@ -101,7 +106,7 @@ fun AlarmsScreenDarkPreview() {
         AlarmsScreen(
             AlarmsState(
                 WeekCalendarData.getDefaultList(),
-                Date(0, 0, 0, 0),
+                0,
                 "Будильники на сегодня, 1 января",
                 AlarmsListLoadingState()
             ),
@@ -111,7 +116,7 @@ fun AlarmsScreenDarkPreview() {
 }
 
 class PreviewListener : OnAlarmsScreenClickListener {
-    override fun onDayViewClick(day: Date) {
-        Log.d("Preview", "onDayViewClick: $day")
-    }
+    override fun onDayViewClick(dayNum: Int) {}
+
+    override fun pagerScroll(dayNum: Int) {}
 }

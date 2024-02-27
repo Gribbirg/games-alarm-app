@@ -31,7 +31,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
     private val _state = MutableStateFlow(
         AlarmsState(
             getDefaultWeekDataList(100),
-            getToday(),
+            getToday().dayOfWeek,
             getInfoLine(getToday()),
             AlarmsListLoadingState()
         )
@@ -49,6 +49,25 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
     private val alarmDbRepository = AlarmDbRepository(
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
+
+    init {
+        viewModelScope.launch {
+            try {
+                _state.update {
+                    it.copy(
+                        alarmsListState = AlarmsListLoadedState(alarmDbRepository.getAlarmsList())
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("db", "Database: error on alarms list loading: $e")
+                _state.update {
+                    it.copy(
+                        alarmsListState = AlarmsListErrorState(e.toString())
+                    )
+                }
+            }
+        }
+    }
 
     fun setWeekData() {
         weekCalendarData.postValue(calendarRepository.getWeek())
@@ -110,9 +129,9 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         with(resultBundle) {
             putIntegerArrayList(
                 "currentDay", arrayListOf(
-                    state.value.selectedDay.dayOfWeek,
+                    state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7].dayOfWeek,
 //                    weekCalendarData.value!!.weekOfYear,
-                    state.value.selectedDay.yearNumber
+                    state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7].yearNumber
                 )
             )
             putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
@@ -154,7 +173,8 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
 
     private fun getCurrentDateStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
-        val week = CalendarRepository.getWeek(state.value.selectedDay)
+        val week =
+            CalendarRepository.getWeek(state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7])
         for (day in week)
             list.add(getCurrentDateString(day))
         return list
@@ -162,20 +182,26 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
 
     private fun getDateOfWeekStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
-        val week = CalendarRepository.getWeek(state.value.selectedDay)
+        val week =
+            CalendarRepository.getWeek(state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7])
         for (day in week)
             list.add(getCurrentDateOfWeekString(day))
         return list
     }
 
-    override fun onDayViewClick(day: Date) {
+    override fun onDayViewClick(dayNum: Int) {
         viewModelScope.launch {
             _state.update { state ->
                 state.copy(
-                    selectedDay = day,
-                    dayInfoText = getInfoLine(day)
+                    selectedDayNum = dayNum,
+                    dayInfoText = getInfoLine(state.weekCalendarData[dayNum / 7].daysList[dayNum % 7])
                 )
             }
         }
+    }
+
+    override fun pagerScroll(dayNum: Int) {
+        Log.d("test", "pagerScroll: $dayNum")
+        onDayViewClick(dayNum)
     }
 }

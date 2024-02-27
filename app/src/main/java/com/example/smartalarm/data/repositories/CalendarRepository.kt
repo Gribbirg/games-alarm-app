@@ -148,10 +148,7 @@ class CalendarRepository {
         }
 
         fun getWeek(day: Date): List<Date> {
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.DAY_OF_MONTH, day.dayNumber)
-            calendar.set(Calendar.MONTH, day.monthNumber - 1)
-            calendar.set(Calendar.YEAR, day.yearNumber)
+            val calendar = calendarFromDate(day)
 
             while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
                 calendar.add(Calendar.DATE, -1)
@@ -162,6 +159,18 @@ class CalendarRepository {
                 calendar.add(Calendar.DATE, 1)
             } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
             return res
+        }
+
+        private fun calendarFromDate(date: Date) = Calendar.getInstance().apply {
+            set(Calendar.DAY_OF_MONTH, date.dayNumber)
+            set(Calendar.MONTH, date.monthNumber - 1)
+            set(Calendar.YEAR, date.yearNumber)
+        }
+
+        fun addDays(date: Date, count: Int): Date {
+            val calendar = calendarFromDate(date)
+            calendar.add(Calendar.DATE, count)
+            return Date(calendar)
         }
     }
 }

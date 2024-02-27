@@ -33,6 +33,12 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
             return@withContext alarmsDao.getAlarmById(id)
         }
 
+    suspend fun getAlarmsList(): List<List<AlarmData>> = withContext(Dispatchers.IO) {
+        return@withContext List(7) { index ->
+            alarmsDao.getAlarmsByDay(index).map { alarm -> getAlarmWithGames(alarm.id) }
+        }
+    }
+
     suspend fun getAlarmWithGames(id: Long): AlarmData =
         withContext(Dispatchers.IO) {
             val alarmSimpleData = getAlarmFromDb(id)
