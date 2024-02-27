@@ -9,6 +9,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
+import com.example.smartalarm.R
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 class AlarmsFragment : Fragment() {
@@ -31,7 +34,14 @@ class AlarmsFragment : Fragment() {
             GamesAlarmTheme {
                 AlarmsScreen(
                     listener = viewModel,
-                    state = state
+                    state = state,
+                    onAddAlarmButtonClick = {
+                        Navigation.findNavController(composeView).navigate(
+                            R.id.action_alarmsFragment_to_addAlarmFragment,
+                            viewModel.addInfoInformationToBundle(null),
+                            NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                        )
+                    }
                 )
             }
         }

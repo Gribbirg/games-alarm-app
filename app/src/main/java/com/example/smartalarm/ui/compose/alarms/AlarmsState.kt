@@ -6,4 +6,4 @@ data class AlarmsState(
     val weekCalendarData: List<WeekCalendarData>,
     var selectedDay: WeekCalendarData.Date,
     var dayInfoText: String
-) {}
+)

@@ -108,14 +108,14 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         with(resultBundle) {
             putIntegerArrayList(
                 "currentDay", arrayListOf(
-                    currentDayOfWeek!!,
-                    weekCalendarData.value!!.weekOfYear,
-                    weekCalendarData.value!!.daysList[currentDayOfWeek!!].yearNumber
+                    state.value.selectedDay.dayOfWeek,
+//                    weekCalendarData.value!!.weekOfYear,
+                    state.value.selectedDay.yearNumber
                 )
             )
-//            putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
+            putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
             putStringArrayList("infoCurrentDayOfWeek", getDateOfWeekStringForAllWeek())
-            putStringArrayList("datesOfWeek", weekCalendarData.value!!.toStringArray())
+//            putStringArrayList("datesOfWeek", weekCalendarData.value!!.toStringArray())
             putBoolean("isNew", id == null)
             if (id != null) putLong("alarmId", id)
         }
@@ -150,18 +150,19 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         }
 //            getDayOfWeekNameVinit(day.dayOfWeek)
 
-//    private fun getCurrentDateStringForAllWeek(): ArrayList<String> {
-//        val list = ArrayList<String>()
-//        for (i in 0..6)
-//            list.add(getCurrentDateString(i))
-//        return list
-//    }
+    private fun getCurrentDateStringForAllWeek(): ArrayList<String> {
+        val list = ArrayList<String>()
+        val week = CalendarRepository.getWeek(state.value.selectedDay)
+        for (day in week)
+            list.add(getCurrentDateString(day))
+        return list
+    }
 
     private fun getDateOfWeekStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
-        for (i in 0..6) {
-        }
-//            list.add(getCurrentDateOfWeekString(i))
+        val week = CalendarRepository.getWeek(state.value.selectedDay)
+        for (day in week)
+            list.add(getCurrentDateOfWeekString(day))
         return list
     }
 

@@ -145,6 +145,23 @@ class CalendarRepository {
                 return CalendarIsAhead.AFTER_TOMORROW
             return CalendarIsAhead.FAR
         }
+
+        fun getWeek(day: WeekCalendarData.Date): List<WeekCalendarData.Date> {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.DAY_OF_MONTH, day.dayNumber)
+            calendar.set(Calendar.MONTH, day.monthNumber - 1)
+            calendar.set(Calendar.YEAR, day.yearNumber)
+
+            while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
+                calendar.add(Calendar.DATE, -1)
+
+            val res = ArrayList<WeekCalendarData.Date>()
+            do {
+                res.add(WeekCalendarData.Date(calendar))
+                calendar.add(Calendar.DATE, 1)
+            } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
+            return res
+        }
     }
 }
 

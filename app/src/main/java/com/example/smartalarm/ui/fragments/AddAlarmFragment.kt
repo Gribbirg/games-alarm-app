@@ -196,7 +196,7 @@ class AddAlarmFragment : Fragment() {
             "currentDay", arrayListOf(
                 dayOfWeek,
                 arguments?.getIntegerArrayList("currentDay")!![1],
-                arguments?.getIntegerArrayList("currentDay")!![2],
+//                arguments?.getIntegerArrayList("currentDay")!![2],
             )
         )
 

@@ -30,7 +30,8 @@ import com.example.smartalarm.ui.theme.GamesAlarmTheme
 @Composable
 fun AlarmsScreen(
     state: AlarmsState,
-    listener: OnAlarmsScreenClickListener
+    listener: OnAlarmsScreenClickListener,
+    onAddAlarmButtonClick: () -> Unit
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "РазБудильник") }) },
@@ -45,12 +46,14 @@ fun AlarmsScreen(
         ) {
             CalendarView(listener, state.weekCalendarData, state.selectedDay)
             Row(
-                modifier = Modifier.fillMaxWidth().padding(start = 5.dp, end = 5.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 5.dp, end = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = state.dayInfoText)
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onAddAlarmButtonClick) {
                     Icon(Icons.Filled.Add, contentDescription = "Добавить будильник")
                 }
             }
@@ -76,7 +79,7 @@ fun AlarmsScreenPreview() {
                 "Будильники на сегодня, 1 января"
             ),
             PreviewListener()
-        )
+        ) {}
     }
 }
 
@@ -94,7 +97,7 @@ fun AlarmsScreenDarkPreview() {
                 "Будильники на сегодня, 1 января"
             ),
             PreviewListener()
-        )
+        ) {}
     }
 }
 
