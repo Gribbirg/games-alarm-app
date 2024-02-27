@@ -67,7 +67,9 @@ interface OnAlarmsScreenClickListener : OnCalendarViewClickListener {
 }
 
 @Preview(
-    showBackground = true, wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE, showSystemUi = true,
+    showBackground = true,
+    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE,
+    showSystemUi = true,
     apiLevel = 33, name = "main_light",
 )
 @Composable
@@ -77,7 +79,8 @@ fun AlarmsScreenPreview() {
             AlarmsState(
                 WeekCalendarData.getDefaultList(),
                 Date(0, 0, 0, 0),
-                "Будильники на сегодня, 1 января"
+                "Будильники на сегодня, 1 января",
+                AlarmsListLoadingState()
             ),
             PreviewListener()
         ) {}
@@ -85,7 +88,9 @@ fun AlarmsScreenPreview() {
 }
 
 @Preview(
-    showBackground = true, wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE, showSystemUi = true,
+    showBackground = true,
+    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE,
+    showSystemUi = true,
     apiLevel = 33,
 )
 @Composable
@@ -95,7 +100,8 @@ fun AlarmsScreenDarkPreview() {
             AlarmsState(
                 WeekCalendarData.getDefaultList(),
                 Date(0, 0, 0, 0),
-                "Будильники на сегодня, 1 января"
+                "Будильники на сегодня, 1 января",
+                AlarmsListLoadingState()
             ),
             PreviewListener()
         ) {}

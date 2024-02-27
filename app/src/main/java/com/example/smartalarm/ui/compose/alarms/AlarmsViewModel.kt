@@ -32,7 +32,8 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         AlarmsState(
             getDefaultWeekDataList(100),
             getToday(),
-            getInfoLine(getToday())
+            getInfoLine(getToday()),
+            AlarmsListLoadingState()
         )
     )
     val state = _state.asStateFlow()
