@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.repositories.getDayOfWeekShortName
 
@@ -68,5 +69,5 @@ private fun getTextColor(data: WeekCalendarData.DateUnit): Color = when {
 }
 
 interface OnDayViewClickListener {
-    fun onDayViewClick(day: WeekCalendarData.Date)
+    fun onDayViewClick(day: Date)
 }

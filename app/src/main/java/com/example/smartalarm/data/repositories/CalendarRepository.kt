@@ -2,6 +2,7 @@ package com.example.smartalarm.data.repositories
 
 import android.util.Log
 import com.example.smartalarm.data.constants.HOLIDAYS
+import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import java.time.LocalDateTime
@@ -133,20 +134,20 @@ class CalendarRepository {
     }
 
     companion object {
-        fun isAhead(day: WeekCalendarData.Date): CalendarIsAhead {
+        fun isAhead(day: Date): CalendarIsAhead {
             val calendar = Calendar.getInstance()
-            if (WeekCalendarData.Date(calendar) == day)
+            if (Date(calendar) == day)
                 return CalendarIsAhead.TODAY
             calendar.add(Calendar.DATE, 1)
-            if (WeekCalendarData.Date(calendar) == day)
+            if (Date(calendar) == day)
                 return CalendarIsAhead.TOMORROW
             calendar.add(Calendar.DATE, 1)
-            if (WeekCalendarData.Date(calendar) == day)
+            if (Date(calendar) == day)
                 return CalendarIsAhead.AFTER_TOMORROW
             return CalendarIsAhead.FAR
         }
 
-        fun getWeek(day: WeekCalendarData.Date): List<WeekCalendarData.Date> {
+        fun getWeek(day: Date): List<Date> {
             val calendar = Calendar.getInstance()
             calendar.set(Calendar.DAY_OF_MONTH, day.dayNumber)
             calendar.set(Calendar.MONTH, day.monthNumber - 1)
@@ -155,9 +156,9 @@ class CalendarRepository {
             while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
                 calendar.add(Calendar.DATE, -1)
 
-            val res = ArrayList<WeekCalendarData.Date>()
+            val res = ArrayList<Date>()
             do {
-                res.add(WeekCalendarData.Date(calendar))
+                res.add(Date(calendar))
                 calendar.add(Calendar.DATE, 1)
             } while (calendar.get(Calendar.DAY_OF_WEEK) != 2)
             return res
@@ -199,7 +200,7 @@ fun isAhead(date: String, hour: Int, minute: Int): Boolean {
     else minute > currentCalendar.get(Calendar.MINUTE)
 }
 
-fun getToday(): WeekCalendarData.Date = WeekCalendarData.Date(Calendar.getInstance())
+fun getToday(): Date = Date(Calendar.getInstance())
 
 fun getTodayDate(): String {
     val currentCalendar = Calendar.getInstance()

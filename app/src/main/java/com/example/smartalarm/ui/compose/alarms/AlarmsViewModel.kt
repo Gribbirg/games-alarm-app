@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AlarmData
+import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
@@ -135,15 +136,15 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         weekCalendarData.postValue(calendarRepository.getWeekOfDay(dayInfo[1], dayInfo[2]))
     }
 
-    private fun getInfoLine(day: WeekCalendarData.Date) =
+    private fun getInfoLine(day: Date) =
         "Будильники на ${getCurrentDateOfWeekString(day)},\n${
             getCurrentDateString(day)
         }:"
 
-    private fun getCurrentDateString(day: WeekCalendarData.Date) =
+    private fun getCurrentDateString(day: Date) =
         day.dayNumber.toString() + " " + getMontNameVinit(day.monthNumber)
 
-    private fun getCurrentDateOfWeekString(day: WeekCalendarData.Date): String =
+    private fun getCurrentDateOfWeekString(day: Date): String =
         when (val ahead = CalendarRepository.isAhead(day)) {
             CalendarIsAhead.FAR -> getDayOfWeekNameVinit(day.dayOfWeek)
             else -> ahead.toString()
@@ -166,7 +167,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         return list
     }
 
-    override fun onDayViewClick(day: WeekCalendarData.Date) {
+    override fun onDayViewClick(day: Date) {
         viewModelScope.launch {
             _state.update { state ->
                 state.copy(

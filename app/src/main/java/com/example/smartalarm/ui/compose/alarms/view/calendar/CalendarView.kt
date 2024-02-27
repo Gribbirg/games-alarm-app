@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.repositories.getDefaultWeekDataList
 import com.example.smartalarm.ui.compose.alarms.PreviewListener
@@ -42,7 +43,7 @@ import kotlin.math.log
 fun CalendarView(
     listener: OnCalendarViewClickListener,
     data: List<WeekCalendarData>,
-    selectedDay: WeekCalendarData.Date
+    selectedDay: Date
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = {
@@ -89,7 +90,7 @@ fun CalendarView(
                         listener,
                         data[page].daysList[num],
                         num,
-                        selectedDay == (data[page].daysList[num] as WeekCalendarData.Date)
+                        selectedDay == (data[page].daysList[num] as Date)
                     )
                 }
                 Spacer(modifier = Modifier.width(2.dp))
@@ -113,7 +114,7 @@ fun CalendarViewPreview() {
                 CalendarView(
                     PreviewListener(),
                     getDefaultWeekDataList(100),
-                    WeekCalendarData.Date(0, 0, 0, 0)
+                    Date(0, 0, 0, 0)
                 )
             }
         }
@@ -131,7 +132,7 @@ fun CalendarViewDarkPreview() {
                 CalendarView(
                     PreviewListener(),
                     getDefaultWeekDataList(100),
-                    WeekCalendarData.Date(0, 0, 0, 0)
+                    Date(0, 0, 0, 0)
                 )
             }
         }

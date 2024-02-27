@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.OnCalendarViewClickListener
@@ -75,7 +76,7 @@ fun AlarmsScreenPreview() {
         AlarmsScreen(
             AlarmsState(
                 WeekCalendarData.getDefaultList(),
-                WeekCalendarData.Date(0, 0, 0, 0),
+                Date(0, 0, 0, 0),
                 "Будильники на сегодня, 1 января"
             ),
             PreviewListener()
@@ -93,7 +94,7 @@ fun AlarmsScreenDarkPreview() {
         AlarmsScreen(
             AlarmsState(
                 WeekCalendarData.getDefaultList(),
-                WeekCalendarData.Date(0, 0, 0, 0),
+                Date(0, 0, 0, 0),
                 "Будильники на сегодня, 1 января"
             ),
             PreviewListener()
@@ -102,7 +103,7 @@ fun AlarmsScreenDarkPreview() {
 }
 
 class PreviewListener : OnAlarmsScreenClickListener {
-    override fun onDayViewClick(day: WeekCalendarData.Date) {
+    override fun onDayViewClick(day: Date) {
         Log.d("Preview", "onDayViewClick: $day")
     }
 }
