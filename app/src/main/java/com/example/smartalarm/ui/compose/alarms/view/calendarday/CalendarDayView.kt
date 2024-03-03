@@ -19,8 +19,8 @@ import com.example.smartalarm.data.repositories.getDayOfWeekShortName
 @Composable
 fun CalendarDayView(
     modifier: Modifier,
+    onEvent: (CalendarDayEvent) -> Unit,
     state: CalendarDayState,
-    listener: OnDayViewClickListener,
 ) {
     Card(
         modifier = modifier,
@@ -32,7 +32,7 @@ fun CalendarDayView(
             defaultElevation = if (state.isSelected) 5.dp else 0.dp,
             pressedElevation = 2.dp
         ),
-        onClick = { listener.onDayViewClick(state.num) },
+        onClick = { onEvent(CalendarDayOnClickEvent(state.num)) },
     ) {
         Column(
             modifier = Modifier
@@ -55,8 +55,4 @@ private fun getTextColor(data: WeekCalendarData.DateUnit): Color = when {
     data.isHoliday -> MaterialTheme.colorScheme.error
     data.isWeekend -> MaterialTheme.colorScheme.primary
     else -> MaterialTheme.colorScheme.onBackground
-}
-
-interface OnDayViewClickListener {
-    fun onDayViewClick(dayNum: Int)
 }

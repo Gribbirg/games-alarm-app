@@ -1,6 +1,5 @@
 package com.example.smartalarm.ui.compose.alarms
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,21 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
-import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
-import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListListener
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
-import com.example.smartalarm.ui.compose.alarms.view.calendar.OnCalendarViewClickListener
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlarmsScreen(
     state: AlarmsState,
-    listener: OnAlarmsScreenClickListener,
+    onEvent: (AlarmsEvent) -> Unit,
     onAddAlarmButtonClick: () -> Unit
 ) {
     Scaffold(
@@ -49,7 +45,7 @@ fun AlarmsScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CalendarView(listener, state.calendarViewState)
+            CalendarView(onEvent, state.calendarViewState)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -64,14 +60,10 @@ fun AlarmsScreen(
             }
             AlarmsListView(
                 state = state.alarmsListState,
-                listener = listener
+                onEvent = onEvent
             )
         }
     }
-}
-
-interface OnAlarmsScreenClickListener : OnCalendarViewClickListener, AlarmsListListener {
-
 }
 
 @Preview(
@@ -89,7 +81,7 @@ fun AlarmsScreenPreview() {
                 calendarViewState = CalendarViewState(WeekCalendarData.getDefaultList(), 0),
                 dayInfoText = "Будильники на сегодня, 1 января"
             ),
-            PreviewListener()
+            {}
         ) {}
     }
 }
@@ -109,13 +101,7 @@ fun AlarmsScreenDarkPreview() {
                 calendarViewState = CalendarViewState(WeekCalendarData.getDefaultList(), 0),
                 dayInfoText = "Будильники на сегодня, 1 января"
             ),
-            PreviewListener()
+            {}
         ) {}
     }
-}
-
-class PreviewListener : OnAlarmsScreenClickListener {
-    override fun onDayViewClick(dayNum: Int) {}
-
-    override fun pagerScroll(dayNum: Int) {}
 }

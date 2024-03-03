@@ -21,17 +21,22 @@ import com.example.smartalarm.data.repositories.getMontNameVinit
 import com.example.smartalarm.data.repositories.getToday
 import com.example.smartalarm.data.repositories.getTodayNumInWeek
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListErrorState
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListEvent
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadedState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
-import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListState
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListPagerScrollEvent
+import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
+import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayEvent
+import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayOnClickEvent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class AlarmsViewModel(application: Application) : AndroidViewModel(application),
-    OnAlarmsScreenClickListener {
+class AlarmsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _state = MutableStateFlow(
         AlarmsState(
@@ -78,6 +83,52 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
                         )
                     )
                 }
+            }
+        }
+    }
+
+    fun onEvent(event: AlarmsEvent) {
+        viewModelScope.launch {
+            when (event) {
+                is AlarmsListEvent -> onAlarmsListEvent(event)
+                is CalendarViewEvent -> onCalendarViewEvent(event)
+            }
+        }
+    }
+
+    private suspend fun onAlarmsListEvent(event: AlarmsListEvent) = withContext(Dispatchers.IO) {
+        when (event) {
+            is AlarmsListPagerScrollEvent -> {
+                onDayChange(event.dayNum)
+            }
+        }
+    }
+
+    private suspend fun onCalendarViewEvent(event: CalendarViewEvent) =
+        withContext(Dispatchers.IO) {
+            when (event) {
+                is CalendarDayEvent -> onCalendarDayEvent(event)
+            }
+        }
+
+    private suspend fun onCalendarDayEvent(event: CalendarDayEvent) = withContext(Dispatchers.IO) {
+        when (event) {
+            is CalendarDayOnClickEvent -> onDayChange(event.dayNum)
+        }
+    }
+
+    private fun onDayChange(dayNum: Int) {
+        viewModelScope.launch {
+            _state.update { state ->
+                state.copy(
+                    alarmsListState = state.alarmsListState.copy(dayNum),
+                    calendarViewState = state.calendarViewState.copy(
+                        selectedDayNum = dayNum
+                    ),
+                    dayInfoText = getInfoLine(
+                        state.calendarViewState.data[dayNum / 7].daysList[dayNum % 7]
+                    )
+                )
             }
         }
     }
@@ -221,25 +272,5 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         for (day in week)
             list.add(getCurrentDateOfWeekString(day))
         return list
-    }
-
-    override fun onDayViewClick(dayNum: Int) {
-        viewModelScope.launch {
-            _state.update { state ->
-                state.copy(
-                    alarmsListState = state.alarmsListState.copy(dayNum),
-                    calendarViewState = state.calendarViewState.copy(
-                        selectedDayNum = dayNum
-                    ),
-                    dayInfoText = getInfoLine(
-                        state.calendarViewState.data[dayNum / 7].daysList[dayNum % 7]
-                    )
-                )
-            }
-        }
-    }
-
-    override fun pagerScroll(dayNum: Int) {
-        onDayViewClick(dayNum)
     }
 }

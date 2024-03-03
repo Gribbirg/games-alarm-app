@@ -33,7 +33,7 @@ class AlarmsFragment : Fragment() {
             val state by viewModel.state.collectAsState()
             GamesAlarmTheme {
                 AlarmsScreen(
-                    listener = viewModel,
+                    onEvent = viewModel::onEvent,
                     state = state,
                     onAddAlarmButtonClick = {
                         Navigation.findNavController(composeView).navigate(

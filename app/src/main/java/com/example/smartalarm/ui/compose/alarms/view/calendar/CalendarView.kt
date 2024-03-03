@@ -26,17 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartalarm.data.repositories.getDefaultWeekDataList
-import com.example.smartalarm.ui.compose.alarms.PreviewListener
 import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayState
 import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayView
-import com.example.smartalarm.ui.compose.alarms.view.calendarday.OnDayViewClickListener
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarView(
-    listener: OnCalendarViewClickListener,
+    onEvent: (CalendarViewEvent) -> Unit,
     state: CalendarViewState
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -88,22 +86,18 @@ fun CalendarView(
                     val dayNum = page * 7 + num
                     CalendarDayView(
                         Modifier.weight(1f),
+                        onEvent,
                         CalendarDayState(
                             state.data[page].daysList[num],
                             dayNum,
                             state.selectedDayNum == dayNum
                         ),
-                        listener
                     )
                 }
                 Spacer(modifier = Modifier.width(2.dp))
             }
         }
     }
-}
-
-interface OnCalendarViewClickListener : OnDayViewClickListener {
-
 }
 
 @Preview(apiLevel = 33, showBackground = true)
@@ -115,7 +109,7 @@ fun CalendarViewPreview() {
                 modifier = Modifier.padding(it)
             ) {
                 CalendarView(
-                    PreviewListener(),
+                    {},
                     CalendarViewState(getDefaultWeekDataList(100), 0),
                 )
             }
@@ -132,7 +126,7 @@ fun CalendarViewDarkPreview() {
                 modifier = Modifier.padding(it)
             ) {
                 CalendarView(
-                    PreviewListener(),
+                    {},
                     CalendarViewState(getDefaultWeekDataList(100), 0)
                 )
             }

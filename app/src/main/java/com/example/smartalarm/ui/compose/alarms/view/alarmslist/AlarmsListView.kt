@@ -27,14 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
-import com.example.smartalarm.ui.compose.alarms.PreviewListener
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AlarmsListView(
-    state: AlarmsListState,
-    listener: AlarmsListListener
+    onEvent: (AlarmsListEvent) -> Unit,
+    state: AlarmsListState
 ) {
     when (state) {
         is AlarmsListLoadingState -> {
@@ -60,7 +59,7 @@ fun AlarmsListView(
 
             LaunchedEffect(pagerState.currentPage) {
                 if (state.dayNum != pagerState.targetPage) {
-                    listener.pagerScroll(pagerState.currentPage)
+                    onEvent(AlarmsListPagerScrollEvent(pagerState.currentPage))
                 }
             }
 
@@ -113,10 +112,6 @@ fun AlarmsListView(
     }
 }
 
-interface AlarmsListListener {
-    fun pagerScroll(dayNum: Int)
-}
-
 @Preview(wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE, apiLevel = 33)
 @Composable
 fun AlarmsListViewPreview() {
@@ -125,7 +120,7 @@ fun AlarmsListViewPreview() {
             Box(modifier = Modifier.padding(it)) {
                 AlarmsListView(
                     state = AlarmsListLoadingState(0),
-                    listener = PreviewListener()
+                    onEvent = {}
                 )
             }
         }
