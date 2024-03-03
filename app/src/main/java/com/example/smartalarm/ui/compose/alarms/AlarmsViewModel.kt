@@ -25,8 +25,13 @@ import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListEvent
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadedState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListPagerScrollEvent
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemChangeEvent
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemEvent
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemSetOnStateEvent
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetCloseEvent
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetEvent
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnDeleteClickedEvent
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayEvent
@@ -71,6 +76,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         return AlarmsState(
             alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
             calendarViewState = getCalendarViewState(today.dayOfWeek),
+            bottomSheetState = AlarmEditBottomSheetState(false),
             dayInfoText = getInfoLine(today)
         )
     }
@@ -98,6 +104,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             when (event) {
                 is AlarmsListEvent -> onAlarmsListEvent(event)
                 is CalendarViewEvent -> onCalendarViewEvent(event)
+                is AlarmEditBottomSheetEvent -> onAlarmEditBottomSheetEvent(event)
             }
         }
     }
@@ -122,6 +129,10 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                         )
                     )
                 }
+
+                is AlarmsListItemChangeEvent -> {
+                    bottomSheetStateChange(true, alarm = event.alarm)
+                }
             }
         }
 
@@ -137,6 +148,19 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             is CalendarDayOnClickEvent -> onDayChange(event.dayNum)
         }
     }
+
+    private suspend fun onAlarmEditBottomSheetEvent(event: AlarmEditBottomSheetEvent) =
+        withContext(Dispatchers.IO) {
+            when (event) {
+                is AlarmEditBottomSheetCloseEvent -> bottomSheetStateChange(isOn = false)
+                is AlarmEditBottomSheetOnDeleteClickedEvent -> {
+                    deleteAlarmFromDb(AlarmSimpleData(event.alarm))
+                    bottomSheetStateChange(isOn = false)
+                }
+
+                else -> {}
+            }
+        }
 
     private suspend fun onDayChange(dayNum: Int) = withContext(Dispatchers.IO) {
         _state.update { state ->
@@ -172,7 +196,8 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                         days = it.calendarViewState.days.map { week ->
                             week.mapIndexed { dayNum, day ->
                                 day.copy(
-                                    earliestAlarm = alarmsList[dayNum].find { alarm -> alarm.isOn }?.getTime() ?: ""
+                                    earliestAlarm = alarmsList[dayNum].find { alarm -> alarm.isOn }
+                                        ?.getTime() ?: ""
                                 )
                             }
                         }
@@ -219,12 +244,23 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun deleteAlarmFromDb(alarm: AlarmSimpleData) {
+    private suspend fun bottomSheetStateChange(isOn: Boolean, alarm: AlarmData? = null) =
+        withContext(Dispatchers.IO) {
+            _state.update { state ->
+                state.copy(
+                    bottomSheetState = state.bottomSheetState.copy(
+                        state = isOn,
+                        alarm = alarm
+                    )
+                )
+            }
+        }
+
+    private suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         viewModelScope.launch {
             alarmDbRepository.deleteAlarmFromDb(alarm)
             AlarmData(alarm, arrayListOf()).let(alarmCreateRepository::cancel)
-//            getAlarmsFromDbByDayOfWeek(currentDayOfWeek)
-//            getEarliestAlarmsForAllWeek()
+            alarmsListLoad()
         }
     }
 

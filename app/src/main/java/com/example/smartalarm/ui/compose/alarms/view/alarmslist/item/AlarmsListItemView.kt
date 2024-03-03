@@ -76,7 +76,7 @@ fun AlarmsListItemView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${state.alarm.timeHour}:${state.alarm.timeMinute}",
+                    text = state.alarm.getTime(),
                     fontSize = 50.sp
                 )
                 Row {

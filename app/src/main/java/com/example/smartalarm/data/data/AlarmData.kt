@@ -63,5 +63,5 @@ data class AlarmData(
         Log.i("grib", "system ${System.currentTimeMillis()}")
     }
 
-    fun getTime() = "$timeHour:${if (timeMinute < 10) "0" else ""}$timeMinute"
+    fun getTime() = "${if (timeHour < 10) "0" else ""}$timeHour:${if (timeMinute < 10) "0" else ""}$timeMinute"
 }
