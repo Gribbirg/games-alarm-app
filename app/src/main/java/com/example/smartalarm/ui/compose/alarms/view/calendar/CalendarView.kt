@@ -25,10 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.smartalarm.data.data.Date
-import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.repositories.getDefaultWeekDataList
 import com.example.smartalarm.ui.compose.alarms.PreviewListener
+import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayState
+import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayView
+import com.example.smartalarm.ui.compose.alarms.view.calendarday.OnDayViewClickListener
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 import kotlinx.coroutines.launch
 
@@ -36,16 +37,15 @@ import kotlinx.coroutines.launch
 @Composable
 fun CalendarView(
     listener: OnCalendarViewClickListener,
-    data: List<WeekCalendarData>,
-    selectedDayNum: Int
+    state: CalendarViewState
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = {
-        data.size
+        state.data.size
     })
 
-    LaunchedEffect(selectedDayNum) {
-        pagerState.animateScrollToPage(selectedDayNum / 7)
+    LaunchedEffect(state.selectedDayNum) {
+        pagerState.animateScrollToPage(state.selectedDayNum / 7)
     }
 
     Column(
@@ -66,9 +66,9 @@ fun CalendarView(
             }) {
                 Icon(Icons.Filled.ChevronLeft, contentDescription = "Предыдущая неделя")
             }
-            Text(text = data[pagerState.currentPage].monthList[0])
-            Text(text = data[pagerState.currentPage].monthList[1])
-            Text(text = data[pagerState.currentPage].monthList[2])
+            Text(text = state.data[pagerState.currentPage].monthList[0])
+            Text(text = state.data[pagerState.currentPage].monthList[1])
+            Text(text = state.data[pagerState.currentPage].monthList[2])
             IconButton(onClick = {
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
@@ -88,10 +88,12 @@ fun CalendarView(
                     val dayNum = page * 7 + num
                     CalendarDayView(
                         Modifier.weight(1f),
-                        listener,
-                        data[page].daysList[num],
-                        dayNum,
-                        selectedDayNum == dayNum
+                        CalendarDayState(
+                            state.data[page].daysList[num],
+                            dayNum,
+                            state.selectedDayNum == dayNum
+                        ),
+                        listener
                     )
                 }
                 Spacer(modifier = Modifier.width(2.dp))
@@ -114,8 +116,7 @@ fun CalendarViewPreview() {
             ) {
                 CalendarView(
                     PreviewListener(),
-                    getDefaultWeekDataList(100),
-                    0
+                    CalendarViewState(getDefaultWeekDataList(100), 0),
                 )
             }
         }
@@ -132,8 +133,7 @@ fun CalendarViewDarkPreview() {
             ) {
                 CalendarView(
                     PreviewListener(),
-                    getDefaultWeekDataList(100),
-                    0
+                    CalendarViewState(getDefaultWeekDataList(100), 0)
                 )
             }
         }

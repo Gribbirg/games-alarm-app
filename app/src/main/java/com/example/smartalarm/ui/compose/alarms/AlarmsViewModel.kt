@@ -20,6 +20,11 @@ import com.example.smartalarm.data.repositories.getDefaultWeekDataList
 import com.example.smartalarm.data.repositories.getMontNameVinit
 import com.example.smartalarm.data.repositories.getToday
 import com.example.smartalarm.data.repositories.getTodayNumInWeek
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListErrorState
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadedState
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListState
+import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -30,10 +35,12 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
 
     private val _state = MutableStateFlow(
         AlarmsState(
-            getDefaultWeekDataList(100),
-            getToday().dayOfWeek,
-            getInfoLine(getToday()),
-            AlarmsListLoadingState()
+            alarmsListState = AlarmsListLoadingState(getToday().dayOfWeek),
+            calendarViewState = CalendarViewState(
+                getDefaultWeekDataList(100),
+                getToday().dayOfWeek
+            ),
+            dayInfoText = getInfoLine(getToday())
         )
     )
     val state = _state.asStateFlow()
@@ -55,14 +62,20 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
             try {
                 _state.update {
                     it.copy(
-                        alarmsListState = AlarmsListLoadedState(alarmDbRepository.getAlarmsList())
+                        alarmsListState = AlarmsListLoadedState(
+                            it.alarmsListState.dayNum,
+                            alarmDbRepository.getAlarmsList()
+                        )
                     )
                 }
             } catch (e: Exception) {
                 Log.e("db", "Database: error on alarms list loading: $e")
                 _state.update {
                     it.copy(
-                        alarmsListState = AlarmsListErrorState(e.toString())
+                        alarmsListState = AlarmsListErrorState(
+                            it.alarmsListState.dayNum,
+                            e.toString()
+                        )
                     )
                 }
             }
@@ -129,9 +142,18 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         with(resultBundle) {
             putIntegerArrayList(
                 "currentDay", arrayListOf(
-                    state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7].dayOfWeek,
+                    state
+                        .value
+                        .calendarViewState
+                        .data[state.value.calendarViewState.selectedDayNum / 7]
+                        .daysList[state.value.calendarViewState.selectedDayNum % 7]
+                        .dayOfWeek,
 //                    weekCalendarData.value!!.weekOfYear,
-                    state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7].yearNumber
+                    state
+                        .value
+                        .calendarViewState.data[state.value.calendarViewState.selectedDayNum / 7]
+                        .daysList[state.value.calendarViewState.selectedDayNum % 7]
+                        .yearNumber
                 )
             )
             putStringArrayList("infoCurrentDay", getCurrentDateStringForAllWeek())
@@ -174,7 +196,13 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
     private fun getCurrentDateStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
         val week =
-            CalendarRepository.getWeek(state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7])
+            CalendarRepository.getWeek(
+                state
+                    .value
+                    .calendarViewState
+                    .data[state.value.calendarViewState.selectedDayNum / 7]
+                    .daysList[state.value.calendarViewState.selectedDayNum % 7]
+            )
         for (day in week)
             list.add(getCurrentDateString(day))
         return list
@@ -183,7 +211,13 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
     private fun getDateOfWeekStringForAllWeek(): ArrayList<String> {
         val list = ArrayList<String>()
         val week =
-            CalendarRepository.getWeek(state.value.weekCalendarData[state.value.selectedDayNum / 7].daysList[state.value.selectedDayNum % 7])
+            CalendarRepository.getWeek(
+                state
+                    .value
+                    .calendarViewState
+                    .data[state.value.calendarViewState.selectedDayNum / 7]
+                    .daysList[state.value.calendarViewState.selectedDayNum % 7]
+            )
         for (day in week)
             list.add(getCurrentDateOfWeekString(day))
         return list
@@ -193,15 +227,19 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application),
         viewModelScope.launch {
             _state.update { state ->
                 state.copy(
-                    selectedDayNum = dayNum,
-                    dayInfoText = getInfoLine(state.weekCalendarData[dayNum / 7].daysList[dayNum % 7])
+                    alarmsListState = state.alarmsListState.copy(dayNum),
+                    calendarViewState = state.calendarViewState.copy(
+                        selectedDayNum = dayNum
+                    ),
+                    dayInfoText = getInfoLine(
+                        state.calendarViewState.data[dayNum / 7].daysList[dayNum % 7]
+                    )
                 )
             }
         }
     }
 
     override fun pagerScroll(dayNum: Int) {
-        Log.d("test", "pagerScroll: $dayNum")
         onDayViewClick(dayNum)
     }
 }
