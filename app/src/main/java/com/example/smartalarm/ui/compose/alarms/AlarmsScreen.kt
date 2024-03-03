@@ -88,6 +88,7 @@ fun AlarmsScreenPreview() {
                     CalendarDayState(
                         day,
                         day.dayNumber,
+                        day.toString(),
                         selectedDayNum == weekNum * 7 + dayNum
                     )
                 }
@@ -130,6 +131,7 @@ fun AlarmsScreenDarkPreview() {
                     CalendarDayState(
                         day,
                         day.dayNumber,
+                        day.toString(),
                         selectedDayNum == weekNum * 7 + dayNum
                     )
                 }

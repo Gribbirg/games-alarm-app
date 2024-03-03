@@ -43,7 +43,7 @@ fun CalendarDayView(
             val textColor = getTextColor(state.data)
             Text(text = state.data.dayNumber.toString(), fontSize = 25.sp, color = textColor)
             Text(text = getDayOfWeekShortName(state.data.dayOfWeek), color = textColor)
-            Text(text = "", color = textColor)
+            Text(text = state.earliestAlarm, color = textColor)
         }
     }
 }

@@ -83,6 +83,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                     CalendarDayState(
                         day,
                         num,
+                        "",
                         selectedDayNum == num
                     )
                 }
@@ -160,11 +161,21 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun alarmsListLoad() = withContext(Dispatchers.IO) {
         try {
+            val alarmsList = alarmDbRepository.getAlarmsList()
             _state.update {
                 it.copy(
                     alarmsListState = AlarmsListLoadedState(
                         it.alarmsListState.dayNum,
-                        alarmDbRepository.getAlarmsList()
+                        alarmsList
+                    ),
+                    calendarViewState = it.calendarViewState.copy(
+                        days = it.calendarViewState.days.map { week ->
+                            week.mapIndexed { dayNum, day ->
+                                day.copy(
+                                    earliestAlarm = alarmsList[dayNum].find { alarm -> alarm.isOn }?.getTime() ?: ""
+                                )
+                            }
+                        }
                     )
                 )
             }
