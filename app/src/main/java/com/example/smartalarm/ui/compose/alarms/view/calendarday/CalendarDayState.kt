@@ -5,5 +5,5 @@ import com.example.smartalarm.data.data.WeekCalendarData
 data class CalendarDayState (
     val data: WeekCalendarData.DateUnit,
     val num: Int,
-    val isSelected: Boolean = false
+    var isSelected: Boolean = false
 )

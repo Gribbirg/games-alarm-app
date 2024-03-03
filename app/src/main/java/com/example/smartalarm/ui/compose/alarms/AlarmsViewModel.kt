@@ -29,31 +29,26 @@ import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayOnClickEvent
+import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.days
 
 class AlarmsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _state = MutableStateFlow(
-        AlarmsState(
-            alarmsListState = AlarmsListLoadingState(getToday().dayOfWeek),
-            calendarViewState = CalendarViewState(
-                getDefaultWeekDataList(100),
-                getToday().dayOfWeek
-            ),
-            dayInfoText = getInfoLine(getToday())
-        )
-    )
+    private val weekCalendarData: List<WeekCalendarData> = getDefaultWeekDataList(100)
+
+    private val _state = MutableStateFlow(getDefaultState())
     val state = _state.asStateFlow()
 
     var currentDayOfWeek: Int? = getTodayNumInWeek()
     private val calendarRepository = CalendarRepository()
     private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
-    var weekCalendarData: MutableLiveData<WeekCalendarData> = MutableLiveData()
+//    var weekCalendarData: MutableLiveData<WeekCalendarData> = MutableLiveData()
 
     var alarmsList: MutableLiveData<ArrayList<AlarmData>> = MutableLiveData()
     var earliestAlarmsList: MutableLiveData<ArrayList<AlarmSimpleData?>> = MutableLiveData()
@@ -86,6 +81,30 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
+
+
+    private fun getDefaultState(): AlarmsState {
+        val today = getToday()
+        return AlarmsState(
+            alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
+            calendarViewState = getCalendarViewState(today.dayOfWeek),
+            dayInfoText = getInfoLine(today)
+        )
+    }
+
+    private fun getCalendarViewState(selectedDayNum: Int) = CalendarViewState(
+        days = weekCalendarData.mapIndexed { weekNum, week ->
+            week.daysList.mapIndexed { dayNum, day ->
+                CalendarDayState(
+                    day,
+                    day.dayNumber,
+                    selectedDayNum == weekNum * 7 + dayNum
+                )
+            }
+        },
+        monthTextList = weekCalendarData.map { element -> element.monthList },
+        selectedDayNum = selectedDayNum
+        )
 
     fun onEvent(event: AlarmsEvent) {
         viewModelScope.launch {
@@ -120,48 +139,31 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
     private fun onDayChange(dayNum: Int) {
         viewModelScope.launch {
             _state.update { state ->
+
+                val oldDayNum = state.calendarViewState.selectedDayNum
+                val days = state.calendarViewState.days
+                days[oldDayNum / 7][oldDayNum % 7].isSelected = false
+                days[dayNum / 7][dayNum % 7].isSelected = true
+
                 state.copy(
                     alarmsListState = state.alarmsListState.copy(dayNum),
                     calendarViewState = state.calendarViewState.copy(
-                        selectedDayNum = dayNum
+                        selectedDayNum = dayNum,
+                        days = days
                     ),
                     dayInfoText = getInfoLine(
-                        state.calendarViewState.data[dayNum / 7].daysList[dayNum % 7]
+                       weekCalendarData[dayNum / 7].daysList[dayNum % 7]
                     )
                 )
             }
         }
     }
 
-    fun setWeekData() {
-        weekCalendarData.postValue(calendarRepository.getWeek())
-    }
-
-    fun setDayOfWeek(dayOfWeek: Int) {
-        currentDayOfWeek = dayOfWeek
-        getAlarmsFromDbByDayOfWeek(currentDayOfWeek)
-    }
-
-    fun getAlarmsFromDbByDayOfWeek(dayOfWeek: Int? = currentDayOfWeek) {
-        viewModelScope.launch {
-            if (dayOfWeek == null || currentDayOfWeek == null)
-                alarmsList.postValue(ArrayList())
-            else {
-                alarmsList.postValue(
-                    alarmDbRepository.getAlarmsFromDbByDayOfWeek(
-                        dayOfWeek,
-                        weekCalendarData.value!!.daysList[currentDayOfWeek!!].toString()
-                    )
-                )
-            }
-        }
-    }
-
-    fun getEarliestAlarmsForAllWeek() {
-        viewModelScope.launch {
-            earliestAlarmsList.postValue(alarmDbRepository.getEarliestAlarmsFromDb(weekCalendarData.value!!.toStringArray()))
-        }
-    }
+//    fun getEarliestAlarmsForAllWeek() {
+//        viewModelScope.launch {
+//            earliestAlarmsList.postValue(alarmDbRepository.getEarliestAlarmsFromDb(weekCalendarData.value!!.toStringArray()))
+//        }
+//    }
 
     fun setAlarmState(alarm: AlarmSimpleData) {
         viewModelScope.launch {
@@ -171,7 +173,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             } else {
                 alarmCreateRepository.cancel(AlarmData(alarm))
             }
-            getEarliestAlarmsForAllWeek()
+//            getEarliestAlarmsForAllWeek()
         }
     }
 
@@ -179,8 +181,8 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             alarmDbRepository.deleteAlarmFromDb(alarm)
             AlarmData(alarm, arrayListOf()).let(alarmCreateRepository::cancel)
-            getAlarmsFromDbByDayOfWeek(currentDayOfWeek)
-            getEarliestAlarmsForAllWeek()
+//            getAlarmsFromDbByDayOfWeek(currentDayOfWeek)
+//            getEarliestAlarmsForAllWeek()
         }
     }
 
@@ -193,16 +195,11 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         with(resultBundle) {
             putIntegerArrayList(
                 "currentDay", arrayListOf(
-                    state
-                        .value
-                        .calendarViewState
-                        .data[state.value.calendarViewState.selectedDayNum / 7]
+                    weekCalendarData[state.value.calendarViewState.selectedDayNum / 7]
                         .daysList[state.value.calendarViewState.selectedDayNum % 7]
                         .dayOfWeek,
 //                    weekCalendarData.value!!.weekOfYear,
-                    state
-                        .value
-                        .calendarViewState.data[state.value.calendarViewState.selectedDayNum / 7]
+                    weekCalendarData[state.value.calendarViewState.selectedDayNum / 7]
                         .daysList[state.value.calendarViewState.selectedDayNum % 7]
                         .yearNumber
                 )
@@ -214,19 +211,6 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             if (id != null) putLong("alarmId", id)
         }
         return resultBundle
-    }
-
-    fun changeWeek(next: Int) {
-        currentDayOfWeek = null
-        alarmsList.postValue(ArrayList())
-        calendarRepository.changeWeek(next)
-        weekCalendarData.postValue(calendarRepository.getWeek())
-        getEarliestAlarmsForAllWeek()
-    }
-
-    fun setDate(dayInfo: ArrayList<Int>) {
-        currentDayOfWeek = dayInfo[0]
-        weekCalendarData.postValue(calendarRepository.getWeekOfDay(dayInfo[1], dayInfo[2]))
     }
 
     private fun getInfoLine(day: Date) =
@@ -248,10 +232,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         val list = ArrayList<String>()
         val week =
             CalendarRepository.getWeek(
-                state
-                    .value
-                    .calendarViewState
-                    .data[state.value.calendarViewState.selectedDayNum / 7]
+               weekCalendarData[state.value.calendarViewState.selectedDayNum / 7]
                     .daysList[state.value.calendarViewState.selectedDayNum % 7]
             )
         for (day in week)
@@ -263,10 +244,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         val list = ArrayList<String>()
         val week =
             CalendarRepository.getWeek(
-                state
-                    .value
-                    .calendarViewState
-                    .data[state.value.calendarViewState.selectedDayNum / 7]
+                weekCalendarData[state.value.calendarViewState.selectedDayNum / 7]
                     .daysList[state.value.calendarViewState.selectedDayNum % 7]
             )
         for (day in week)

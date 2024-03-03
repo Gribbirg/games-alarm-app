@@ -21,10 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.example.smartalarm.data.data.WeekCalendarData
+import com.example.smartalarm.data.repositories.getDefaultWeekDataList
+import com.example.smartalarm.data.repositories.getToday
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
+import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayState
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,13 +77,35 @@ fun AlarmsScreen(
 )
 @Composable
 fun AlarmsScreenPreview() {
+    val weekCalendarData: List<WeekCalendarData> = getDefaultWeekDataList(100)
+
+    fun getDefaultState(): AlarmsState {
+        val today = getToday()
+
+        fun getCalendarViewState(selectedDayNum: Int) = CalendarViewState(
+            days = weekCalendarData.mapIndexed { weekNum, week ->
+                week.daysList.mapIndexed { dayNum, day ->
+                    CalendarDayState(
+                        day,
+                        day.dayNumber,
+                        selectedDayNum == weekNum * 7 + dayNum
+                    )
+                }
+            },
+            monthTextList = weekCalendarData.map { element -> element.monthList },
+            selectedDayNum = selectedDayNum
+        )
+
+        return AlarmsState(
+            alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
+            calendarViewState = getCalendarViewState(today.dayOfWeek),
+            dayInfoText = "Будильники на сегодня, 1 января"
+        )
+    }
+
     GamesAlarmTheme {
         AlarmsScreen(
-            AlarmsState(
-                alarmsListState = AlarmsListLoadingState(0),
-                calendarViewState = CalendarViewState(WeekCalendarData.getDefaultList(), 0),
-                dayInfoText = "Будильники на сегодня, 1 января"
-            ),
+            getDefaultState(),
             {}
         ) {}
     }
@@ -94,13 +119,35 @@ fun AlarmsScreenPreview() {
 )
 @Composable
 fun AlarmsScreenDarkPreview() {
+    val weekCalendarData: List<WeekCalendarData> = getDefaultWeekDataList(100)
+
+    fun getDefaultState(): AlarmsState {
+        val today = getToday()
+
+        fun getCalendarViewState(selectedDayNum: Int) = CalendarViewState(
+            days = weekCalendarData.mapIndexed { weekNum, week ->
+                week.daysList.mapIndexed { dayNum, day ->
+                    CalendarDayState(
+                        day,
+                        day.dayNumber,
+                        selectedDayNum == weekNum * 7 + dayNum
+                    )
+                }
+            },
+            monthTextList = weekCalendarData.map { element -> element.monthList },
+            selectedDayNum = selectedDayNum
+        )
+
+        return AlarmsState(
+            alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
+            calendarViewState = getCalendarViewState(today.dayOfWeek),
+            dayInfoText = "Будильники на сегодня, 1 января"
+        )
+    }
+
     GamesAlarmTheme(darkTheme = true) {
         AlarmsScreen(
-            AlarmsState(
-                alarmsListState = AlarmsListLoadingState(0),
-                calendarViewState = CalendarViewState(WeekCalendarData.getDefaultList(), 0),
-                dayInfoText = "Будильники на сегодня, 1 января"
-            ),
+            getDefaultState(),
             {}
         ) {}
     }
