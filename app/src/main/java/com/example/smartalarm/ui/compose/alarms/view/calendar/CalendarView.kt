@@ -21,7 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayView
+import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayView
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

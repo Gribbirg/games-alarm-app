@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemState
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -63,8 +65,6 @@ fun AlarmsListView(
                 }
             }
 
-
-
             HorizontalPager(state = pagerState) { index ->
 
                 val alarmsList = state.alarmsList[index % 7]
@@ -74,11 +74,12 @@ fun AlarmsListView(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight()
-                            .padding(5.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .padding(10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         items(alarmsList) { alarm ->
-                            Text(text = alarm.toString())
+                            AlarmsListItemView(onEvent = onEvent, state = AlarmsListItemState(alarm))
                         }
                     }
                 } else {

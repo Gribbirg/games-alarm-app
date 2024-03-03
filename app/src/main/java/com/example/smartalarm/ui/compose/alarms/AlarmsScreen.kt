@@ -27,7 +27,7 @@ import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadin
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
-import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayState
+import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayState
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

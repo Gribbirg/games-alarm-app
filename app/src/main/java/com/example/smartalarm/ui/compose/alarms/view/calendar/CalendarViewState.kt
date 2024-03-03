@@ -1,6 +1,6 @@
 package com.example.smartalarm.ui.compose.alarms.view.calendar
 
-import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayState
+import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayState
 
 data class CalendarViewState(
     val days: List<List<CalendarDayState>>,

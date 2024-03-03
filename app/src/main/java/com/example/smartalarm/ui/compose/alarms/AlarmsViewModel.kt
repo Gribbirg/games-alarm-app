@@ -25,11 +25,13 @@ import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListEvent
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadedState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListPagerScrollEvent
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemEvent
+import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemSetOnStateEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
-import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayEvent
-import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayOnClickEvent
-import com.example.smartalarm.ui.compose.alarms.view.calendarday.CalendarDayState
+import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayEvent
+import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayOnClickEvent
+import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,26 +61,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
 
     init {
         viewModelScope.launch {
-            try {
-                _state.update {
-                    it.copy(
-                        alarmsListState = AlarmsListLoadedState(
-                            it.alarmsListState.dayNum,
-                            alarmDbRepository.getAlarmsList()
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                Log.e("db", "Database: error on alarms list loading: $e")
-                _state.update {
-                    it.copy(
-                        alarmsListState = AlarmsListErrorState(
-                            it.alarmsListState.dayNum,
-                            e.toString()
-                        )
-                    )
-                }
-            }
+            alarmsListLoad()
         }
     }
 
@@ -92,19 +75,22 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         )
     }
 
-    private fun getCalendarViewState(selectedDayNum: Int) = CalendarViewState(
-        days = weekCalendarData.mapIndexed { weekNum, week ->
-            week.daysList.mapIndexed { dayNum, day ->
-                CalendarDayState(
-                    day,
-                    day.dayNumber,
-                    selectedDayNum == weekNum * 7 + dayNum
-                )
-            }
-        },
-        monthTextList = weekCalendarData.map { element -> element.monthList },
-        selectedDayNum = selectedDayNum
+    private fun getCalendarViewState(selectedDayNum: Int): CalendarViewState {
+        return CalendarViewState(
+            days = weekCalendarData.mapIndexed { weekNum, week ->
+                week.daysList.mapIndexed { dayNum, day ->
+                    val num = weekNum * 7 + dayNum
+                    CalendarDayState(
+                        day,
+                        num,
+                        selectedDayNum == num
+                    )
+                }
+            },
+            monthTextList = weekCalendarData.map { element -> element.monthList },
+            selectedDayNum = selectedDayNum
         )
+    }
 
     fun onEvent(event: AlarmsEvent) {
         viewModelScope.launch {
@@ -117,11 +103,26 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun onAlarmsListEvent(event: AlarmsListEvent) = withContext(Dispatchers.IO) {
         when (event) {
-            is AlarmsListPagerScrollEvent -> {
-                onDayChange(event.dayNum)
-            }
+            is AlarmsListPagerScrollEvent -> onDayChange(event.dayNum)
+            is AlarmsListItemEvent -> onAlarmsListItemEvent(event)
         }
     }
+
+    private suspend fun onAlarmsListItemEvent(event: AlarmsListItemEvent) =
+        withContext(Dispatchers.IO) {
+            when (event) {
+                is AlarmsListItemSetOnStateEvent -> {
+                    val newAlarm = event.alarm.copy(
+                        isOn = event.isOn
+                    )
+                    setAlarmState(
+                        AlarmSimpleData(
+                            newAlarm
+                        )
+                    )
+                }
+            }
+        }
 
     private suspend fun onCalendarViewEvent(event: CalendarViewEvent) =
         withContext(Dispatchers.IO) {
@@ -136,26 +137,39 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun onDayChange(dayNum: Int) {
-        viewModelScope.launch {
-            _state.update { state ->
+    private suspend fun onDayChange(dayNum: Int) = withContext(Dispatchers.IO) {
+        _state.update { state ->
 
-                val oldDayNum = state.calendarViewState.selectedDayNum
-                val days = state.calendarViewState.days
-                days[oldDayNum / 7][oldDayNum % 7].isSelected = false
-                days[dayNum / 7][dayNum % 7].isSelected = true
+            val oldDayNum = state.calendarViewState.selectedDayNum
+            val days = state.calendarViewState.days
+            days[oldDayNum / 7][oldDayNum % 7].isSelected = false
+            days[dayNum / 7][dayNum % 7].isSelected = true
 
-                state.copy(
-                    alarmsListState = state.alarmsListState.copy(dayNum),
-                    calendarViewState = state.calendarViewState.copy(
-                        selectedDayNum = dayNum,
-                        days = days
-                    ),
-                    dayInfoText = getInfoLine(
-                       weekCalendarData[dayNum / 7].daysList[dayNum % 7]
+            state.copy(
+                alarmsListState = state.alarmsListState.copy(dayNum),
+                calendarViewState = state.calendarViewState.copy(
+                    selectedDayNum = dayNum,
+                    days = days
+                ),
+                dayInfoText = getInfoLine(
+                    weekCalendarData[dayNum / 7].daysList[dayNum % 7]
+                )
+            )
+        }
+    }
+
+    private suspend fun alarmsListLoad() = withContext(Dispatchers.IO) {
+        try {
+            _state.update {
+                it.copy(
+                    alarmsListState = AlarmsListLoadedState(
+                        it.alarmsListState.dayNum,
+                        alarmDbRepository.getAlarmsList()
                     )
                 )
             }
+        } catch (e: Exception) {
+            onAlarmsDbError(e)
         }
     }
 
@@ -165,15 +179,32 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
 //        }
 //    }
 
-    fun setAlarmState(alarm: AlarmSimpleData) {
+    private fun setAlarmState(alarm: AlarmSimpleData) {
         viewModelScope.launch {
-            alarmDbRepository.updateAlarmInDb(alarm)
-            if (alarm.isOn) {
-                alarmCreateRepository.create(AlarmData(alarm))
-            } else {
-                alarmCreateRepository.cancel(AlarmData(alarm))
+            try {
+                alarmDbRepository.updateAlarmInDb(alarm)
+                if (alarm.isOn) {
+                    alarmCreateRepository.create(AlarmData(alarm))
+                } else {
+                    alarmCreateRepository.cancel(AlarmData(alarm))
+                }
+                alarmsListLoad()
+            } catch (e: Exception) {
+                onAlarmsDbError(e)
             }
 //            getEarliestAlarmsForAllWeek()
+        }
+    }
+
+    private fun onAlarmsDbError(e: Exception) {
+        Log.e("db", "Database: error on alarms list loading: $e")
+        _state.update {
+            it.copy(
+                alarmsListState = AlarmsListErrorState(
+                    it.alarmsListState.dayNum,
+                    e.toString()
+                )
+            )
         }
     }
 
@@ -232,7 +263,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         val list = ArrayList<String>()
         val week =
             CalendarRepository.getWeek(
-               weekCalendarData[state.value.calendarViewState.selectedDayNum / 7]
+                weekCalendarData[state.value.calendarViewState.selectedDayNum / 7]
                     .daysList[state.value.calendarViewState.selectedDayNum % 7]
             )
         for (day in week)

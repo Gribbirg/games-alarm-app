@@ -1,4 +1,4 @@
-package com.example.smartalarm.ui.compose.alarms.view.calendarday
+package com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday
 
 import com.example.smartalarm.data.data.WeekCalendarData
 
