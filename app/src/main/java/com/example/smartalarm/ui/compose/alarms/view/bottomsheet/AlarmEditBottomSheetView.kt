@@ -68,13 +68,10 @@ fun AlarmEditBottomSheetView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalIconButton(
-                        modifier = Modifier
-                            .size(60.dp),
                         onClick = { onEvent(AlarmEditBottomSheetOnDeleteClickedEvent(state.alarm!!)) }
                     ) {
                         Icon(
                             Icons.Filled.Delete,
-                            modifier = Modifier.size(30.dp),
                             contentDescription = "Удалить"
                         )
                     }
@@ -87,13 +84,10 @@ fun AlarmEditBottomSheetView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalIconButton(
-                        modifier = Modifier
-                            .size(60.dp),
                         onClick = { /*TODO*/ }
                     ) {
                         Icon(
                             Icons.Filled.ContentCopy,
-                            modifier = Modifier.size(30.dp),
                             contentDescription = "Скопировать"
                         )
                     }
@@ -106,13 +100,10 @@ fun AlarmEditBottomSheetView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalIconButton(
-                        modifier = Modifier
-                            .size(60.dp),
                         onClick = { /*TODO*/ }
                     ) {
                         Icon(
                             Icons.Filled.Edit,
-                            modifier = Modifier.size(30.dp),
                             contentDescription = "Изменить"
                         )
                     }
