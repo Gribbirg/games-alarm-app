@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +31,8 @@ import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottom
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayState
+import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogState
+import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +72,7 @@ fun AlarmsScreen(
             )
         }
         AlarmEditBottomSheetView(onEvent = onEvent, state = state.bottomSheetState)
+        AlarmDeleteDialogView(onEvent = onEvent, state = state.deleteDialogState)
     }
 }
 
@@ -104,7 +108,8 @@ fun AlarmsScreenPreview() {
             alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
             calendarViewState = getCalendarViewState(today.dayOfWeek),
             bottomSheetState = AlarmEditBottomSheetState(true),
-            dayInfoText = "Будильники на сегодня, 1 января"
+            dayInfoText = "Будильники на сегодня, 1 января",
+            deleteDialogState = AlarmDeleteDialogState()
         )
     }
 
@@ -148,7 +153,8 @@ fun AlarmsScreenDarkPreview() {
             alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
             calendarViewState = getCalendarViewState(today.dayOfWeek),
             bottomSheetState = AlarmEditBottomSheetState(true),
-            dayInfoText = "Будильники на сегодня, 1 января"
+            dayInfoText = "Будильники на сегодня, 1 января",
+            deleteDialogState = AlarmDeleteDialogState()
         )
     }
 
