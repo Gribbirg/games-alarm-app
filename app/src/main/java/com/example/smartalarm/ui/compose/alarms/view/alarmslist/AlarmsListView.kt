@@ -81,6 +81,9 @@ fun AlarmsListView(
                         items(alarmsList) { alarm ->
                             AlarmsListItemView(onEvent = onEvent, state = AlarmsListItemState(alarm))
                         }
+                        item {
+                            Spacer(modifier = Modifier.height(5.dp))
+                        }
                     }
                 } else {
                     Column(
