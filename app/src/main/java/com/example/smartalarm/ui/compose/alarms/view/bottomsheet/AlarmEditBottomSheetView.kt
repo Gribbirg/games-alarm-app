@@ -40,7 +40,7 @@ fun AlarmEditBottomSheetView(
     state: AlarmEditBottomSheetState
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
-    if (state.state) {
+    if (state is AlarmEditBottomSheetOnState) {
         ModalBottomSheet(
             onDismissRequest = {
                 onEvent(AlarmEditBottomSheetCloseEvent())
@@ -53,7 +53,7 @@ fun AlarmEditBottomSheetView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
-                Text(text = "Будильник \"${state.alarm!!.name}\" на ${state.alarm.getTime()}")
+                Text(text = "Будильник \"${state.alarm.name}\" на ${state.alarm.getTime()}")
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row(
@@ -68,7 +68,7 @@ fun AlarmEditBottomSheetView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalIconButton(
-                        onClick = { onEvent(AlarmEditBottomSheetOnDeleteClickedEvent(state.alarm!!)) }
+                        onClick = { onEvent(AlarmEditBottomSheetOnDeleteClickedEvent(state.alarm)) }
                     ) {
                         Icon(
                             Icons.Filled.Delete,
@@ -134,7 +134,7 @@ fun AlarmEditBottomSheetViewPreview() {
             ) {}
             AlarmEditBottomSheetView(
                 {},
-                AlarmEditBottomSheetState(true, AlarmData())
+                AlarmEditBottomSheetOnState(AlarmData())
             )
         }
     }

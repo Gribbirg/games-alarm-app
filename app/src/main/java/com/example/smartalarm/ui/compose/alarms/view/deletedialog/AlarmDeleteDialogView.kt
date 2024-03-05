@@ -13,7 +13,7 @@ fun AlarmDeleteDialogView(
     onEvent: (AlarmDeleteDialogEvent) -> Unit,
     state: AlarmDeleteDialogState
 ) {
-    if (state.alarm != null) {
+    if (state is AlarmDeleteDialogOnState) {
         AlertDialog(
             icon = { Icon(Icons.Filled.AlarmOff, contentDescription = "Удалить будильник") },
             title = { Text(text = "Удалить \"${state.alarm.name}\"?") },

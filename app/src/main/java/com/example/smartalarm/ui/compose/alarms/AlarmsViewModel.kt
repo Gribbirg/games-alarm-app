@@ -30,7 +30,9 @@ import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListI
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemSetOnStateEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetCloseEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetEvent
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOffState
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnDeleteClickedEvent
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnState
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
@@ -40,6 +42,8 @@ import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.Calend
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogConfirmEvent
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogDismissEvent
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogEvent
+import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogOffState
+import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogOnState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -80,8 +84,8 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         return AlarmsState(
             alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
             calendarViewState = getCalendarViewState(today.dayOfWeek),
-            bottomSheetState = AlarmEditBottomSheetState(false),
-            deleteDialogState = AlarmDeleteDialogState(),
+            bottomSheetState = AlarmEditBottomSheetOffState(),
+            deleteDialogState = AlarmDeleteDialogOffState(),
             dayInfoText = getInfoLine(today)
         )
     }
@@ -135,8 +139,9 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                         )
                     )
                 }
+
                 is AlarmsListItemChangeEvent -> {
-                    bottomSheetStateChange(true, alarm = event.alarm)
+                    bottomSheetStateChange(alarm = event.alarm)
                 }
             }
         }
@@ -157,10 +162,11 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
     private suspend fun onAlarmEditBottomSheetEvent(event: AlarmEditBottomSheetEvent) =
         withContext(Dispatchers.IO) {
             when (event) {
-                is AlarmEditBottomSheetCloseEvent -> bottomSheetStateChange(isOn = false)
+                is AlarmEditBottomSheetCloseEvent -> bottomSheetStateChange(null)
                 is AlarmEditBottomSheetOnDeleteClickedEvent -> {
                     deleteDialogStateChange(event.alarm)
                 }
+
                 else -> {}
             }
         }
@@ -170,9 +176,10 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             when (event) {
                 is AlarmDeleteDialogConfirmEvent -> {
                     deleteAlarmFromDb(AlarmSimpleData(event.alarm))
-                    bottomSheetStateChange(isOn = false)
+                    bottomSheetStateChange(null)
                     deleteDialogStateChange()
                 }
+
                 is AlarmDeleteDialogDismissEvent -> {
                     deleteDialogStateChange()
                 }
@@ -261,14 +268,13 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private suspend fun bottomSheetStateChange(isOn: Boolean, alarm: AlarmData? = null) =
+    private suspend fun bottomSheetStateChange(alarm: AlarmData? = null) =
         withContext(Dispatchers.IO) {
             _state.update { state ->
                 state.copy(
-                    bottomSheetState = state.bottomSheetState.copy(
-                        state = isOn,
-                        alarm = alarm
-                    )
+                    bottomSheetState =
+                    if (alarm != null) AlarmEditBottomSheetOnState(alarm)
+                    else AlarmEditBottomSheetOffState()
                 )
             }
         }
@@ -277,9 +283,9 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         withContext(Dispatchers.IO) {
             _state.update { state ->
                 state.copy(
-                    deleteDialogState = state.deleteDialogState.copy(
-                        alarm = alarm
-                    )
+                    deleteDialogState =
+                    if (alarm != null) AlarmDeleteDialogOnState(alarm)
+                    else AlarmDeleteDialogOffState()
                 )
             }
         }

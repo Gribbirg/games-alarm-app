@@ -26,11 +26,13 @@ import com.example.smartalarm.data.repositories.getDefaultWeekDataList
 import com.example.smartalarm.data.repositories.getToday
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListView
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOffState
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetState
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayState
+import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogOffState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
@@ -107,9 +109,9 @@ fun AlarmsScreenPreview() {
         return AlarmsState(
             alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
             calendarViewState = getCalendarViewState(today.dayOfWeek),
-            bottomSheetState = AlarmEditBottomSheetState(true),
+            bottomSheetState = AlarmEditBottomSheetOffState(),
             dayInfoText = "Будильники на сегодня, 1 января",
-            deleteDialogState = AlarmDeleteDialogState()
+            deleteDialogState = AlarmDeleteDialogOffState()
         )
     }
 
@@ -152,9 +154,9 @@ fun AlarmsScreenDarkPreview() {
         return AlarmsState(
             alarmsListState = AlarmsListLoadingState(today.dayOfWeek),
             calendarViewState = getCalendarViewState(today.dayOfWeek),
-            bottomSheetState = AlarmEditBottomSheetState(true),
+            bottomSheetState = AlarmEditBottomSheetOffState(),
             dayInfoText = "Будильники на сегодня, 1 января",
-            deleteDialogState = AlarmDeleteDialogState()
+            deleteDialogState = AlarmDeleteDialogOffState()
         )
     }
 

@@ -2,7 +2,11 @@ package com.example.smartalarm.ui.compose.alarms.view.bottomsheet
 
 import com.example.smartalarm.data.data.AlarmData
 
-data class AlarmEditBottomSheetState(
-    val state: Boolean,
-    val alarm: AlarmData? = null
-)
+open class AlarmEditBottomSheetState
+
+class AlarmEditBottomSheetOnState(
+    val alarm: AlarmData
+) : AlarmEditBottomSheetState()
+
+
+class AlarmEditBottomSheetOffState : AlarmEditBottomSheetState()
