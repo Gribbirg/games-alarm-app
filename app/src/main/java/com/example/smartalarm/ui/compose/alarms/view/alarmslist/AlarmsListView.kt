@@ -74,7 +74,7 @@ fun AlarmsListView(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight()
-                            .padding(10.dp),
+                            .padding(start = 10.dp, end = 10.dp, top = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
