@@ -1,5 +1,9 @@
 package com.example.smartalarm.ui.compose.alarms.view.bottomsheet
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,15 +27,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import com.example.smartalarm.App
 import com.example.smartalarm.data.data.AlarmData
+import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +52,8 @@ fun AlarmEditBottomSheetView(
     state: AlarmEditBottomSheetState
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     if (state is AlarmEditBottomSheetOnState) {
         ModalBottomSheet(
             onDismissRequest = {
@@ -84,7 +98,10 @@ fun AlarmEditBottomSheetView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalIconButton(
-                        onClick = { /*TODO*/ }
+                        onClick = { scope.launch {
+                            copyAlarm(context, state.alarm)
+                            onEvent(AlarmEditBottomSheetOnCopyClickedEvent(state.alarm))
+                        } }
                     ) {
                         Icon(
                             Icons.Filled.ContentCopy,
@@ -100,7 +117,7 @@ fun AlarmEditBottomSheetView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalIconButton(
-                        onClick = { /*TODO*/ }
+                        onClick = { onEvent(AlarmEditBottomSheetOnEditClickedEvent(state.alarm)) }
                     ) {
                         Icon(
                             Icons.Filled.Edit,
@@ -114,6 +131,16 @@ fun AlarmEditBottomSheetView(
             Spacer(modifier = Modifier.height(50.dp))
         }
     }
+}
+
+private suspend fun copyAlarm(context: Context, alarm: AlarmData) = withContext(Dispatchers.IO) {
+    val clipboard =
+        context.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val intent = Intent(context.applicationContext, App::class.java)
+    intent.putExtra("alarm simple", AlarmSimpleData(alarm).toStringArray())
+    intent.putExtra("alarm games", alarm.gamesList)
+    val clip = ClipData.newIntent("alarm copy", intent)
+    clipboard.setPrimaryClip(clip)
 }
 
 @Preview(

@@ -84,21 +84,29 @@ fun AlarmsScreen(
         AlarmDeleteDialogView(onEvent = onEvent, state = state.deleteDialogState)
 
         LaunchedEffect(key1 = state.snackBarState) {
-            if (state.snackBarState is SnackBarAlarmDeleteState) {
-                val result = snackbarHostState
-                    .showSnackbar(
-                        message = "Будильник ${state.snackBarState.alarm.name} на ${state.snackBarState.alarm.getTime()} удалён",
-                        actionLabel = "Отменить",
+            when (state.snackBarState) {
+                is SnackBarAlarmDeleteState -> {
+                    val result = snackbarHostState
+                        .showSnackbar(
+                            message = "${state.snackBarState.alarm.name} на ${state.snackBarState.alarm.getTime()} удалён",
+                            actionLabel = "Отменить",
+                            duration = SnackbarDuration.Short
+                        )
+                    when (result) {
+                        SnackbarResult.ActionPerformed -> {
+                            onEvent(SnackBarAlarmReturnEvent(state.snackBarState.alarm))
+                        }
+
+                        SnackbarResult.Dismissed -> {
+                            onEvent(SnackBarDismissEvent())
+                        }
+                    }
+                }
+                is SnackBarAlarmCopyState -> {
+                    snackbarHostState.showSnackbar(
+                        message = "${state.snackBarState.alarm.name} на ${state.snackBarState.alarm.getTime()} скопирован!",
                         duration = SnackbarDuration.Short
                     )
-                when (result) {
-                    SnackbarResult.ActionPerformed -> {
-                        onEvent(SnackBarAlarmReturnEvent(state.snackBarState.alarm))
-                    }
-
-                    SnackbarResult.Dismissed -> {
-                        onEvent(SnackBarDismissEvent())
-                    }
                 }
             }
         }

@@ -1,11 +1,18 @@
 package com.example.smartalarm.ui.compose.alarms
 
 import android.app.Application
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.smartalarm.App
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
@@ -31,7 +38,9 @@ import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListI
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetCloseEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOffState
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnCopyClickedEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnDeleteClickedEvent
+import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnEditClickedEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnState
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewEvent
@@ -170,7 +179,13 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                 is AlarmEditBottomSheetOnDeleteClickedEvent -> {
                     deleteDialogStateChange(event.alarm)
                 }
+                is AlarmEditBottomSheetOnCopyClickedEvent -> {
+                    snackBarStateChange(SnackBarAlarmCopyState(event.alarm))
+                    bottomSheetStateChange()
+                }
+                is AlarmEditBottomSheetOnEditClickedEvent -> {
 
+                }
                 else -> {}
             }
         }
@@ -256,24 +271,22 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
 //        }
 //    }
 
-    private fun setAlarmState(alarm: AlarmSimpleData) {
-        viewModelScope.launch {
-            try {
-                alarmDbRepository.updateAlarmInDb(alarm)
-                if (alarm.isOn) {
-                    alarmCreateRepository.create(AlarmData(alarm))
-                } else {
-                    alarmCreateRepository.cancel(AlarmData(alarm))
-                }
-                alarmsListLoad()
-            } catch (e: Exception) {
-                onAlarmsDbError(e)
+    private suspend fun setAlarmState(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
+        try {
+            alarmDbRepository.updateAlarmInDb(alarm)
+            if (alarm.isOn) {
+                alarmCreateRepository.create(AlarmData(alarm))
+            } else {
+                alarmCreateRepository.cancel(AlarmData(alarm))
             }
-//            getEarliestAlarmsForAllWeek()
+            alarmsListLoad()
+        } catch (e: Exception) {
+            onAlarmsDbError(e)
         }
+//            getEarliestAlarmsForAllWeek()
     }
 
-    private fun onAlarmsDbError(e: Exception) {
+    private suspend fun onAlarmsDbError(e: Exception) = withContext(Dispatchers.IO) {
         Log.e("db", "Database: error on alarms list loading: $e")
         _state.update {
             it.copy(
@@ -307,13 +320,14 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
 
-    private suspend fun snackBarStateChange(snackBarState: SnackBarState) = withContext(Dispatchers.IO) {
-        _state.update { state ->
-            state.copy(
-                snackBarState = snackBarState
-            )
+    private suspend fun snackBarStateChange(snackBarState: SnackBarState) =
+        withContext(Dispatchers.IO) {
+            _state.update { state ->
+                state.copy(
+                    snackBarState = snackBarState
+                )
+            }
         }
-    }
 
     private suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         viewModelScope.launch {

@@ -48,8 +48,9 @@ fun AlarmsListItemView(
             defaultElevation = 5.dp
         ),
         colors = CardDefaults.cardColors(
-            containerColor = if (isOnState.value) MaterialTheme.colorScheme.surfaceContainerHighest
-            else MaterialTheme.colorScheme.surfaceContainerLow
+            containerColor =
+            if (isOnState.value) MaterialTheme.colorScheme.surfaceContainerHighest
+            else MaterialTheme.colorScheme.surfaceContainerLowest
         )
     ) {
         Column(

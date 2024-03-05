@@ -38,3 +38,7 @@ class SnackBarOffState : SnackBarState()
 data class SnackBarAlarmDeleteState(
     val alarm: AlarmData
 ) : SnackBarState()
+
+data class SnackBarAlarmCopyState(
+    val alarm: AlarmData
+) : SnackBarState()

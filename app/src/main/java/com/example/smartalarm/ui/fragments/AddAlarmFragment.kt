@@ -261,15 +261,17 @@ class AddAlarmFragment : Fragment() {
 
     private fun pasteAlarm() {
         val clipboard =
-            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            requireContext().applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
         val pasteIntent: Intent? = clipboard.primaryClip?.getItemAt(0)?.intent
+
+        Log.i("paste", "pasteAlarm: $pasteIntent")
 
         if (pasteIntent != null) {
 
             val alarmSimpleDataStringArray = pasteIntent.getStringArrayListExtra("alarm simple")
             val alarmGamesList = pasteIntent.getIntegerArrayListExtra("alarm games")
-
+            Log.i("paste", "pasteAlarm: $alarmSimpleDataStringArray")
             if (alarmSimpleDataStringArray != null && alarmGamesList != null) {
 
                 val copyAlarm = AlarmSimpleData(alarmSimpleDataStringArray)
