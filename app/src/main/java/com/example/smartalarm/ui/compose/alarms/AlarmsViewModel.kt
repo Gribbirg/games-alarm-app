@@ -60,9 +60,11 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
     private val _state = MutableStateFlow(getDefaultState())
     val state = _state.asStateFlow()
 
+    private val creator = AlarmCreateRepository(application.applicationContext)
+    private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
+
     var currentDayOfWeek: Int? = getTodayNumInWeek()
     private val calendarRepository = CalendarRepository()
-    private val alarmCreateRepository = AlarmCreateRepository(application.applicationContext)
 //    var weekCalendarData: MutableLiveData<WeekCalendarData> = MutableLiveData()
 
     var alarmsList: MutableLiveData<ArrayList<AlarmData>> = MutableLiveData()
@@ -86,6 +88,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             calendarViewState = getCalendarViewState(today.dayOfWeek),
             bottomSheetState = AlarmEditBottomSheetOffState(),
             deleteDialogState = AlarmDeleteDialogOffState(),
+            snackBarState = SnackBarOffState(),
             dayInfoText = getInfoLine(today)
         )
     }
@@ -115,6 +118,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                 is CalendarViewEvent -> onCalendarViewEvent(event)
                 is AlarmEditBottomSheetEvent -> onAlarmEditBottomSheetEvent(event)
                 is AlarmDeleteDialogEvent -> onAlarmDeleteDialogEvent(event)
+                is SnackBarEvent -> onSnackBarEvent(event)
             }
         }
     }
@@ -178,6 +182,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                     deleteAlarmFromDb(AlarmSimpleData(event.alarm))
                     bottomSheetStateChange(null)
                     deleteDialogStateChange()
+                    snackBarStateChange(SnackBarAlarmDeleteState(event.alarm))
                 }
 
                 is AlarmDeleteDialogDismissEvent -> {
@@ -185,6 +190,18 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                 }
             }
         }
+
+    private suspend fun onSnackBarEvent(event: SnackBarEvent) = withContext(Dispatchers.IO) {
+        when (event) {
+            is SnackBarDismissEvent -> snackBarStateChange(SnackBarOffState())
+            is SnackBarAlarmReturnEvent -> {
+                alarmDbRepository.insertAlarmToDb(event.alarm)
+                event.alarm.let(creator::create)
+                alarmsListLoad()
+                snackBarStateChange(SnackBarOffState())
+            }
+        }
+    }
 
     private suspend fun onDayChange(dayNum: Int) = withContext(Dispatchers.IO) {
         _state.update { state ->
@@ -289,6 +306,14 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                 )
             }
         }
+
+    private suspend fun snackBarStateChange(snackBarState: SnackBarState) = withContext(Dispatchers.IO) {
+        _state.update { state ->
+            state.copy(
+                snackBarState = snackBarState
+            )
+        }
+    }
 
     private suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         viewModelScope.launch {

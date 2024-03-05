@@ -12,10 +12,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,13 +32,11 @@ import com.example.smartalarm.data.repositories.getToday
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListView
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOffState
-import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetState
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarView
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogOffState
-import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
@@ -44,8 +47,11 @@ fun AlarmsScreen(
     onEvent: (AlarmsEvent) -> Unit,
     onAddAlarmButtonClick: () -> Unit
 ) {
+//    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "РазБудильник") }) },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
         Column(
             modifier = Modifier
@@ -73,8 +79,29 @@ fun AlarmsScreen(
                 onEvent = onEvent
             )
         }
+
         AlarmEditBottomSheetView(onEvent = onEvent, state = state.bottomSheetState)
         AlarmDeleteDialogView(onEvent = onEvent, state = state.deleteDialogState)
+
+        LaunchedEffect(key1 = state.snackBarState) {
+            if (state.snackBarState is SnackBarAlarmDeleteState) {
+                val result = snackbarHostState
+                    .showSnackbar(
+                        message = "Будильник ${state.snackBarState.alarm.name} на ${state.snackBarState.alarm.getTime()} удалён",
+                        actionLabel = "Отменить",
+                        duration = SnackbarDuration.Short
+                    )
+                when (result) {
+                    SnackbarResult.ActionPerformed -> {
+                        onEvent(SnackBarAlarmReturnEvent(state.snackBarState.alarm))
+                    }
+
+                    SnackbarResult.Dismissed -> {
+                        onEvent(SnackBarDismissEvent())
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -111,7 +138,8 @@ fun AlarmsScreenPreview() {
             calendarViewState = getCalendarViewState(today.dayOfWeek),
             bottomSheetState = AlarmEditBottomSheetOffState(),
             dayInfoText = "Будильники на сегодня, 1 января",
-            deleteDialogState = AlarmDeleteDialogOffState()
+            deleteDialogState = AlarmDeleteDialogOffState(),
+            snackBarState = SnackBarOffState()
         )
     }
 
@@ -156,7 +184,8 @@ fun AlarmsScreenDarkPreview() {
             calendarViewState = getCalendarViewState(today.dayOfWeek),
             bottomSheetState = AlarmEditBottomSheetOffState(),
             dayInfoText = "Будильники на сегодня, 1 января",
-            deleteDialogState = AlarmDeleteDialogOffState()
+            deleteDialogState = AlarmDeleteDialogOffState(),
+            snackBarState = SnackBarOffState()
         )
     }
 
