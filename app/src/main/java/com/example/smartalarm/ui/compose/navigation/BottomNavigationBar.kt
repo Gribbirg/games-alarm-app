@@ -18,7 +18,7 @@ fun BottomNavigationBar(
         val currentRoute = backStackEntry?.destination?.route
         Screen.getList().forEach { item ->
             NavigationBarItem(
-                selected = currentRoute == item.route,
+                selected = currentRoute?.startsWith(item.route) ?: false,
                 onClick = {
                     navController.navigate(item.route) {
                         launchSingleTop = true
