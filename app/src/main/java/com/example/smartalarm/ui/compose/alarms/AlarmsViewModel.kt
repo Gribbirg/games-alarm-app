@@ -184,9 +184,14 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                     }
                     try {
                         val alarm = event.alarm
+
+                        creator.cancel(alarm)
+
                         alarm.timeHour = event.hour
                         alarm.timeMinute = event.minute
                         alarmDbRepository.updateAlarmInDb(AlarmSimpleData(alarm))
+                        creator.create(alarm)
+
                         alarmsListLoad()
                         snackBarStateChange(AlarmsSnackBarTimeChangeState(alarm))
                     } catch (e: Exception) {
