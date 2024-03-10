@@ -10,6 +10,8 @@ import com.example.smartalarm.data.db.AlarmSimpleData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.isAhead
+import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemEvent
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,13 +32,23 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
             gamesList.add(1)
     }
 
-    private fun getDefaultState() = AddAlarmState()
+    private fun getDefaultState() = AddAlarmState(
+        isNew = true
+    )
 
     private val alarmDbRepository = AlarmDbRepository(
         AlarmsDB.getInstance(getApplication())?.alarmsDao()!!
     )
 
     fun onEvent(event: AddAlarmEvent) {
+
+    }
+
+    fun onAlarmItemEvent(event: AlarmItemEvent) {
+
+    }
+
+    fun onTimePickerDialogEvent(event: TimePickerDialogEvent) {
 
     }
 

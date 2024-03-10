@@ -41,7 +41,9 @@ class AlarmsFragment : Fragment() {
                             viewModel.addInfoInformationToBundle(null),
                             NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
                         )
-                    }
+                    },
+                    onAlarmItemEvent = {},
+                    onTimePickerDialogEvent = {}
                 )
             }
         }

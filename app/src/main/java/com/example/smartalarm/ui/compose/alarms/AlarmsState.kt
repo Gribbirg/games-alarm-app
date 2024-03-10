@@ -5,13 +5,15 @@ import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListState
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogState
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogState
 
 open class AlarmsState(
     val alarmsListState: AlarmsListState,
     val calendarViewState: CalendarViewState,
     val bottomSheetState: AlarmEditBottomSheetState,
     val deleteDialogState: AlarmDeleteDialogState,
-    val snackBarState: SnackBarState,
+    val alarmsSnackBarState: AlarmsSnackBarState,
+    val timePickerState: TimePickerDialogState,
     val dayInfoText: String
 ) {
     fun copy(
@@ -19,26 +21,32 @@ open class AlarmsState(
         calendarViewState: CalendarViewState = this.calendarViewState,
         bottomSheetState: AlarmEditBottomSheetState = this.bottomSheetState,
         deleteDialogState: AlarmDeleteDialogState = this.deleteDialogState,
-        snackBarState: SnackBarState = this.snackBarState,
+        alarmsSnackBarState: AlarmsSnackBarState = this.alarmsSnackBarState,
+        timePickerState: TimePickerDialogState = this.timePickerState,
         dayInfoText: String = this.dayInfoText
     ) = AlarmsState(
         alarmsListState,
         calendarViewState,
         bottomSheetState,
         deleteDialogState,
-        snackBarState,
+        alarmsSnackBarState,
+        timePickerState,
         dayInfoText
     )
 }
 
-abstract class SnackBarState
+abstract class AlarmsSnackBarState
 
-class SnackBarOffState : SnackBarState()
+class AlarmsSnackBarOffState : AlarmsSnackBarState()
 
-data class SnackBarAlarmDeleteState(
+data class AlarmsSnackBarAlarmDeleteState(
     val alarm: AlarmData
-) : SnackBarState()
+) : AlarmsSnackBarState()
 
-data class SnackBarAlarmCopyState(
+data class AlarmsSnackBarAlarmCopyState(
     val alarm: AlarmData
-) : SnackBarState()
+) : AlarmsSnackBarState()
+
+data class AlarmsSnackBarTimeChangeState(
+    val alarm: AlarmData
+) : AlarmsSnackBarState()

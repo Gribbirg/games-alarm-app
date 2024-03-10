@@ -1,18 +1,12 @@
 package com.example.smartalarm.ui.compose.alarms
 
 import android.app.Application
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.smartalarm.App
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
@@ -32,9 +26,9 @@ import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListEvent
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadedState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListLoadingState
 import com.example.smartalarm.ui.compose.alarms.view.alarmslist.AlarmsListPagerScrollEvent
-import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemChangeEvent
-import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemEvent
-import com.example.smartalarm.ui.compose.alarms.view.alarmslist.item.AlarmsListItemSetOnStateEvent
+import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemChangeEvent
+import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemEvent
+import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemSetOnStateEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetCloseEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOffState
@@ -42,7 +36,6 @@ import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottom
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnDeleteClickedEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnEditClickedEvent
 import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetOnState
-import com.example.smartalarm.ui.compose.alarms.view.bottomsheet.AlarmEditBottomSheetState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewEvent
 import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayEvent
@@ -53,14 +46,18 @@ import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDia
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogEvent
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogOffState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogOnState
-import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogState
+import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemClockClickedEvent
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogDismissEvent
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogEvent
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogOffState
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogOnState
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogSetEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.time.Duration.Companion.days
 
 class AlarmsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -97,8 +94,9 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             calendarViewState = getCalendarViewState(today.dayOfWeek),
             bottomSheetState = AlarmEditBottomSheetOffState(),
             deleteDialogState = AlarmDeleteDialogOffState(),
-            snackBarState = SnackBarOffState(),
-            dayInfoText = getInfoLine(today)
+            alarmsSnackBarState = AlarmsSnackBarOffState(),
+            timePickerState = TimePickerDialogOffState(),
+            dayInfoText = getInfoLine(today),
         )
     }
 
@@ -135,14 +133,13 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
     private suspend fun onAlarmsListEvent(event: AlarmsListEvent) = withContext(Dispatchers.IO) {
         when (event) {
             is AlarmsListPagerScrollEvent -> onDayChange(event.dayNum)
-            is AlarmsListItemEvent -> onAlarmsListItemEvent(event)
         }
     }
 
-    private suspend fun onAlarmsListItemEvent(event: AlarmsListItemEvent) =
-        withContext(Dispatchers.IO) {
+    fun onAlarmsListItemEvent(event: AlarmItemEvent) {
+        viewModelScope.launch {
             when (event) {
-                is AlarmsListItemSetOnStateEvent -> {
+                is AlarmItemSetOnStateEvent -> {
                     val newAlarm = event.alarm.copy(
                         isOn = event.isOn
                     )
@@ -153,11 +150,52 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
 
-                is AlarmsListItemChangeEvent -> {
+                is AlarmItemChangeEvent -> {
                     bottomSheetStateChange(alarm = event.alarm)
+                }
+
+                is AlarmItemClockClickedEvent -> {
+                    _state.update { state ->
+                        state.copy(
+                            timePickerState = TimePickerDialogOnState(event.alarm)
+                        )
+                    }
                 }
             }
         }
+    }
+
+    fun onTimePickerDialogEvent(event: TimePickerDialogEvent) {
+        viewModelScope.launch {
+            when (event) {
+                is TimePickerDialogDismissEvent -> {
+                    _state.update { state ->
+                        state.copy(
+                            timePickerState = TimePickerDialogOffState()
+                        )
+                    }
+                }
+
+                is TimePickerDialogSetEvent -> {
+                    _state.update { state ->
+                        state.copy(
+                            timePickerState = TimePickerDialogOffState()
+                        )
+                    }
+                    try {
+                        val alarm = event.alarm
+                        alarm.timeHour = event.hour
+                        alarm.timeMinute = event.minute
+                        alarmDbRepository.updateAlarmInDb(AlarmSimpleData(alarm))
+                        alarmsListLoad()
+                        snackBarStateChange(AlarmsSnackBarTimeChangeState(alarm))
+                    } catch (e: Exception) {
+                        onAlarmsDbError(e)
+                    }
+                }
+            }
+        }
+    }
 
     private suspend fun onCalendarViewEvent(event: CalendarViewEvent) =
         withContext(Dispatchers.IO) {
@@ -179,13 +217,16 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                 is AlarmEditBottomSheetOnDeleteClickedEvent -> {
                     deleteDialogStateChange(event.alarm)
                 }
+
                 is AlarmEditBottomSheetOnCopyClickedEvent -> {
-                    snackBarStateChange(SnackBarAlarmCopyState(event.alarm))
+                    snackBarStateChange(AlarmsSnackBarAlarmCopyState(event.alarm))
                     bottomSheetStateChange()
                 }
+
                 is AlarmEditBottomSheetOnEditClickedEvent -> {
 
                 }
+
                 else -> {}
             }
         }
@@ -197,7 +238,7 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
                     deleteAlarmFromDb(AlarmSimpleData(event.alarm))
                     bottomSheetStateChange(null)
                     deleteDialogStateChange()
-                    snackBarStateChange(SnackBarAlarmDeleteState(event.alarm))
+                    snackBarStateChange(AlarmsSnackBarAlarmDeleteState(event.alarm))
                 }
 
                 is AlarmDeleteDialogDismissEvent -> {
@@ -208,12 +249,12 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun onSnackBarEvent(event: SnackBarEvent) = withContext(Dispatchers.IO) {
         when (event) {
-            is SnackBarDismissEvent -> snackBarStateChange(SnackBarOffState())
+            is SnackBarDismissEvent -> snackBarStateChange(AlarmsSnackBarOffState())
             is SnackBarAlarmReturnEvent -> {
                 alarmDbRepository.insertAlarmToDb(event.alarm)
                 event.alarm.let(creator::create)
                 alarmsListLoad()
-                snackBarStateChange(SnackBarOffState())
+                snackBarStateChange(AlarmsSnackBarOffState())
             }
         }
     }
@@ -320,11 +361,11 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
 
-    private suspend fun snackBarStateChange(snackBarState: SnackBarState) =
+    private suspend fun snackBarStateChange(alarmsSnackBarState: AlarmsSnackBarState) =
         withContext(Dispatchers.IO) {
             _state.update { state ->
                 state.copy(
-                    snackBarState = snackBarState
+                    alarmsSnackBarState = alarmsSnackBarState
                 )
             }
         }

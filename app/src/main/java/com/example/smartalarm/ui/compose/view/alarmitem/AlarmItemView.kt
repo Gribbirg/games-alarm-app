@@ -1,4 +1,4 @@
-package com.example.smartalarm.ui.compose.alarms.view.alarmslist.item
+package com.example.smartalarm.ui.compose.view.alarmitem
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,12 +14,16 @@ import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material.icons.outlined.VideogameAsset
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,8 +39,8 @@ import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @Composable
 fun AlarmsListItemView(
-    onEvent: (AlarmsListItemEvent) -> Unit,
-    state: AlarmsListItemState
+    onEvent: (AlarmItemEvent) -> Unit,
+    state: AlarmItemState
 ) {
     val isOnState = remember {
         mutableStateOf(state.alarm.isOn)
@@ -65,7 +69,7 @@ fun AlarmsListItemView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = state.alarm.name)
-                IconButton(onClick = { onEvent(AlarmsListItemChangeEvent(state.alarm)) }) {
+                IconButton(onClick = { onEvent(AlarmItemChangeEvent(state.alarm)) }) {
                     Icon(Icons.Filled.MoreHoriz, contentDescription = "Изменить")
                 }
             }
@@ -76,10 +80,16 @@ fun AlarmsListItemView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = state.alarm.getTime(),
-                    fontSize = 50.sp
-                )
+                TextButton(
+                    onClick = {
+                        onEvent(AlarmItemClockClickedEvent(state.alarm))
+                    }
+                ) {
+                    Text(
+                        text = state.alarm.getTime(),
+                        fontSize = 50.sp
+                    )
+                }
                 Row {
                     Icon(Icons.Outlined.VideogameAsset, contentDescription = "Игры")
                     Text(text = ": ${state.alarm.gamesList.count { game -> game != 0 }}")
@@ -88,7 +98,7 @@ fun AlarmsListItemView(
                     checked = isOnState.value,
                     onCheckedChange = { isOn ->
                         isOnState.value = isOn
-                        onEvent(AlarmsListItemSetOnStateEvent(state.alarm, isOn))
+                        onEvent(AlarmItemSetOnStateEvent(state.alarm, isOn))
                     }
                 )
             }
@@ -136,7 +146,7 @@ fun AlarmsListItemViewPreview() {
             ) {
                 AlarmsListItemView(
                     {},
-                    AlarmsListItemState(
+                    AlarmItemState(
                         AlarmData(
                             0,
                             "Будильник",
@@ -165,7 +175,7 @@ fun AlarmsListItemViewDarkPreview() {
             ) {
                 AlarmsListItemView(
                     {},
-                    AlarmsListItemState(
+                    AlarmItemState(
                         AlarmData(
                             0,
                             "Будильник",

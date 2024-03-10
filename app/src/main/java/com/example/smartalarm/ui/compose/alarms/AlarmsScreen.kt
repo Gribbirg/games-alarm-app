@@ -17,7 +17,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.repositories.getDefaultWeekDataList
 import com.example.smartalarm.data.repositories.getToday
@@ -38,6 +41,10 @@ import com.example.smartalarm.ui.compose.alarms.view.calendar.CalendarViewState
 import com.example.smartalarm.ui.compose.alarms.view.calendar.calendarday.CalendarDayState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogOffState
 import com.example.smartalarm.ui.compose.alarms.view.deletedialog.AlarmDeleteDialogView
+import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemEvent
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogEvent
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogOffState
+import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,10 +52,13 @@ import com.example.smartalarm.ui.theme.GamesAlarmTheme
 fun AlarmsScreen(
     state: AlarmsState,
     onEvent: (AlarmsEvent) -> Unit,
+    onAlarmItemEvent: (AlarmItemEvent) -> Unit,
+    onTimePickerDialogEvent: (TimePickerDialogEvent) -> Unit,
     onAddAlarmButtonClick: () -> Unit
 ) {
 //    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "РазБудильник") }) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
@@ -76,37 +86,50 @@ fun AlarmsScreen(
             }
             AlarmsListView(
                 state = state.alarmsListState,
+                onAlarmItemEvent = onAlarmItemEvent,
                 onEvent = onEvent
             )
         }
 
         AlarmEditBottomSheetView(onEvent = onEvent, state = state.bottomSheetState)
         AlarmDeleteDialogView(onEvent = onEvent, state = state.deleteDialogState)
+        TimePickerDialogView(onEvent = onTimePickerDialogEvent, state = state.timePickerState)
 
-        LaunchedEffect(key1 = state.snackBarState) {
-            when (state.snackBarState) {
-                is SnackBarAlarmDeleteState -> {
-                    val result = snackbarHostState
-                        .showSnackbar(
-                            message = "${state.snackBarState.alarm.name} на ${state.snackBarState.alarm.getTime()} удалён",
-                            actionLabel = "Отменить",
-                            duration = SnackbarDuration.Short
-                        )
-                    when (result) {
-                        SnackbarResult.ActionPerformed -> {
-                            onEvent(SnackBarAlarmReturnEvent(state.snackBarState.alarm))
-                        }
 
-                        SnackbarResult.Dismissed -> {
-                            onEvent(SnackBarDismissEvent())
+        LaunchedEffect(key1 = state.alarmsSnackBarState) {
+            with(state.alarmsSnackBarState) {
+                when (this) {
+                    is AlarmsSnackBarAlarmDeleteState -> {
+                        val result = snackbarHostState
+                            .showSnackbar(
+                                message = "${alarm.name} на ${alarm.getTime()} удалён",
+                                actionLabel = "Отменить",
+                                duration = SnackbarDuration.Short
+                            )
+                        when (result) {
+                            SnackbarResult.ActionPerformed -> {
+                                onEvent(SnackBarAlarmReturnEvent(alarm))
+                            }
+
+                            SnackbarResult.Dismissed -> {
+                                onEvent(SnackBarDismissEvent())
+                            }
                         }
                     }
-                }
-                is SnackBarAlarmCopyState -> {
-                    snackbarHostState.showSnackbar(
-                        message = "${state.snackBarState.alarm.name} на ${state.snackBarState.alarm.getTime()} скопирован!",
-                        duration = SnackbarDuration.Short
-                    )
+
+                    is AlarmsSnackBarAlarmCopyState -> {
+                        snackbarHostState.showSnackbar(
+                            message = "${alarm.name} на ${alarm.getTime()} скопирован!",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    is AlarmsSnackBarTimeChangeState -> {
+                        snackbarHostState.showSnackbar(
+                            message = "${alarm.name} переставлен на ${alarm.getTime()}",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
                 }
             }
         }
@@ -147,13 +170,16 @@ fun AlarmsScreenPreview() {
             bottomSheetState = AlarmEditBottomSheetOffState(),
             dayInfoText = "Будильники на сегодня, 1 января",
             deleteDialogState = AlarmDeleteDialogOffState(),
-            snackBarState = SnackBarOffState()
+            alarmsSnackBarState = AlarmsSnackBarOffState(),
+            timePickerState = TimePickerDialogOffState()
         )
     }
 
     GamesAlarmTheme {
         AlarmsScreen(
             getDefaultState(),
+            {},
+            {},
             {}
         ) {}
     }
@@ -193,13 +219,16 @@ fun AlarmsScreenDarkPreview() {
             bottomSheetState = AlarmEditBottomSheetOffState(),
             dayInfoText = "Будильники на сегодня, 1 января",
             deleteDialogState = AlarmDeleteDialogOffState(),
-            snackBarState = SnackBarOffState()
+            alarmsSnackBarState = AlarmsSnackBarOffState(),
+            timePickerState = TimePickerDialogOffState(),
         )
     }
 
     GamesAlarmTheme(darkTheme = true) {
         AlarmsScreen(
             getDefaultState(),
+            {},
+            {},
             {}
         ) {}
     }

@@ -32,7 +32,12 @@ fun NavGraph(
     ) {
         composable(Screen.Alarms.route) {
             val state by alarmsViewModel.state.collectAsState()
-            AlarmsScreen(state = state, onEvent = alarmsViewModel::onEvent) {
+            AlarmsScreen(
+                state = state,
+                onEvent = alarmsViewModel::onEvent,
+                onAlarmItemEvent = alarmsViewModel::onAlarmsListItemEvent,
+                onTimePickerDialogEvent = alarmsViewModel::onTimePickerDialogEvent
+            ) {
                 navHostController.navigate("${Screen.Alarms.route}/addalarm")
             }
         }
@@ -50,7 +55,11 @@ fun NavGraph(
         }
         composable("${Screen.Alarms.route}/addalarm") {
             val state by addAlarmViewModel.state.collectAsState()
-            AddAlarmScreen(onEvent = addAlarmViewModel::onEvent, state = state)
+            AddAlarmScreen(
+                onEvent = addAlarmViewModel::onEvent,
+                onAlarmItemEvent = addAlarmViewModel::onAlarmItemEvent,
+                state = state
+            )
         }
     }
 }
