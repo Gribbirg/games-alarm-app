@@ -58,6 +58,7 @@ fun NavGraph(
             AddAlarmScreen(
                 onEvent = addAlarmViewModel::onEvent,
                 onAlarmItemEvent = addAlarmViewModel::onAlarmItemEvent,
+                onTimePickerDialogEvent = addAlarmViewModel::onTimePickerDialogEvent,
                 state = state
             )
         }
