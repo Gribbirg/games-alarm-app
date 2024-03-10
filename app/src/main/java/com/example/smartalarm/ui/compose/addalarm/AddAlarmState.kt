@@ -8,6 +8,7 @@ data class AddAlarmState(
     val alarm: AlarmData = AlarmData(),
     val isNew: Boolean,
     val daysOfWeek: MutableList<Boolean>,
+    val saveFinish: Boolean = false,
 
     val timePickerDialogState: TimePickerDialogState
 ) {}

@@ -110,16 +110,18 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
 
     private suspend fun insertAlarmGame(alarm: AlarmData) =
         withContext(Dispatchers.IO) {
-            for (i in 1..ALL_GAMES.size) {
-                Log.i("alarm db", alarm.id.toString())
-                if (alarm.gamesList[i - 1] != 0)
-                    alarmsDao.insertNewAlarmUserGamesData(
-                        AlarmUserGamesData(
-                            idGame = i,
-                            idAlarm = alarm.id,
-                            difficulty = alarm.gamesList[i - 1]
+            if (alarm.gamesList.isNotEmpty()) {
+                for (i in 1..ALL_GAMES.size) {
+                    Log.i("alarm db", alarm.id.toString())
+                    if (alarm.gamesList[i - 1] != 0)
+                        alarmsDao.insertNewAlarmUserGamesData(
+                            AlarmUserGamesData(
+                                idGame = i,
+                                idAlarm = alarm.id,
+                                difficulty = alarm.gamesList[i - 1]
+                            )
                         )
-                    )
+                }
             }
         }
 

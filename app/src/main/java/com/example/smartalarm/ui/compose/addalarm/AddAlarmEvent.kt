@@ -19,3 +19,11 @@ data class AddAlarmNameChangeEvent(
 data class AddAlarmVibrationChangeEvent(
     val isVibration: Boolean
 ) : AddAlarmEvent()
+
+
+data class AddAlarmRisingVolumeChangeEvent(
+    val isRisingVolume: Boolean
+) : AddAlarmEvent()
+
+
+class AddAlarmSaveEvent : AddAlarmEvent()

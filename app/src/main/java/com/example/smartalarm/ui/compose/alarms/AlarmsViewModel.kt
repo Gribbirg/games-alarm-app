@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.Date
 import com.example.smartalarm.data.data.WeekCalendarData
@@ -119,47 +120,43 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onEvent(event: AlarmsEvent) {
-        viewModelScope.launch {
-            when (event) {
-                is AlarmsListEvent -> onAlarmsListEvent(event)
-                is CalendarViewEvent -> onCalendarViewEvent(event)
-                is AlarmEditBottomSheetEvent -> onAlarmEditBottomSheetEvent(event)
-                is AlarmDeleteDialogEvent -> onAlarmDeleteDialogEvent(event)
-                is SnackBarEvent -> onSnackBarEvent(event)
-            }
+        when (event) {
+            is AlarmsListEvent -> onAlarmsListEvent(event)
+            is CalendarViewEvent -> onCalendarViewEvent(event)
+            is AlarmEditBottomSheetEvent -> onAlarmEditBottomSheetEvent(event)
+            is AlarmDeleteDialogEvent -> onAlarmDeleteDialogEvent(event)
+            is SnackBarEvent -> onSnackBarEvent(event)
         }
     }
 
-    private suspend fun onAlarmsListEvent(event: AlarmsListEvent) = withContext(Dispatchers.IO) {
+    private fun onAlarmsListEvent(event: AlarmsListEvent) {
         when (event) {
             is AlarmsListPagerScrollEvent -> onDayChange(event.dayNum)
         }
     }
 
     fun onAlarmsListItemEvent(event: AlarmItemEvent) {
-        viewModelScope.launch {
-            when (event) {
-                is AlarmItemSetOnStateEvent -> {
-                    val newAlarm = event.alarm.copy(
-                        isOn = event.isOn
+        when (event) {
+            is AlarmItemSetOnStateEvent -> {
+                val newAlarm = event.alarm.copy(
+                    isOn = event.isOn
+                )
+                setAlarmState(
+                    AlarmSimpleData(
+                        newAlarm
                     )
-                    setAlarmState(
-                        AlarmSimpleData(
-                            newAlarm
-                        )
+                )
+            }
+
+            is AlarmItemChangeEvent -> {
+                bottomSheetStateChange(alarm = event.alarm)
+            }
+
+            is AlarmItemClockClickedEvent -> {
+                _state.update { state ->
+                    state.copy(
+                        timePickerState = TimePickerDialogOnState(event.alarm)
                     )
-                }
-
-                is AlarmItemChangeEvent -> {
-                    bottomSheetStateChange(alarm = event.alarm)
-                }
-
-                is AlarmItemClockClickedEvent -> {
-                    _state.update { state ->
-                        state.copy(
-                            timePickerState = TimePickerDialogOnState(event.alarm)
-                        )
-                    }
                 }
             }
         }
@@ -202,112 +199,117 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private suspend fun onCalendarViewEvent(event: CalendarViewEvent) =
-        withContext(Dispatchers.IO) {
-            when (event) {
-                is CalendarDayEvent -> onCalendarDayEvent(event)
-            }
+    private fun onCalendarViewEvent(event: CalendarViewEvent) {
+        when (event) {
+            is CalendarDayEvent -> onCalendarDayEvent(event)
         }
+    }
 
-    private suspend fun onCalendarDayEvent(event: CalendarDayEvent) = withContext(Dispatchers.IO) {
+    private fun onCalendarDayEvent(event: CalendarDayEvent) {
         when (event) {
             is CalendarDayOnClickEvent -> onDayChange(event.dayNum)
         }
     }
 
-    private suspend fun onAlarmEditBottomSheetEvent(event: AlarmEditBottomSheetEvent) =
-        withContext(Dispatchers.IO) {
-            when (event) {
-                is AlarmEditBottomSheetCloseEvent -> bottomSheetStateChange(null)
-                is AlarmEditBottomSheetOnDeleteClickedEvent -> {
-                    deleteDialogStateChange(event.alarm)
-                }
-
-                is AlarmEditBottomSheetOnCopyClickedEvent -> {
-                    snackBarStateChange(AlarmsSnackBarAlarmCopyState(event.alarm))
-                    bottomSheetStateChange()
-                }
-
-                is AlarmEditBottomSheetOnEditClickedEvent -> {
-
-                }
-
-                else -> {}
+    private fun onAlarmEditBottomSheetEvent(event: AlarmEditBottomSheetEvent) {
+        when (event) {
+            is AlarmEditBottomSheetCloseEvent -> bottomSheetStateChange(null)
+            is AlarmEditBottomSheetOnDeleteClickedEvent -> {
+                deleteDialogStateChange(event.alarm)
             }
-        }
 
-    private suspend fun onAlarmDeleteDialogEvent(event: AlarmDeleteDialogEvent) =
-        withContext(Dispatchers.IO) {
-            when (event) {
-                is AlarmDeleteDialogConfirmEvent -> {
+            is AlarmEditBottomSheetOnCopyClickedEvent -> {
+                snackBarStateChange(AlarmsSnackBarAlarmCopyState(event.alarm))
+                bottomSheetStateChange()
+            }
+
+            is AlarmEditBottomSheetOnEditClickedEvent -> {
+                bottomSheetStateChange()
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun onAlarmDeleteDialogEvent(event: AlarmDeleteDialogEvent) {
+        when (event) {
+            is AlarmDeleteDialogConfirmEvent -> {
+                viewModelScope.launch {
                     deleteAlarmFromDb(AlarmSimpleData(event.alarm))
                     bottomSheetStateChange(null)
                     deleteDialogStateChange()
                     snackBarStateChange(AlarmsSnackBarAlarmDeleteState(event.alarm))
                 }
+            }
 
-                is AlarmDeleteDialogDismissEvent -> {
-                    deleteDialogStateChange()
+            is AlarmDeleteDialogDismissEvent -> {
+                deleteDialogStateChange()
+            }
+        }
+    }
+
+    private fun onSnackBarEvent(event: SnackBarEvent) {
+        viewModelScope.launch {
+            when (event) {
+                is SnackBarDismissEvent -> snackBarStateChange(AlarmsSnackBarOffState())
+                is SnackBarAlarmReturnEvent -> {
+                    alarmDbRepository.insertAlarmToDb(event.alarm)
+                    event.alarm.let(creator::create)
+                    alarmsListLoad()
+                    snackBarStateChange(AlarmsSnackBarOffState())
                 }
             }
         }
-
-    private suspend fun onSnackBarEvent(event: SnackBarEvent) = withContext(Dispatchers.IO) {
-        when (event) {
-            is SnackBarDismissEvent -> snackBarStateChange(AlarmsSnackBarOffState())
-            is SnackBarAlarmReturnEvent -> {
-                alarmDbRepository.insertAlarmToDb(event.alarm)
-                event.alarm.let(creator::create)
-                alarmsListLoad()
-                snackBarStateChange(AlarmsSnackBarOffState())
-            }
-        }
     }
 
-    private suspend fun onDayChange(dayNum: Int) = withContext(Dispatchers.IO) {
-        _state.update { state ->
+    private fun onDayChange(dayNum: Int) {
+        viewModelScope.launch {
+            _state.update { state ->
 
-            val oldDayNum = state.calendarViewState.selectedDayNum
-            val days = state.calendarViewState.days
-            days[oldDayNum / 7][oldDayNum % 7].isSelected = false
-            days[dayNum / 7][dayNum % 7].isSelected = true
+                val oldDayNum = state.calendarViewState.selectedDayNum
+                val days = state.calendarViewState.days
+                days[oldDayNum / 7][oldDayNum % 7].isSelected = false
+                days[dayNum / 7][dayNum % 7].isSelected = true
 
-            state.copy(
-                alarmsListState = state.alarmsListState.copy(dayNum),
-                calendarViewState = state.calendarViewState.copy(
-                    selectedDayNum = dayNum,
-                    days = days
-                ),
-                dayInfoText = getInfoLine(
-                    weekCalendarData[dayNum / 7].daysList[dayNum % 7]
-                )
-            )
-        }
-    }
-
-    private suspend fun alarmsListLoad() = withContext(Dispatchers.IO) {
-        try {
-            val alarmsList = alarmDbRepository.getAlarmsList()
-            _state.update {
-                it.copy(
-                    alarmsListState = AlarmsListLoadedState(
-                        it.alarmsListState.dayNum,
-                        alarmsList
+                state.copy(
+                    alarmsListState = state.alarmsListState.copy(dayNum),
+                    calendarViewState = state.calendarViewState.copy(
+                        selectedDayNum = dayNum,
+                        days = days
                     ),
-                    calendarViewState = it.calendarViewState.copy(
-                        days = it.calendarViewState.days.map { week ->
-                            week.mapIndexed { dayNum, day ->
-                                day.copy(
-                                    earliestAlarm = alarmsList[dayNum].find { alarm -> alarm.isOn }
-                                        ?.getTime() ?: ""
-                                )
-                            }
-                        }
+                    dayInfoText = getInfoLine(
+                        weekCalendarData[dayNum / 7].daysList[dayNum % 7]
                     )
                 )
             }
-        } catch (e: Exception) {
-            onAlarmsDbError(e)
+        }
+    }
+
+    private fun alarmsListLoad() {
+        viewModelScope.launch {
+            try {
+                val alarmsList = alarmDbRepository.getAlarmsList()
+                _state.update {
+                    it.copy(
+                        alarmsListState = AlarmsListLoadedState(
+                            it.alarmsListState.dayNum,
+                            alarmsList
+                        ),
+                        calendarViewState = it.calendarViewState.copy(
+                            days = it.calendarViewState.days.map { week ->
+                                week.mapIndexed { dayNum, day ->
+                                    day.copy(
+                                        earliestAlarm = alarmsList[dayNum].find { alarm -> alarm.isOn }
+                                            ?.getTime() ?: ""
+                                    )
+                                }
+                            }
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                onAlarmsDbError(e)
+            }
         }
     }
 
@@ -317,19 +319,21 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
 //        }
 //    }
 
-    private suspend fun setAlarmState(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
-        try {
-            alarmDbRepository.updateAlarmInDb(alarm)
-            if (alarm.isOn) {
-                alarmCreateRepository.create(AlarmData(alarm))
-            } else {
-                alarmCreateRepository.cancel(AlarmData(alarm))
+    private fun setAlarmState(alarm: AlarmSimpleData) {
+        viewModelScope.launch {
+            try {
+                alarmDbRepository.updateAlarmInDb(alarm)
+                if (alarm.isOn) {
+                    alarmCreateRepository.create(AlarmData(alarm))
+                } else {
+                    alarmCreateRepository.cancel(AlarmData(alarm))
+                }
+                alarmsListLoad()
+            } catch (e: Exception) {
+                onAlarmsDbError(e)
             }
-            alarmsListLoad()
-        } catch (e: Exception) {
-            onAlarmsDbError(e)
-        }
 //            getEarliestAlarmsForAllWeek()
+        }
     }
 
     private suspend fun onAlarmsDbError(e: Exception) = withContext(Dispatchers.IO) {
@@ -344,36 +348,35 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private suspend fun bottomSheetStateChange(alarm: AlarmData? = null) =
-        withContext(Dispatchers.IO) {
-            _state.update { state ->
-                state.copy(
-                    bottomSheetState =
-                    if (alarm != null) AlarmEditBottomSheetOnState(alarm)
-                    else AlarmEditBottomSheetOffState()
-                )
-            }
+    private fun bottomSheetStateChange(alarm: AlarmData? = null) {
+        _state.update { state ->
+            state.copy(
+                bottomSheetState =
+                if (alarm != null) AlarmEditBottomSheetOnState(alarm)
+                else AlarmEditBottomSheetOffState()
+            )
         }
+    }
 
-    private suspend fun deleteDialogStateChange(alarm: AlarmData? = null) =
-        withContext(Dispatchers.IO) {
-            _state.update { state ->
-                state.copy(
-                    deleteDialogState =
-                    if (alarm != null) AlarmDeleteDialogOnState(alarm)
-                    else AlarmDeleteDialogOffState()
-                )
-            }
+    private fun deleteDialogStateChange(alarm: AlarmData? = null) {
+        _state.update { state ->
+            state.copy(
+                deleteDialogState =
+                if (alarm != null) AlarmDeleteDialogOnState(alarm)
+                else AlarmDeleteDialogOffState()
+            )
         }
+    }
 
-    private suspend fun snackBarStateChange(alarmsSnackBarState: AlarmsSnackBarState) =
-        withContext(Dispatchers.IO) {
+    private fun snackBarStateChange(alarmsSnackBarState: AlarmsSnackBarState) {
+        viewModelScope.launch {
             _state.update { state ->
                 state.copy(
                     alarmsSnackBarState = alarmsSnackBarState
                 )
             }
         }
+    }
 
     private suspend fun deleteAlarmFromDb(alarm: AlarmSimpleData) = withContext(Dispatchers.IO) {
         viewModelScope.launch {
@@ -447,5 +450,11 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         for (day in week)
             list.add(getCurrentDateOfWeekString(day))
         return list
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            alarmsListLoad()
+        }
     }
 }

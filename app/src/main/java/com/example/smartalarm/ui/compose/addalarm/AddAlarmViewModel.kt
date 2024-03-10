@@ -1,6 +1,7 @@
 package com.example.smartalarm.ui.compose.addalarm
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.DayOfWeek
 
 class AddAlarmViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -51,37 +53,60 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
     )
 
     fun onEvent(event: AddAlarmEvent) {
-            when (event) {
-                is AddAlarmTimeClickedEvent -> launchTimePickerDialog()
-                is AddAlarmDayOfWeekSelectedEvent -> {
-                    _state.update { state ->
-                        state.copy(
-                            daysOfWeek = MutableList(7) { i ->
-                                if (i == event.dayOfWeek)
-                                    event.isOn
-                                else
-                                    state.daysOfWeek[i]
-                            }
-                        )
-                    }
-                }
-
-                is AddAlarmNameChangeEvent -> {
-                    setAlarm(
-                        state.value.alarm.copy(
-                            name = event.name
-                        )
-                    )
-                }
-
-                is AddAlarmVibrationChangeEvent -> {
-                    setAlarm(
-                        state.value.alarm.copy(
-                            isVibration = event.isVibration
-                        )
+        when (event) {
+            is AddAlarmTimeClickedEvent -> launchTimePickerDialog()
+            is AddAlarmDayOfWeekSelectedEvent -> {
+                _state.update { state ->
+                    state.copy(
+                        daysOfWeek = MutableList(7) { i ->
+                            if (i == event.dayOfWeek)
+                                event.isOn
+                            else
+                                state.daysOfWeek[i]
+                        }
                     )
                 }
             }
+
+            is AddAlarmNameChangeEvent -> {
+                setAlarm(
+                    state.value.alarm.copy(
+                        name = event.name
+                    )
+                )
+            }
+
+            is AddAlarmVibrationChangeEvent -> {
+                setAlarm(
+                    state.value.alarm.copy(
+                        isVibration = event.isVibration
+                    )
+                )
+            }
+
+            is AddAlarmRisingVolumeChangeEvent -> {
+                setAlarm(
+                    state.value.alarm.copy(
+                        isRisingVolume = event.isRisingVolume
+                    )
+                )
+            }
+
+            is AddAlarmSaveEvent -> {
+                viewModelScope.launch {
+                    insertOrUpdateAlarmToDb(
+                        state.value.isNew,
+                        state.value.alarm,
+                        state.value.daysOfWeek
+                    )
+                    _state.update { state ->
+                        state.copy(
+                            saveFinish = true
+                        )
+                    }
+                }
+            }
+        }
     }
 
     fun onAlarmItemEvent(event: AlarmItemEvent) {
@@ -134,46 +159,52 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun insertOrUpdateAlarm(alarm: AlarmSimpleData): Boolean {
-        if (alarm.activateDate != null)
-            if (!isAhead(alarm.activateDate!!, alarm.timeHour, alarm.timeMinute))
-                return false
-        insertOrUpdateAlarmToDb(alarm)
-        return true
-    }
+//    fun insertOrUpdateAlarm(alarm: AlarmSimpleData): Boolean {
+//        if (alarm.activateDate != null)
+//            if (!isAhead(alarm.activateDate!!, alarm.timeHour, alarm.timeMinute))
+//                return false
+//        insertOrUpdateAlarmToDb(alarm)
+//        return true
+//    }
 
-    private fun insertOrUpdateAlarmToDb(
-        alarm: AlarmSimpleData
-    ) {
-        viewModelScope.launch {
-            if (alarm.name == "") alarm.name = "Будильник"
+    private suspend fun insertOrUpdateAlarmToDb(
+        isNew: Boolean,
+        alarmInput: AlarmData,
+        daysOfWeek: MutableList<Boolean>
+    ) = withContext(Dispatchers.IO) {
+        if (alarmInput.name == "") alarmInput.name = "Будильник"
 
-            if (currentAlarm == null) {
-
-                alarm.id = alarmDbRepository.insertAlarmToDb(AlarmData(alarm, gamesList))
-                AlarmData(alarm, gamesList).let(creator::create)
-            } else {
-                alarm.id = currentAlarm!!.id
-
-                if (
-                    currentAlarm!!.timeMinute != alarm.timeMinute ||
-                    currentAlarm!!.timeHour != alarm.timeHour ||
-                    currentAlarm!!.dayOfWeek != alarm.dayOfWeek ||
-                    currentAlarm!!.activateDate != alarm.activateDate
-                ) {
-                    alarm.recordSeconds = null
-                    alarm.recordScore = null
-                } else {
-                    alarm.recordSeconds = currentAlarm!!.recordSeconds
-                    alarm.recordScore = currentAlarm!!.recordScore
+        if (isNew) {
+            daysOfWeek.forEachIndexed { index, value ->
+                if (value) {
+                    val alarm = alarmInput.copy(
+                        dayOfWeek = index
+                    )
+                    alarm.id = alarmDbRepository.insertAlarmToDb(alarm)
+                    alarm.let(creator::create)
                 }
-                alarmDbRepository.updateAlarmInDbWithGames(AlarmData(alarm, gamesList))
-                AlarmData(alarm, gamesList).let(creator::update)
             }
+        } else {
+            alarmDbRepository.updateAlarmInDbWithGames(alarmInput)
+            alarmInput.let(creator::update)
         }
     }
 
     suspend fun getAlarm(id: Long): AlarmData = withContext(Dispatchers.IO) {
         return@withContext alarmDbRepository.getAlarmWithGames(id)
+    }
+
+    fun setAlarm(isNew: Boolean = true, alarm: AlarmData) {
+        if (isNew) {
+            _state.update {
+                getDefaultState()
+            }
+        } else {
+            _state.update {
+                getDefaultState().copy(
+                    alarm = alarm
+                )
+            }
+        }
     }
 }

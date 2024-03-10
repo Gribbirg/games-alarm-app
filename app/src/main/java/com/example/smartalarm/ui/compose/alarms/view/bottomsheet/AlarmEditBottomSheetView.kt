@@ -49,7 +49,8 @@ import kotlinx.coroutines.withContext
 @Composable
 fun AlarmEditBottomSheetView(
     onEvent: (AlarmEditBottomSheetEvent) -> Unit,
-    state: AlarmEditBottomSheetState
+    state: AlarmEditBottomSheetState,
+    navigateToAddAlarmScreen: (Boolean, AlarmData) -> Unit
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -117,7 +118,10 @@ fun AlarmEditBottomSheetView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalIconButton(
-                        onClick = { onEvent(AlarmEditBottomSheetOnEditClickedEvent(state.alarm)) }
+                        onClick = {
+                            onEvent(AlarmEditBottomSheetOnEditClickedEvent(state.alarm))
+                            navigateToAddAlarmScreen(false, state.alarm)
+                        }
                     ) {
                         Icon(
                             Icons.Filled.Edit,
@@ -161,7 +165,8 @@ fun AlarmEditBottomSheetViewPreview() {
             ) {}
             AlarmEditBottomSheetView(
                 {},
-                AlarmEditBottomSheetOnState(AlarmData())
+                AlarmEditBottomSheetOnState(AlarmData()),
+                {i, j ->}
             )
         }
     }

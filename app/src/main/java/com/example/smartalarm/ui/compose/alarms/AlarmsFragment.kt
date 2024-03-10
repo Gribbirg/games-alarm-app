@@ -29,23 +29,23 @@ class AlarmsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        composeView.setContent {
-            val state by viewModel.state.collectAsState()
-            GamesAlarmTheme {
-                AlarmsScreen(
-                    onEvent = viewModel::onEvent,
-                    state = state,
-                    onAddAlarmButtonClick = {
-                        Navigation.findNavController(composeView).navigate(
-                            R.id.action_alarmsFragment_to_addAlarmFragment,
-                            viewModel.addInfoInformationToBundle(null),
-                            NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
-                        )
-                    },
-                    onAlarmItemEvent = {},
-                    onTimePickerDialogEvent = {}
-                )
-            }
-        }
+//        composeView.setContent {
+//            val state by viewModel.state.collectAsState()
+//            GamesAlarmTheme {
+//                AlarmsScreen(
+//                    onEvent = viewModel::onEvent,
+//                    state = state,
+//                    navigateToAddAlarmScreen = {
+//                        Navigation.findNavController(composeView).navigate(
+//                            R.id.action_alarmsFragment_to_addAlarmFragment,
+//                            viewModel.addInfoInformationToBundle(null),
+//                            NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+//                        )
+//                    },
+//                    onAlarmItemEvent = {},
+//                    onTimePickerDialogEvent = {}
+//                )
+//            }
+//        }
     }
 }

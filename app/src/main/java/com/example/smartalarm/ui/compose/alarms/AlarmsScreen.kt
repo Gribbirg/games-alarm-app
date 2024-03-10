@@ -17,9 +17,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -29,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.data.WeekCalendarData
 import com.example.smartalarm.data.repositories.getDefaultWeekDataList
 import com.example.smartalarm.data.repositories.getToday
@@ -48,7 +46,6 @@ import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogO
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 import kotlinx.coroutines.launch
-import java.sql.Time
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +54,7 @@ fun AlarmsScreen(
     onEvent: (AlarmsEvent) -> Unit,
     onAlarmItemEvent: (AlarmItemEvent) -> Unit,
     onTimePickerDialogEvent: (TimePickerDialogEvent) -> Unit,
-    onAddAlarmButtonClick: () -> Unit
+    navigateToAddAlarmScreen: (Boolean, AlarmData) -> Unit
 ) {
 //    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -83,7 +80,7 @@ fun AlarmsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = state.dayInfoText)
-                IconButton(onClick = onAddAlarmButtonClick) {
+                IconButton(onClick = { navigateToAddAlarmScreen(true, AlarmData()) }) {
                     Icon(Icons.Filled.Add, contentDescription = "Добавить будильник")
                 }
             }
@@ -94,7 +91,11 @@ fun AlarmsScreen(
             )
         }
 
-        AlarmEditBottomSheetView(onEvent = onEvent, state = state.bottomSheetState)
+        AlarmEditBottomSheetView(
+            onEvent = onEvent,
+            state = state.bottomSheetState,
+            navigateToAddAlarmScreen = navigateToAddAlarmScreen
+        )
         AlarmDeleteDialogView(onEvent = onEvent, state = state.deleteDialogState)
         TimePickerDialogView(onEvent = onTimePickerDialogEvent, state = state.timePickerState)
 
@@ -197,7 +198,7 @@ fun AlarmsScreenPreview() {
             {},
             {},
             {}
-        ) {}
+        ) { isNew, alarm -> }
     }
 }
 
@@ -246,6 +247,6 @@ fun AlarmsScreenDarkPreview() {
             {},
             {},
             {}
-        ) {}
+        ) { isNew, alarm -> }
     }
 }

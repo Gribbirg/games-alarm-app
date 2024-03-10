@@ -36,30 +36,39 @@ fun NavGraph(
                 state = state,
                 onEvent = alarmsViewModel::onEvent,
                 onAlarmItemEvent = alarmsViewModel::onAlarmsListItemEvent,
-                onTimePickerDialogEvent = alarmsViewModel::onTimePickerDialogEvent
-            ) {
-                navHostController.navigate("${Screen.Alarms.route}/addalarm")
-            }
+                onTimePickerDialogEvent = alarmsViewModel::onTimePickerDialogEvent,
+                navigateToAddAlarmScreen = { isNew, alarm ->
+                    addAlarmViewModel.setAlarm(isNew, alarm)
+                    navHostController.navigate("${Screen.Alarms.route}/addalarm")
+                }
+            )
         }
         composable(Screen.Records.route) {
             val state by recordsViewModel.state.collectAsState()
             RecordsScreen(onEvent = recordsViewModel::onEvent, state = state)
         }
+
         composable(Screen.Profile.route) {
             val state by profileViewModel.state.collectAsState()
             ProfileScreen(onEvent = profileViewModel::onEvent, state = state)
         }
+
         composable(Screen.Settings.route) {
             val state by settingsViewModel.state.collectAsState()
             SettingsScreen(onEvent = settingsViewModel::onEvent, state = state)
         }
+
         composable("${Screen.Alarms.route}/addalarm") {
             val state by addAlarmViewModel.state.collectAsState()
             AddAlarmScreen(
                 onEvent = addAlarmViewModel::onEvent,
                 onAlarmItemEvent = addAlarmViewModel::onAlarmItemEvent,
                 onTimePickerDialogEvent = addAlarmViewModel::onTimePickerDialogEvent,
-                state = state
+                state = state,
+                toAlarmsScreen = {
+                    alarmsViewModel.refresh()
+                    navHostController.navigate(Screen.Alarms.route)
+                }
             )
         }
     }

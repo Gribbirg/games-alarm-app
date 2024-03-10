@@ -122,7 +122,7 @@ fun AlarmsListItemView(
                     Icon(
                         Icons.AutoMirrored.Filled.VolumeUp,
                         contentDescription = "Увеличение громкости",
-                        modifier = Modifier.alpha(if (state.alarm.isVibration) 1f else 0f)
+                        modifier = Modifier.alpha(if (state.alarm.isRisingVolume) 1f else 0f)
                     )
                 }
             }
