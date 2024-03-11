@@ -25,6 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,6 +46,12 @@ fun AlarmsListItemView(
     val isOnState = remember {
         mutableStateOf(state.alarm.isOn)
     }
+
+    LaunchedEffect(key1 = state.alarm.isOn) {
+        if (state.alarm.isOn != isOnState.value)
+            isOnState.value = state.alarm.isOn
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth(),
