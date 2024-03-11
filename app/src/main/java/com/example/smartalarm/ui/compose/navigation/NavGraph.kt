@@ -41,6 +41,9 @@ fun NavGraph(
                 navigateToAddAlarmScreen = { isNew, alarm ->
                     addAlarmViewModel.setAlarm(isNew, alarm)
                     navHostController.navigate("${Screen.Alarms.route}/addalarm")
+                },
+                copyAlarm = { alarm ->
+                    addAlarmViewModel.copiedAlarm = alarm
                 }
             )
         }

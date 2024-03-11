@@ -18,7 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Save
@@ -38,6 +38,10 @@ import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -54,7 +58,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.repositories.getDayOfWeekShortName
 import com.example.smartalarm.data.utils.RealPathUtil
@@ -65,6 +68,9 @@ import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogE
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogOffState
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,6 +98,7 @@ fun AddAlarmScreen(
             Log.i("selection fail", e.toString())
         }
     }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = state.saveFinish) {
         if (state.saveFinish)
@@ -103,6 +110,7 @@ fun AddAlarmScreen(
     }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
@@ -115,6 +123,19 @@ fun AddAlarmScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onEvent(AddAlarmPasteEvent())
+                        },
+                        enabled = state.hasCopiedAlarm
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ContentPaste,
+                            contentDescription = "Вставить"
                         )
                     }
                 }
@@ -195,7 +216,7 @@ fun AddAlarmScreen(
                 Text(
                     text = if (name == "") "По умолчанию" else name,
                     color = MaterialTheme.colorScheme.primary
-                ) // TODO: song
+                )
                 OutlinedButton(onClick = { musicSelectLauncher.launch(arrayOf("audio/*")) }) {
                     Icon(imageVector = Icons.Filled.Edit, contentDescription = "Изменить")
                 }
@@ -270,7 +291,7 @@ fun AddAlarmScreen(
                     Icon(imageVector = Icons.Filled.Add, contentDescription = "Добавить")
                 }
             }
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(130.dp))
         }
     }
 
@@ -289,6 +310,31 @@ fun AddAlarmScreen(
             icon = { Icon(imageVector = Icons.Filled.ErrorOutline, contentDescription = "Ошибка") }
         )
     }
+
+    LaunchedEffect(key1 = state.snackBarState) {
+        with(state.snackBarState) {
+            when (this) {
+                is AddAlarmSnackBarOffState -> return@LaunchedEffect
+
+                is AddAlarmSnackBarPastedState -> {
+                    Log.d("test", "AddAlarmScreen: $alarm")
+                    showSimpleSnackBar(
+                        onEvent,
+                        snackbarHostState,
+                        "${alarm.name} на ${alarm.getTime()} вставлен"
+                    )
+                }
+
+                is AddAlarmSnackBarNothingToPastedState -> {
+                    showSimpleSnackBar(
+                        onEvent,
+                        snackbarHostState,
+                        "Нет скопированного будильника"
+                    )
+                }
+            }
+        }
+    }
 }
 
 
@@ -296,6 +342,21 @@ private fun getShapeByDayOfWeekNumber(dayOfWeek: Int) = when (dayOfWeek) {
     0 -> RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
     6 -> RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp)
     else -> RoundedCornerShape(0.dp)
+}
+
+private suspend fun showSimpleSnackBar(
+    onEvent: (AddAlarmSnackBarClosedEvent) -> Unit,
+    snackbarHostState: SnackbarHostState,
+    text: String
+) = withContext(Dispatchers.IO) {
+    val result = snackbarHostState.showSnackbar(
+        message = text,
+        duration = SnackbarDuration.Short
+    )
+
+    if (result == SnackbarResult.Dismissed) {
+        onEvent(AddAlarmSnackBarClosedEvent())
+    }
 }
 
 @Preview(
@@ -315,11 +376,12 @@ fun AddAlarmScreenPreview() {
                 alarm = AlarmData(),
                 timePickerDialogState = TimePickerDialogOffState(),
                 daysOfWeek = MutableList(7) { it == 3 },
-                alertDialogState = AddAlarmAlertDialogOffState()
+                alertDialogState = AddAlarmAlertDialogOffState(),
+                snackBarState = AddAlarmSnackBarOffState()
             ),
             onAlarmItemEvent = {},
             onTimePickerDialogEvent = {},
-            toAlarmsScreen = { a, b, c -> },
+            toAlarmsScreen = { _, _, _ -> },
             toAlarmsScreenBack = {}
         )
     }

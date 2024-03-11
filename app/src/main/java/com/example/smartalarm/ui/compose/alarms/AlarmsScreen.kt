@@ -58,7 +58,8 @@ fun AlarmsScreen(
     onEvent: (AlarmsEvent) -> Unit,
     onAlarmItemEvent: (AlarmItemEvent) -> Unit,
     onTimePickerDialogEvent: (TimePickerDialogEvent) -> Unit,
-    navigateToAddAlarmScreen: (Boolean, AlarmData) -> Unit
+    navigateToAddAlarmScreen: (Boolean, AlarmData) -> Unit,
+    copyAlarm: (AlarmData) -> Unit
 ) {
 //    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -108,7 +109,8 @@ fun AlarmsScreen(
         AlarmEditBottomSheetView(
             onEvent = onEvent,
             state = state.bottomSheetState,
-            navigateToAddAlarmScreen = navigateToAddAlarmScreen
+            navigateToAddAlarmScreen = navigateToAddAlarmScreen,
+            copyAlarm = copyAlarm
         )
         AlarmDeleteDialogView(onEvent = onEvent, state = state.deleteDialogState)
         TimePickerDialogView(onEvent = onTimePickerDialogEvent, state = state.timePickerState)
@@ -132,6 +134,7 @@ fun AlarmsScreen(
                                 SnackbarResult.ActionPerformed -> {
                                     onEvent(SnackBarAlarmReturnEvent(alarm))
                                 }
+
                                 SnackbarResult.Dismissed -> {
                                     onEvent(SnackBarDismissEvent())
                                 }
@@ -236,8 +239,10 @@ fun AlarmsScreenPreview() {
             getDefaultState(),
             {},
             {},
-            {}
-        ) { isNew, alarm -> }
+            {},
+            { _, _ -> },
+            { _ -> }
+        )
     }
 }
 
@@ -285,7 +290,9 @@ fun AlarmsScreenDarkPreview() {
             getDefaultState(),
             {},
             {},
-            {}
-        ) { isNew, alarm -> }
+            {},
+            { _, _ -> },
+            { _ -> }
+        )
     }
 }

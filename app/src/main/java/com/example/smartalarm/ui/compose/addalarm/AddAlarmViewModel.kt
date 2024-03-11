@@ -1,6 +1,7 @@
 package com.example.smartalarm.ui.compose.addalarm
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.constants.ALL_GAMES
@@ -28,7 +29,17 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
     private val _state = MutableStateFlow(getDefaultState())
     val state = _state.asStateFlow()
 
-    var currentAlarm: AlarmData? = null
+    var copiedAlarm: AlarmData? = null
+        set(value) {
+            field = value
+
+            _state.update { state ->
+                state.copy(
+                    hasCopiedAlarm = value != null
+                )
+            }
+        }
+
     var gamesList: ArrayList<Int> = ArrayList()
     private val creator = AlarmCreateRepository(application.applicationContext)
 
@@ -40,6 +51,7 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
     private fun getDefaultState() = AddAlarmState(
         alarm = AlarmData(),
         isNew = true,
+        hasCopiedAlarm = copiedAlarm != null,
         daysOfWeek = MutableList(7) { false },
         timePickerDialogState = TimePickerDialogOffState(),
         alertDialogState = AddAlarmAlertDialogOffState()
@@ -64,6 +76,7 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
                     )
                 }
             }
+
             is AddAlarmAlertDialogCloseEvent -> {
                 _state.update { state ->
                     state.copy(
@@ -120,12 +133,38 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
             }
 
             is AddAlarmRingtoneSelectedEvent -> {
-                _state.update {state ->
+                _state.update { state ->
                     state.copy(
                         alarm = state.alarm.copy(
                             ringtonePath = event.ringtonePath
                         )
                     )
+                }
+            }
+
+            is AddAlarmPasteEvent -> {
+                viewModelScope.launch {
+                    _state.update { state ->
+                        if (copiedAlarm == null)
+                            state.copy(
+                                snackBarState = AddAlarmSnackBarNothingToPastedState()
+                            )
+                        else
+                            state.copy(
+                                alarm = copiedAlarm!!,
+                                snackBarState = AddAlarmSnackBarPastedState(copiedAlarm!!)
+                            )
+                    }
+                }
+            }
+
+            is AddAlarmSnackBarClosedEvent -> {
+                viewModelScope.launch {
+                    _state.update { state ->
+                        state.copy(
+                            snackBarState = AddAlarmSnackBarOffState()
+                        )
+                    }
                 }
             }
         }
@@ -136,7 +175,7 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
             when (event) {
                 is AlarmItemClockClickedEvent -> launchTimePickerDialog()
                 is AlarmItemSetOnStateEvent -> {
-                    _state.update {state ->
+                    _state.update { state ->
                         state.copy(
                             alarm = state.alarm.copy(
                                 isOn = event.isOn

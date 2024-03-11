@@ -34,3 +34,8 @@ class AddAlarmAlertDialogCloseEvent : AddAlarmEvent()
 data class AddAlarmRingtoneSelectedEvent(
     val ringtonePath: String
 ) : AddAlarmEvent()
+
+
+class AddAlarmPasteEvent : AddAlarmEvent()
+
+class AddAlarmSnackBarClosedEvent : AddAlarmEvent()
