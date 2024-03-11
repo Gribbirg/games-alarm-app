@@ -50,3 +50,12 @@ data class AlarmsSnackBarAlarmCopyState(
 data class AlarmsSnackBarTimeChangeState(
     val alarm: AlarmData
 ) : AlarmsSnackBarState()
+
+
+data class AlarmsSnackBarCreatedState(
+    val alarm: AlarmData
+) : AlarmsSnackBarState()
+
+data class AlarmsSnackBarEditedState(
+    val alarm: AlarmData
+) : AlarmsSnackBarState()

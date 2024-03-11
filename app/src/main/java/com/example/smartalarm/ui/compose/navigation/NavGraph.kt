@@ -65,8 +65,9 @@ fun NavGraph(
                 onAlarmItemEvent = addAlarmViewModel::onAlarmItemEvent,
                 onTimePickerDialogEvent = addAlarmViewModel::onTimePickerDialogEvent,
                 state = state,
-                toAlarmsScreen = {
-                    alarmsViewModel.refresh()
+                toAlarmsScreen = { dayOfWeek, isNew, alarm ->
+                    alarmsViewModel.refresh(dayOfWeek)
+                    alarmsViewModel.afterAlarmChange(isNew, alarm)
                     navHostController.navigate(Screen.Alarms.route)
                 }
             )

@@ -452,9 +452,24 @@ class AlarmsViewModel(application: Application) : AndroidViewModel(application) 
         return list
     }
 
-    fun refresh() {
+    fun refresh(dayOfWeek: Int = state.value.alarmsListState.dayNum % 7) {
         viewModelScope.launch {
             alarmsListLoad()
+
+            val current = state.value.alarmsListState.dayNum
+            onDayChange(current / 7 + dayOfWeek)
+        }
+    }
+
+    fun afterAlarmChange(isNew: Boolean, alarm: AlarmData) {
+        viewModelScope.launch {
+            _state.update { state ->
+                state.copy(
+                    alarmsSnackBarState =
+                    if (isNew) AlarmsSnackBarCreatedState(alarm)
+                    else AlarmsSnackBarEditedState(alarm)
+                )
+            }
         }
     }
 }

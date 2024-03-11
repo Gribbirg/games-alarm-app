@@ -45,7 +45,9 @@ import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogE
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogOffState
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogView
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -123,7 +125,6 @@ fun AlarmsScreen(
                                 SnackbarResult.ActionPerformed -> {
                                     onEvent(SnackBarAlarmReturnEvent(alarm))
                                 }
-
                                 SnackbarResult.Dismissed -> {
                                     onEvent(SnackBarDismissEvent())
                                 }
@@ -131,30 +132,56 @@ fun AlarmsScreen(
                         }
 
                         is AlarmsSnackBarAlarmCopyState -> {
-                            val result = snackbarHostState.showSnackbar(
-                                message = "${alarm.name} на ${alarm.getTime()} скопирован",
-                                duration = SnackbarDuration.Short
+                            showSimpleSnackBar(
+                                onEvent,
+                                snackbarHostState,
+                                "${alarm.name} на ${alarm.getTime()} скопирован"
                             )
-
-                            if (result == SnackbarResult.Dismissed) {
-                                onEvent(SnackBarDismissEvent())
-                            }
                         }
 
                         is AlarmsSnackBarTimeChangeState -> {
-                            val result = snackbarHostState.showSnackbar(
-                                message = "${alarm.name} переставлен на ${alarm.getTime()}",
-                                duration = SnackbarDuration.Short
+                            showSimpleSnackBar(
+                                onEvent,
+                                snackbarHostState,
+                                "${alarm.name} переставлен на ${alarm.getTime()}"
                             )
+                        }
 
-                            if (result == SnackbarResult.Dismissed) {
-                                onEvent(SnackBarDismissEvent())
-                            }
+                        is AlarmsSnackBarCreatedState -> {
+                            showSimpleSnackBar(
+                                onEvent,
+                                snackbarHostState,
+                                "${alarm.name} на ${alarm.getTime()} добавлен"
+                            )
+                        }
+
+                        is AlarmsSnackBarEditedState -> {
+                            showSimpleSnackBar(
+                                onEvent,
+                                snackbarHostState,
+                                "${alarm.name} на ${alarm.getTime()} изменён"
+                            )
                         }
                     }
                 }
             }
         }
+    }
+}
+
+
+private suspend fun showSimpleSnackBar(
+    onEvent: (SnackBarEvent) -> Unit,
+    snackbarHostState: SnackbarHostState,
+    text: String
+) = withContext(Dispatchers.IO) {
+    val result = snackbarHostState.showSnackbar(
+        message = text,
+        duration = SnackbarDuration.Short
+    )
+
+    if (result == SnackbarResult.Dismissed) {
+        onEvent(SnackBarDismissEvent())
     }
 }
 
