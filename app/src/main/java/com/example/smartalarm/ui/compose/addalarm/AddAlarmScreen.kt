@@ -317,7 +317,6 @@ fun AddAlarmScreen(
                 is AddAlarmSnackBarOffState -> return@LaunchedEffect
 
                 is AddAlarmSnackBarPastedState -> {
-                    Log.d("test", "AddAlarmScreen: $alarm")
                     showSimpleSnackBar(
                         onEvent,
                         snackbarHostState,
