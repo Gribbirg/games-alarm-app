@@ -118,6 +118,16 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
                     }
                 }
             }
+
+            is AddAlarmRingtoneSelectedEvent -> {
+                _state.update {state ->
+                    state.copy(
+                        alarm = state.alarm.copy(
+                            ringtonePath = event.ringtonePath
+                        )
+                    )
+                }
+            }
         }
     }
 

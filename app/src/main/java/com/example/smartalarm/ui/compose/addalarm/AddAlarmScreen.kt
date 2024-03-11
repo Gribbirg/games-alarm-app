@@ -1,5 +1,8 @@
 package com.example.smartalarm.ui.compose.addalarm
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
@@ -53,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.repositories.getDayOfWeekShortName
+import com.example.smartalarm.data.utils.RealPathUtil
 import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemEvent
 import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemState
 import com.example.smartalarm.ui.compose.view.alarmitem.AlarmsListItemView
@@ -71,8 +76,22 @@ fun AddAlarmScreen(
     toAlarmsScreen: (dayOfWeek: Int, isNew: Boolean, alarm: AlarmData) -> Unit,
     toAlarmsScreenBack: () -> Unit
 ) {
+    val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val musicSelectLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        try {
+            uri?.let {
+                val ringtonePath = RealPathUtil.getRealPath(context, uri).toString()
+                Log.i("chosen song", ringtonePath)
+                onEvent(AddAlarmRingtoneSelectedEvent(ringtonePath))
+            }
+        } catch (e: Exception) {
+            Log.i("selection fail", e.toString())
+        }
+    }
 
     LaunchedEffect(key1 = state.saveFinish) {
         if (state.saveFinish)
@@ -172,8 +191,12 @@ fun AddAlarmScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Название", color = MaterialTheme.colorScheme.primary) // TODO: song
-                OutlinedButton(onClick = { /*TODO*/ }) {
+                val name = state.alarm.ringtonePath.substringAfterLast("/")
+                Text(
+                    text = if (name == "") "По умолчанию" else name,
+                    color = MaterialTheme.colorScheme.primary
+                ) // TODO: song
+                OutlinedButton(onClick = { musicSelectLauncher.launch(arrayOf("audio/*")) }) {
                     Icon(imageVector = Icons.Filled.Edit, contentDescription = "Изменить")
                 }
             }
