@@ -48,6 +48,8 @@ import com.example.smartalarm.ui.theme.GamesAlarmTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,9 +85,14 @@ fun AlarmsScreen(
             ) {
                 Text(text = state.dayInfoText)
                 IconButton(onClick = {
+                    val time = LocalDateTime.now()
                     navigateToAddAlarmScreen(
                         true,
-                        AlarmData(dayOfWeek = state.alarmsListState.dayNum % 7)
+                        AlarmData(
+                            timeHour = time.hour,
+                            timeMinute = time.minute,
+                            dayOfWeek = state.alarmsListState.dayNum % 7
+                        )
                     )
                 }) {
                     Icon(Icons.Filled.Add, contentDescription = "Добавить будильник")

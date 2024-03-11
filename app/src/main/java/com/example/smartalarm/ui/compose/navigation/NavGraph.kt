@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.ui.navigateUp
 import com.example.smartalarm.ui.compose.addalarm.AddAlarmScreen
 import com.example.smartalarm.ui.compose.addalarm.AddAlarmViewModel
 import com.example.smartalarm.ui.compose.alarms.AlarmsScreen
@@ -69,6 +70,9 @@ fun NavGraph(
                     alarmsViewModel.refresh(dayOfWeek)
                     alarmsViewModel.afterAlarmChange(isNew, alarm)
                     navHostController.navigate(Screen.Alarms.route)
+                },
+                toAlarmsScreenBack = {
+                    navHostController.popBackStack()
                 }
             )
         }

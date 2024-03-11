@@ -12,8 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Save
@@ -24,6 +26,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
@@ -47,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.data.repositories.getDayOfWeekShortName
 import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemEvent
@@ -64,7 +68,8 @@ fun AddAlarmScreen(
     onAlarmItemEvent: (AlarmItemEvent) -> Unit,
     onTimePickerDialogEvent: (TimePickerDialogEvent) -> Unit,
     state: AddAlarmState,
-    toAlarmsScreen: (dayOfWeek: Int, isNew: Boolean, alarm: AlarmData) -> Unit
+    toAlarmsScreen: (dayOfWeek: Int, isNew: Boolean, alarm: AlarmData) -> Unit,
+    toAlarmsScreenBack: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -85,6 +90,14 @@ fun AddAlarmScreen(
                     Text(
                         text = if (state.isNew) "Добавить" else "Изменить"
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { toAlarmsScreenBack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
                 }
             )
         },
@@ -283,7 +296,8 @@ fun AddAlarmScreenPreview() {
             ),
             onAlarmItemEvent = {},
             onTimePickerDialogEvent = {},
-            toAlarmsScreen = { a, b, c -> }
+            toAlarmsScreen = { a, b, c -> },
+            toAlarmsScreenBack = {}
         )
     }
 }

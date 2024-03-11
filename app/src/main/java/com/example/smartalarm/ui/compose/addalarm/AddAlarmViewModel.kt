@@ -10,6 +10,7 @@ import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemClockClickedEvent
 import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemEvent
+import com.example.smartalarm.ui.compose.view.alarmitem.AlarmItemSetOnStateEvent
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogDismissEvent
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogEvent
 import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogOffState
@@ -124,6 +125,15 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             when (event) {
                 is AlarmItemClockClickedEvent -> launchTimePickerDialog()
+                is AlarmItemSetOnStateEvent -> {
+                    _state.update {state ->
+                        state.copy(
+                            alarm = state.alarm.copy(
+                                isOn = event.isOn
+                            )
+                        )
+                    }
+                }
             }
         }
     }
@@ -197,12 +207,16 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
                         dayOfWeek = index
                     )
                     alarm.id = alarmDbRepository.insertAlarmToDb(alarm)
-                    alarm.let(creator::create)
+                    if (alarm.isOn)
+                        alarm.let(creator::create)
                 }
             }
         } else {
             alarmDbRepository.updateAlarmInDbWithGames(alarmInput)
-            alarmInput.let(creator::update)
+            if (alarmInput.isOn)
+                alarmInput.let(creator::update)
+            else
+                alarmInput.let(creator::cancel)
         }
     }
 
