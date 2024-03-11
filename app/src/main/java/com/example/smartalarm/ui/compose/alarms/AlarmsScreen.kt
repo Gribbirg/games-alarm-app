@@ -80,7 +80,12 @@ fun AlarmsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = state.dayInfoText)
-                IconButton(onClick = { navigateToAddAlarmScreen(true, AlarmData()) }) {
+                IconButton(onClick = {
+                    navigateToAddAlarmScreen(
+                        true,
+                        AlarmData(dayOfWeek = state.alarmsListState.dayNum % 7)
+                    )
+                }) {
                     Icon(Icons.Filled.Add, contentDescription = "Добавить будильник")
                 }
             }

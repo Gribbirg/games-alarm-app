@@ -18,9 +18,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -35,6 +37,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -188,7 +191,11 @@ fun AddAlarmScreen(
                     )
                 )
                 {
-                    Icon(imageVector = Icons.Filled.Vibration, contentDescription = "Вибрация", tint = MaterialTheme.colorScheme.primary)
+                    Icon(
+                        imageVector = Icons.Filled.Vibration,
+                        contentDescription = "Вибрация",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
             Row(
@@ -207,7 +214,11 @@ fun AddAlarmScreen(
                     )
                 )
                 {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Вибрация", tint = MaterialTheme.colorScheme.primary)
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.VolumeUp,
+                        contentDescription = "Вибрация",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
             HorizontalDivider(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
@@ -238,6 +249,20 @@ fun AddAlarmScreen(
     }
 
     TimePickerDialogView(onEvent = onTimePickerDialogEvent, state = state.timePickerDialogState)
+
+    if (state.alertDialogState is AddAlarmAlertDialogDaysNotSelectedState) {
+        AlertDialog(
+            onDismissRequest = { onEvent(AddAlarmAlertDialogCloseEvent()) },
+            confirmButton = {
+                TextButton(onClick = { onEvent(AddAlarmAlertDialogCloseEvent()) }) {
+                    Text(text = "Понятно")
+                }
+            },
+            title = { Text(text = "Выберите дни") },
+            text = { Text(text = "Выберите дни недели, на которые будет установлен ${state.alarm.name}") },
+            icon = { Icon(imageVector = Icons.Filled.ErrorOutline, contentDescription = "Ошибка") }
+        )
+    }
 }
 
 
@@ -263,7 +288,8 @@ fun AddAlarmScreenPreview() {
                 isNew = false,
                 alarm = AlarmData(),
                 timePickerDialogState = TimePickerDialogOffState(),
-                daysOfWeek = MutableList(7) { it == 3 }
+                daysOfWeek = MutableList(7) { it == 3 },
+                alertDialogState = AddAlarmAlertDialogOffState()
             ),
             onAlarmItemEvent = {},
             onTimePickerDialogEvent = {},

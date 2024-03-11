@@ -46,6 +46,7 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
         isNew = true,
         daysOfWeek = MutableList(7) { false },
         timePickerDialogState = TimePickerDialogOffState(),
+        alertDialogState = AddAlarmAlertDialogOffState()
     )
 
     private val alarmDbRepository = AlarmDbRepository(
@@ -64,6 +65,13 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
                             else
                                 state.daysOfWeek[i]
                         }
+                    )
+                }
+            }
+            is AddAlarmAlertDialogCloseEvent -> {
+                _state.update { state ->
+                    state.copy(
+                        alertDialogState = AddAlarmAlertDialogOffState()
                     )
                 }
             }
@@ -94,15 +102,23 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
 
             is AddAlarmSaveEvent -> {
                 viewModelScope.launch {
-                    insertOrUpdateAlarmToDb(
+                    val result = insertOrUpdateAlarm(
                         state.value.isNew,
                         state.value.alarm,
                         state.value.daysOfWeek
                     )
-                    _state.update { state ->
-                        state.copy(
-                            saveFinish = true
-                        )
+                    if (result) {
+                        _state.update { state ->
+                            state.copy(
+                                saveFinish = true
+                            )
+                        }
+                    } else {
+                        _state.update { state ->
+                            state.copy(
+                                alertDialogState = AddAlarmAlertDialogDaysNotSelectedState()
+                            )
+                        }
                     }
                 }
             }
@@ -159,13 +175,18 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-//    fun insertOrUpdateAlarm(alarm: AlarmSimpleData): Boolean {
-//        if (alarm.activateDate != null)
-//            if (!isAhead(alarm.activateDate!!, alarm.timeHour, alarm.timeMinute))
-//                return false
-//        insertOrUpdateAlarmToDb(alarm)
-//        return true
-//    }
+    private suspend fun insertOrUpdateAlarm(
+        isNew: Boolean,
+        alarmInput: AlarmData,
+        daysOfWeek: MutableList<Boolean>
+    ): Boolean =
+        withContext(Dispatchers.IO) {
+            if (daysOfWeek.all { !it }) {
+                return@withContext false
+            }
+            insertOrUpdateAlarmToDb(isNew, alarmInput, daysOfWeek)
+            return@withContext true
+        }
 
     private suspend fun insertOrUpdateAlarmToDb(
         isNew: Boolean,
@@ -195,16 +216,14 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun setAlarm(isNew: Boolean = true, alarm: AlarmData) {
-        if (isNew) {
-            _state.update {
-                getDefaultState()
-            }
-        } else {
-            _state.update {
-                getDefaultState().copy(
-                    alarm = alarm
-                )
-            }
+        _state.update {
+            getDefaultState().copy(
+                isNew = isNew,
+                alarm = alarm,
+                daysOfWeek = MutableList(7) { i ->
+                    i == alarm.dayOfWeek
+                }
+            )
         }
     }
 }

@@ -27,3 +27,6 @@ data class AddAlarmRisingVolumeChangeEvent(
 
 
 class AddAlarmSaveEvent : AddAlarmEvent()
+
+
+class AddAlarmAlertDialogCloseEvent : AddAlarmEvent()

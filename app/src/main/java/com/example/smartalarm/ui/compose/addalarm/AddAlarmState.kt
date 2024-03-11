@@ -10,5 +10,12 @@ data class AddAlarmState(
     val daysOfWeek: MutableList<Boolean>,
     val saveFinish: Boolean = false,
 
-    val timePickerDialogState: TimePickerDialogState
+    val timePickerDialogState: TimePickerDialogState,
+    val alertDialogState: AddAlarmAlertDialogState
 ) {}
+
+abstract class AddAlarmAlertDialogState
+
+class AddAlarmAlertDialogOffState : AddAlarmAlertDialogState()
+
+class AddAlarmAlertDialogDaysNotSelectedState : AddAlarmAlertDialogState()
