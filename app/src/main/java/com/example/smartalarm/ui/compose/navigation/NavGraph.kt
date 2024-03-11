@@ -11,6 +11,8 @@ import com.example.smartalarm.ui.compose.addalarm.AddAlarmScreen
 import com.example.smartalarm.ui.compose.addalarm.AddAlarmViewModel
 import com.example.smartalarm.ui.compose.alarms.AlarmsScreen
 import com.example.smartalarm.ui.compose.alarms.AlarmsViewModel
+import com.example.smartalarm.ui.compose.gameselect.GameSelectScreen
+import com.example.smartalarm.ui.compose.gameselect.GameSelectViewModel
 import com.example.smartalarm.ui.compose.profile.ProfileScreen
 import com.example.smartalarm.ui.compose.profile.ProfileViewModel
 import com.example.smartalarm.ui.compose.records.RecordsScreen
@@ -25,7 +27,8 @@ fun NavGraph(
     recordsViewModel: RecordsViewModel,
     profileViewModel: ProfileViewModel,
     settingsViewModel: SettingsViewModel,
-    addAlarmViewModel: AddAlarmViewModel
+    addAlarmViewModel: AddAlarmViewModel,
+    gameSelectViewModel: GameSelectViewModel
 ) {
     NavHost(
         navController = navHostController,
@@ -75,6 +78,20 @@ fun NavGraph(
                     navHostController.navigate(Screen.Alarms.route)
                 },
                 toAlarmsScreenBack = {
+                    navHostController.popBackStack()
+                },
+                toGamesSelectScreen = { alarm ->
+                    navHostController.navigate("${Screen.Alarms.route}/addalarm/gameselect")
+                }
+            )
+        }
+
+        composable("${Screen.Alarms.route}/addalarm/gameselect") {
+            val state by gameSelectViewModel.state.collectAsState()
+            GameSelectScreen(
+                onEvent = gameSelectViewModel::onEvent,
+                state = state,
+                onNavBack = {
                     navHostController.popBackStack()
                 }
             )

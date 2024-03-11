@@ -1,5 +1,6 @@
 package com.example.smartalarm.ui.compose.view.timepickerdialog
 
+import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +44,8 @@ fun TimePickerDialogView(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Text(text = "Выберите время")
+                    Spacer(modifier = Modifier.height(10.dp))
                     TimePicker(state = timePickerState)
                     Row(
                         modifier = Modifier

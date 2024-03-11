@@ -29,6 +29,7 @@ import com.example.smartalarm.R
 import com.example.smartalarm.databinding.ActivityMainBinding
 import com.example.smartalarm.ui.compose.addalarm.AddAlarmViewModel
 import com.example.smartalarm.ui.compose.alarms.AlarmsViewModel
+import com.example.smartalarm.ui.compose.gameselect.GameSelectViewModel
 import com.example.smartalarm.ui.compose.navigation.BottomNavigationBar
 import com.example.smartalarm.ui.compose.navigation.NavGraph
 import com.example.smartalarm.ui.compose.profile.ProfileViewModel
@@ -119,6 +120,7 @@ class MainComposeActivity : ComponentActivity() {
         val profileViewModel: ProfileViewModel by viewModels()
         val recordsViewModel: RecordsViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
+        val gameSelectViewModel: GameSelectViewModel by viewModels()
 
         val navController = rememberNavController()
 
@@ -140,7 +142,8 @@ class MainComposeActivity : ComponentActivity() {
                     recordsViewModel = recordsViewModel,
                     profileViewModel = profileViewModel,
                     settingsViewModel = settingsViewModel,
-                    addAlarmViewModel = addAlarmViewModel
+                    addAlarmViewModel = addAlarmViewModel,
+                    gameSelectViewModel = gameSelectViewModel
                 )
             }
         }

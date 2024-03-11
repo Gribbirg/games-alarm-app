@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -80,7 +81,8 @@ fun AddAlarmScreen(
     onTimePickerDialogEvent: (TimePickerDialogEvent) -> Unit,
     state: AddAlarmState,
     toAlarmsScreen: (dayOfWeek: Int, isNew: Boolean, alarm: AlarmData) -> Unit,
-    toAlarmsScreenBack: () -> Unit
+    toAlarmsScreenBack: () -> Unit,
+    toGamesSelectScreen: (AlarmData) -> Unit
 ) {
     val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
@@ -112,7 +114,7 @@ fun AddAlarmScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = if (state.isNew) "Добавить" else "Изменить"
@@ -287,8 +289,11 @@ fun AddAlarmScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                OutlinedButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = "Добавить")
+                OutlinedButton(onClick = { toGamesSelectScreen(state.alarm) }) {
+                    if (state.alarm.gamesList.isEmpty())
+                        Icon(imageVector = Icons.Filled.Add, contentDescription = "Добавить")
+                    else
+                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Изменить")
                 }
             }
             Spacer(modifier = Modifier.height(130.dp))
@@ -381,7 +386,8 @@ fun AddAlarmScreenPreview() {
             onAlarmItemEvent = {},
             onTimePickerDialogEvent = {},
             toAlarmsScreen = { _, _, _ -> },
-            toAlarmsScreenBack = {}
+            toAlarmsScreenBack = {},
+            toGamesSelectScreen = {}
         )
     }
 }

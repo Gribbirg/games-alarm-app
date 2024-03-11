@@ -56,13 +56,13 @@ fun AlarmsListItemView(
         modifier = Modifier
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 5.dp
+            defaultElevation = 3.dp
         ),
         colors = CardDefaults.cardColors(
             containerColor =
-            if (isOnState.value) MaterialTheme.colorScheme.surfaceContainerHighest
-            else MaterialTheme.colorScheme.surfaceContainerLowest
-        )
+            if (isOnState.value) MaterialTheme.colorScheme.surface
+            else MaterialTheme.colorScheme.surfaceContainer
+        ),
     ) {
         Column(
             modifier = Modifier

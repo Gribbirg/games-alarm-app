@@ -25,7 +25,7 @@ fun CalendarDayView(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = if (state.isSelected) MaterialTheme.colorScheme.surfaceContainerHighest
+            containerColor = if (state.isSelected) MaterialTheme.colorScheme.surface
             else MaterialTheme.colorScheme.background
         ),
         elevation = CardDefaults.cardElevation(

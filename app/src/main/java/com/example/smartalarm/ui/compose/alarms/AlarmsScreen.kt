@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddAlarm
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -65,7 +69,7 @@ fun AlarmsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "РазБудильник") }) },
+        topBar = { CenterAlignedTopAppBar(title = { Text(text = "РазБудильник") }) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
         Column(
@@ -85,18 +89,22 @@ fun AlarmsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = state.dayInfoText)
-                IconButton(onClick = {
-                    val time = LocalDateTime.now()
-                    navigateToAddAlarmScreen(
-                        true,
-                        AlarmData(
-                            timeHour = time.hour,
-                            timeMinute = time.minute,
-                            dayOfWeek = state.alarmsListState.dayNum % 7
+                FilledIconButton(
+                    modifier = Modifier
+                        .padding(top = 10.dp ,end = 10.dp),
+                    onClick = {
+                        val time = LocalDateTime.now()
+                        navigateToAddAlarmScreen(
+                            true,
+                            AlarmData(
+                                timeHour = time.hour,
+                                timeMinute = time.minute,
+                                dayOfWeek = state.alarmsListState.dayNum % 7
+                            )
                         )
-                    )
-                }) {
-                    Icon(Icons.Filled.Add, contentDescription = "Добавить будильник")
+                    }
+                ) {
+                    Icon(imageVector = Icons.Filled.AddAlarm, contentDescription = "Добавить")
                 }
             }
             AlarmsListView(
