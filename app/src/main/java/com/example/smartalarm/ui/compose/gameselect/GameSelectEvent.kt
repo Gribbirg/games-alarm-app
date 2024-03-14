@@ -1,4 +1,5 @@
 package com.example.smartalarm.ui.compose.gameselect
 
-class GameSelectEvent {
-}
+open class GameSelectEvent
+
+class GameSelectLoadEvent : GameSelectEvent()

@@ -1,6 +1,7 @@
 package com.example.smartalarm.ui.compose.gameselect
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,11 +9,19 @@ import com.example.smartalarm.data.data.AlarmGameData
 import com.example.smartalarm.data.constants.ALL_GAMES
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmDbRepository
+import com.example.smartalarm.data.repositories.GamesListRepository
+import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class GameSelectViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val gamesListRepository = GamesListRepository(application.applicationContext)
+
     var gamesRecycler: MutableLiveData<ArrayList<AlarmGameData>> = MutableLiveData()
     var games: ArrayList<AlarmGameData> = ArrayList()
     private val alarmDbRepository = AlarmDbRepository(
@@ -23,20 +32,25 @@ class GameSelectViewModel(application: Application) : AndroidViewModel(applicati
     val state = _state.asStateFlow()
 
     fun onEvent(event: GameSelectEvent) {
-
+        when (event) {
+            is GameSelectLoadEvent -> {
+                viewModelScope.launch {
+                    val games = getGames()
+                    _state.update {
+                        games?.let {
+                            GameSelectLoadedState(it)
+                        } ?: GameSelectErrorState()
+                    }
+                }
+            }
+        }
     }
 
-    private fun getDefaultState() = GameSelectState()
+    private fun getDefaultState(): GameSelectState = GameSelectLoadingState()
 
-    fun getGames(gamesDifficulties: ArrayList<Int>?) {
-        viewModelScope.launch {
-            val gamesDataList = alarmDbRepository.getGames()
-            games = ArrayList()
-            for (i in ALL_GAMES.indices) {
-                games.add(AlarmGameData(gamesDataList[i], gamesDifficulties?.get(i) ?: 0))
-            }
-            gamesRecycler.postValue(games)
-        }
+    private suspend fun getGames(): List<GameItemState>? = withContext(Dispatchers.IO) {
+        val games = gamesListRepository.getList()
+        return@withContext games?.size?.let { List(it) { i -> GameItemState(games[i]) } }
     }
 
     fun getDifficultiesList(): ArrayList<Int> {
