@@ -12,6 +12,8 @@ import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material.icons.outlined.VideogameAsset
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,7 +63,10 @@ fun AlarmsListItemView(
         colors = CardDefaults.cardColors(
             containerColor =
             if (isOnState.value) MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.surfaceContainer
+            else MaterialTheme.colorScheme.surfaceContainer,
+            contentColor =
+            if (isOnState.value) MaterialTheme.colorScheme.onPrimaryContainer
+            else MaterialTheme.colorScheme.onSurfaceVariant,
         ),
     ) {
         Column(
@@ -90,7 +95,12 @@ fun AlarmsListItemView(
                 TextButton(
                     onClick = {
                         onEvent(AlarmItemClockClickedEvent(state.alarm))
-                    }
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor =
+                        if (isOnState.value) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 ) {
                     Text(
                         text = state.alarm.getTime(),

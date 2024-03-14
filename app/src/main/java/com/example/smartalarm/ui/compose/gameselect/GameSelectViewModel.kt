@@ -1,15 +1,19 @@
 package com.example.smartalarm.ui.compose.gameselect
 
 import android.app.Application
-import android.util.Log
+import androidx.compose.runtime.internal.updateLiveLiteralValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.data.AlarmGameData
-import com.example.smartalarm.data.constants.ALL_GAMES
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmDbRepository
 import com.example.smartalarm.data.repositories.GamesListRepository
+import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemEvent
+import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemExpandedEvent
+import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemLevelSelectMenuEvent
+import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemLevelSelectMenuSelectEvent
+import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemLevelSelectMenuStateChangeEvent
 import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,10 +47,55 @@ class GameSelectViewModel(application: Application) : AndroidViewModel(applicati
                     }
                 }
             }
+
+            is GameItemEvent -> onGameItemEvent(event)
         }
     }
 
     private fun getDefaultState(): GameSelectState = GameSelectLoadingState()
+
+    private fun onGameItemEvent(event: GameItemEvent) {
+        when (event) {
+            is GameItemExpandedEvent -> updateGamesListItemState(event.id) { it.copy(isExpanded = !it.isExpanded) }
+
+            is GameItemLevelSelectMenuEvent -> onGameItemLevelSelectMenuEvent(event)
+        }
+    }
+
+    private fun onGameItemLevelSelectMenuEvent(event: GameItemLevelSelectMenuEvent) {
+        when (event) {
+            is GameItemLevelSelectMenuStateChangeEvent -> updateGamesListItemState(event.id) {
+                it.copy(
+                    isMenuOpened = event.isOpen
+                )
+            }
+
+            is GameItemLevelSelectMenuSelectEvent -> updateGamesListItemState(event.id) {
+                it.copy(
+                    level = event.levelId,
+                    isMenuOpened = false
+                )
+            }
+        }
+    }
+
+    private fun updateGamesListItemState(id: Int, action: (GameItemState) -> GameItemState) {
+        _state.update { state ->
+            if (state is GameSelectLoadedState)
+                state.copy(
+                    gamesList = List(state.gamesList.size) { i ->
+                        state.gamesList[i].let {
+                            if (it.game.id == id)
+                                action(it)
+                            else
+                                it
+                        }
+                    }
+                )
+            else
+                state
+        }
+    }
 
     private suspend fun getGames(): List<GameItemState>? = withContext(Dispatchers.IO) {
         val games = gamesListRepository.getList()
