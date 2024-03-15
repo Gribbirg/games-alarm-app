@@ -111,15 +111,8 @@ fun AlarmsListItemView(
                     )
                 }
                 Row {
-                    Text(text = "Игры:")
-                    state.alarm.gamesList.forEachIndexed { index, value ->
-                        if (value != 0) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(state.gamesDataList[index].icon),
-                                contentDescription = "Игра"
-                            )
-                        }
-                    }
+                    Icon(Icons.Outlined.VideogameAsset, contentDescription = "Игры")
+                    Text(text = ": ${state.alarm.gamesList.count { game -> game != 0 }}")
                 }
                 Switch(
                     checked = isOnState.value,
@@ -180,7 +173,6 @@ fun AlarmsListItemViewPreview() {
                             8,
                             10
                         ),
-                        listOf()
                     )
                 )
             }
@@ -212,7 +204,6 @@ fun AlarmsListItemViewDarkPreview() {
                             isVibration = true,
                             isRisingVolume = true
                         ),
-                        listOf()
                     )
                 )
             }
