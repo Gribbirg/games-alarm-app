@@ -47,7 +47,7 @@ class MainComposeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("test", "onCreate: ${R.drawable.baseline_calculate_24}")
         val viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
 

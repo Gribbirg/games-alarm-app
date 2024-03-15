@@ -15,6 +15,7 @@ import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemLevelSelect
 import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemLevelSelectMenuSelectEvent
 import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemLevelSelectMenuStateChangeEvent
 import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemState
+import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemStateChangeEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,7 +44,7 @@ class GameSelectViewModel(application: Application) : AndroidViewModel(applicati
                     _state.update {
                         games?.let {
                             GameSelectLoadedState(it)
-                        } ?: GameSelectErrorState()
+                        } ?: GameSelectErrorState("Не удалось загрузить игры")
                     }
                 }
             }
@@ -59,6 +60,8 @@ class GameSelectViewModel(application: Application) : AndroidViewModel(applicati
             is GameItemExpandedEvent -> updateGamesListItemState(event.id) { it.copy(isExpanded = !it.isExpanded) }
 
             is GameItemLevelSelectMenuEvent -> onGameItemLevelSelectMenuEvent(event)
+
+            is GameItemStateChangeEvent -> updateGamesListItemState(event.id) { it.copy(isOn = event.isOn) }
         }
     }
 

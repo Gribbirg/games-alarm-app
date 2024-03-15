@@ -19,3 +19,8 @@ class GameItemLevelSelectMenuSelectEvent(
     id: Int,
     val levelId: Int
 ) : GameItemLevelSelectMenuEvent(id)
+
+class GameItemStateChangeEvent(
+    id: Int,
+    val isOn: Boolean
+) : GameItemEvent(id)

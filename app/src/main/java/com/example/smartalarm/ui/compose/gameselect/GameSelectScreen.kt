@@ -3,18 +3,25 @@ package com.example.smartalarm.ui.compose.gameselect
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,6 +30,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.smartalarm.ui.compose.addalarm.AddAlarmSaveEvent
 import com.example.smartalarm.ui.compose.gameselect.gameitem.GameItemView
 import kotlinx.coroutines.launch
 
@@ -33,7 +42,6 @@ fun GameSelectScreen(
     state: GameSelectState,
     onNavBack: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -47,6 +55,18 @@ fun GameSelectScreen(
                     }
                 }
             )
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            if (state is GameSelectLoadedState) {
+                ExtendedFloatingActionButton(
+                    text = { Text(text = "Сохранить") },
+                    icon = { Icon(imageVector = Icons.Filled.Save, contentDescription = "Сохранить") },
+                    onClick = {
+//                        TODO()
+                    },
+                )
+            }
         }
     ) { paddingValue ->
         when (state) {
@@ -61,6 +81,7 @@ fun GameSelectScreen(
                     state.gamesList.forEach {
                         GameItemView(onEvent = onEvent, state = it)
                     }
+                    Spacer(modifier = Modifier.height(130.dp))
                 }
             }
 
@@ -78,7 +99,7 @@ fun GameSelectScreen(
             }
 
             is GameSelectErrorState -> {
-
+                Text(text = state.text, color = MaterialTheme.colorScheme.error)
             }
         }
     }

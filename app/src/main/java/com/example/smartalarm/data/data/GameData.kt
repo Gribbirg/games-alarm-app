@@ -1,13 +1,18 @@
 package com.example.smartalarm.data.data
 
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
+import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
+import java.util.Vector
 
 @Serializable
 data class GameData(
     val id: Int,
     val name: String,
     val description: String,
-    val levels: List<GameLevelData>
+    var icon: Int,
+    val levels: List<GameLevelData>,
 ) {
 
     @Serializable

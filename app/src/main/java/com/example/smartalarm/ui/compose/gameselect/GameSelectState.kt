@@ -12,4 +12,6 @@ data class GameSelectLoadedState(
 ) : GameSelectState()
 
 
-class GameSelectErrorState : GameSelectState()
+data class GameSelectErrorState(
+    val text: String
+) : GameSelectState()
