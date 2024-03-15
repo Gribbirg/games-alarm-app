@@ -1,11 +1,11 @@
 package com.example.smartalarm.ui.compose.addalarm
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.data.constants.ALL_GAMES
 import com.example.smartalarm.data.data.AlarmData
+import com.example.smartalarm.data.data.GameData
 import com.example.smartalarm.data.db.AlarmsDB
 import com.example.smartalarm.data.repositories.AlarmCreateRepository
 import com.example.smartalarm.data.repositories.AlarmDbRepository
@@ -53,6 +53,7 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
         isNew = true,
         hasCopiedAlarm = copiedAlarm != null,
         daysOfWeek = MutableList(7) { false },
+        selectedGamesList = listOf(),
         timePickerDialogState = TimePickerDialogOffState(),
         alertDialogState = AddAlarmAlertDialogOffState()
     )
@@ -281,6 +282,17 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
                 daysOfWeek = MutableList(7) { i ->
                     i == alarm.dayOfWeek
                 }
+            )
+        }
+    }
+
+    fun setGamesList(gamesList: List<GameData>) {
+        _state.update {state ->
+            state.copy(
+                alarm = state.alarm.copy(
+                    gamesList = ArrayList(gamesList.map { it.id })
+                ),
+                selectedGamesList = gamesList
             )
         }
     }

@@ -40,11 +40,19 @@ class GameSelectViewModel(application: Application) : AndroidViewModel(applicati
         when (event) {
             is GameSelectLoadEvent -> {
                 viewModelScope.launch {
-                    val games = getGames()
-                    _state.update {
-                        games?.let {
-                            GameSelectLoadedState(it)
-                        } ?: GameSelectErrorState("Не удалось загрузить игры")
+                    loadGames()
+                }
+            }
+
+            is GameSelectSaveAndExitEvent -> {
+                _state.update { state ->
+                    if (state is GameSelectLoadedState) {
+                        GameSelectSaveAndExitState(
+                            state.gamesList,
+                            state.gamesList.filter { it.isOn }.map { it.game }
+                        )
+                    } else {
+                        state
                     }
                 }
             }
@@ -100,9 +108,65 @@ class GameSelectViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    private suspend fun loadGames() = withContext(Dispatchers.IO) {
+        val games = getGames()
+        _state.update {
+            games?.let {
+                GameSelectLoadedState(it)
+            } ?: GameSelectErrorState("Не удалось загрузить игры")
+        }
+    }
+
     private suspend fun getGames(): List<GameItemState>? = withContext(Dispatchers.IO) {
         val games = gamesListRepository.getList()
         return@withContext games?.size?.let { List(it) { i -> GameItemState(games[i]) } }
+    }
+
+    fun setGames(gamesIndexesList: List<Int>) {
+        when (val currentState = state.value) {
+            is GameSelectLoadedState -> {
+                _state.update {
+                    currentState.copy(
+                        gamesList = List(currentState.gamesList.size) { i ->
+                            currentState.gamesList[i].copy(
+                                isOn = gamesIndexesList.contains(currentState.gamesList[i].game.id)
+                            )
+                        }
+                    )
+                }
+            }
+
+            is GameSelectSaveAndExitState -> {
+                _state.update {
+                    GameSelectLoadedState(
+                        gamesList = List(currentState.gamesStatesList.size) { i ->
+                            currentState.gamesStatesList[i].copy(
+                                isOn = gamesIndexesList.contains(currentState.gamesStatesList[i].game.id)
+                            )
+                        }
+                    )
+                }
+            }
+
+            else -> {
+                viewModelScope.launch {
+                    loadGames()
+                    _state.update { state ->
+                        if (state is GameSelectLoadedState) {
+                            state.copy(
+                                gamesList = List(state.gamesList.size) { i ->
+                                    state.gamesList[i].copy(
+                                        isOn = gamesIndexesList.contains(state.gamesList[i].game.id)
+                                    )
+                                }
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fun getDifficultiesList(): ArrayList<Int> {

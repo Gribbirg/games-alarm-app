@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
@@ -33,6 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
@@ -108,8 +111,15 @@ fun AlarmsListItemView(
                     )
                 }
                 Row {
-                    Icon(Icons.Outlined.VideogameAsset, contentDescription = "Игры")
-                    Text(text = ": ${state.alarm.gamesList.count { game -> game != 0 }}")
+                    Text(text = "Игры:")
+                    state.alarm.gamesList.forEachIndexed { index, value ->
+                        if (value != 0) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(state.gamesDataList[index].icon),
+                                contentDescription = "Игра"
+                            )
+                        }
+                    }
                 }
                 Switch(
                     checked = isOnState.value,
@@ -169,7 +179,8 @@ fun AlarmsListItemViewPreview() {
                             "Будильник",
                             8,
                             10
-                        )
+                        ),
+                        listOf()
                     )
                 )
             }
@@ -200,7 +211,8 @@ fun AlarmsListItemViewDarkPreview() {
                             10,
                             isVibration = true,
                             isRisingVolume = true
-                        )
+                        ),
+                        listOf()
                     )
                 )
             }

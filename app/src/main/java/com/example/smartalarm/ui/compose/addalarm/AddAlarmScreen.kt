@@ -45,7 +45,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -71,7 +70,6 @@ import com.example.smartalarm.ui.compose.view.timepickerdialog.TimePickerDialogV
 import com.example.smartalarm.ui.theme.GamesAlarmTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -277,9 +275,9 @@ fun AddAlarmScreen(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (state.alarm.gamesList.isNotEmpty()) {
-                    state.alarm.gamesList.forEach { gameNum ->
-                        Text(text = gameNum.toString())
+                if (state.selectedGamesList.isNotEmpty()) {
+                    state.selectedGamesList.forEach { game ->
+                        Text(text = game.name)
                     }
                 } else {
                     Text(text = "Игр нет!")
@@ -381,7 +379,8 @@ fun AddAlarmScreenPreview() {
                 timePickerDialogState = TimePickerDialogOffState(),
                 daysOfWeek = MutableList(7) { it == 3 },
                 alertDialogState = AddAlarmAlertDialogOffState(),
-                snackBarState = AddAlarmSnackBarOffState()
+                snackBarState = AddAlarmSnackBarOffState(),
+                selectedGamesList = listOf()
             ),
             onAlarmItemEvent = {},
             onTimePickerDialogEvent = {},

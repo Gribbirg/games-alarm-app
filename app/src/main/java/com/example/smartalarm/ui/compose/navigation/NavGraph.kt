@@ -81,6 +81,7 @@ fun NavGraph(
                     navHostController.popBackStack()
                 },
                 toGamesSelectScreen = { alarm ->
+                    gameSelectViewModel.setGames(alarm.gamesList)
                     navHostController.navigate("${Screen.Alarms.route}/addalarm/gameselect")
                 }
             )
@@ -93,6 +94,10 @@ fun NavGraph(
                 state = state,
                 onNavBack = {
                     navHostController.popBackStack()
+                },
+                onSave = { gamesList ->
+                    addAlarmViewModel.setGamesList(gamesList)
+                    navHostController.navigate("${Screen.Alarms.route}/addalarm")
                 }
             )
         }

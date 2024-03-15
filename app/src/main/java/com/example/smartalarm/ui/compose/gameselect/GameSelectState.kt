@@ -15,3 +15,9 @@ data class GameSelectLoadedState(
 data class GameSelectErrorState(
     val text: String
 ) : GameSelectState()
+
+
+data class GameSelectSaveAndExitState(
+    val gamesStatesList: List<GameItemState>,
+    val gamesList: List<GameData>
+) : GameSelectState()
