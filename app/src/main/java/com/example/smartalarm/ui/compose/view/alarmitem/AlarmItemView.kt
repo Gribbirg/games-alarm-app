@@ -68,7 +68,7 @@ fun AlarmsListItemView(
             if (isOnState.value) MaterialTheme.colorScheme.surface
             else MaterialTheme.colorScheme.surfaceContainer,
             contentColor =
-            if (isOnState.value) MaterialTheme.colorScheme.onPrimaryContainer
+            if (isOnState.value) MaterialTheme.colorScheme.onSurface
             else MaterialTheme.colorScheme.onSurfaceVariant,
         ),
     ) {
