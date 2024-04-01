@@ -39,3 +39,18 @@ data class AddAlarmRingtoneSelectedEvent(
 class AddAlarmPasteEvent : AddAlarmEvent()
 
 class AddAlarmSnackBarClosedEvent : AddAlarmEvent()
+
+data class AddAlarmOneTimeChangeEvent(
+    val isOn: Boolean
+) : AddAlarmEvent()
+
+
+abstract class AddAlarmDatePickerEvent : AddAlarmEvent()
+
+class AddAlarmDatePickerOpenEvent : AddAlarmDatePickerEvent()
+
+class AddAlarmDatePickerCloseEvent : AddAlarmDatePickerEvent()
+
+data class AddAlarmDatePickerSaveEvent(
+    val dateInMillis: Long?
+) : AddAlarmDatePickerEvent()

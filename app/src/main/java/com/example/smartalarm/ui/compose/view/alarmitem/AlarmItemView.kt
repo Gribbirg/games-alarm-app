@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -52,10 +53,10 @@ fun AlarmsListItemView(
         mutableStateOf(state.alarm.isOn)
     }
 
-    LaunchedEffect(key1 = state.alarm.isOn) {
-        if (state.alarm.isOn != isOnState.value)
-            isOnState.value = state.alarm.isOn
-    }
+//    LaunchedEffect(key1 = state.alarm.isOn) {
+//        if (state.alarm.isOn != isOnState.value)
+//            isOnState.value = state.alarm.isOn
+//    }
 
     Card(
         modifier = Modifier
@@ -65,10 +66,12 @@ fun AlarmsListItemView(
         ),
         colors = CardDefaults.cardColors(
             containerColor =
-            if (isOnState.value) MaterialTheme.colorScheme.surface
+            if (isOnState.value)
+                MaterialTheme.colorScheme.surface
             else MaterialTheme.colorScheme.surfaceContainer,
             contentColor =
-            if (isOnState.value) MaterialTheme.colorScheme.onSurface
+            if (isOnState.value)
+                MaterialTheme.colorScheme.onSurface
             else MaterialTheme.colorScheme.onSurfaceVariant,
         ),
     ) {
@@ -101,14 +104,22 @@ fun AlarmsListItemView(
                     },
                     colors = ButtonDefaults.textButtonColors(
                         contentColor =
-                        if (isOnState.value) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        if (!isOnState.value) MaterialTheme.colorScheme.onSurfaceVariant
+                        else
+                            if (state.alarm.activateDate != null) MaterialTheme.colorScheme.tertiary
+                            else MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    Text(
-                        text = state.alarm.getTime(),
-                        fontSize = 50.sp
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = state.alarm.getTime(),
+                            fontSize = 50.sp,
+                        )
+                        if (state.alarm.activateDate != null) 
+                            Text(text = "Одноразовый")
+                    }
                 }
                 Row {
                     Icon(Icons.Outlined.VideogameAsset, contentDescription = "Игры")
@@ -119,7 +130,15 @@ fun AlarmsListItemView(
                     onCheckedChange = { isOn ->
                         isOnState.value = isOn
                         onEvent(AlarmItemSetOnStateEvent(state.alarm, isOn))
-                    }
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedTrackColor =
+                        if (state.alarm.activateDate != null) MaterialTheme.colorScheme.tertiary
+                        else MaterialTheme.colorScheme.primary,
+                        checkedThumbColor =
+                        if (state.alarm.activateDate != null) MaterialTheme.colorScheme.onTertiary
+                        else MaterialTheme.colorScheme.onPrimary
+                    )
                 )
             }
             Row(

@@ -25,6 +25,9 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -43,8 +46,10 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -99,6 +104,7 @@ fun AddAlarmScreen(
         }
     }
     val snackbarHostState = remember { SnackbarHostState() }
+    val datePickerState = rememberDatePickerState()
 
     LaunchedEffect(key1 = state.saveFinish) {
         if (state.saveFinish)
@@ -173,27 +179,61 @@ fun AddAlarmScreen(
                 }
             }
             HorizontalDivider(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
-            Text(text = "День недели:")
-            MultiChoiceSegmentedButtonRow {
-                repeat(7) { i ->
-                    SegmentedButton(
-                        checked = state.daysOfWeek[i],
-                        onCheckedChange = { isOn ->
-                            onEvent(
-                                AddAlarmDayOfWeekSelectedEvent(
-                                    i,
-                                    isOn
-                                )
-                            )
-                        },
-                        shape = getShapeByDayOfWeekNumber(i),
-                        icon = {}
-                    ) {
-                        Text(text = getDayOfWeekShortName(i))
-                    }
-                }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Одноразовый:", fontSize = 20.sp)
+                Switch(
+                    checked = state.isOneTime,
+                    onCheckedChange = { isOn -> onEvent(AddAlarmOneTimeChangeEvent(isOn)) }
+                )
             }
             HorizontalDivider(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
+
+            if (state.isOneTime) {
+
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Дата:", fontSize = 20.sp)
+                    OutlinedButton(onClick = { onEvent(AddAlarmDatePickerOpenEvent()) }) {
+                        Text(text = state.alarm.activateDate!!, fontSize = 20.sp)
+                    }
+                }
+
+            } else {
+
+                Text(text = "День недели:")
+                MultiChoiceSegmentedButtonRow {
+                    repeat(7) { i ->
+                        SegmentedButton(
+                            checked = state.daysOfWeek[i],
+                            onCheckedChange = { isOn ->
+                                onEvent(
+                                    AddAlarmDayOfWeekSelectedEvent(
+                                        i,
+                                        isOn
+                                    )
+                                )
+                            },
+                            shape = getShapeByDayOfWeekNumber(i),
+                            icon = {}
+                        ) {
+                            Text(text = getDayOfWeekShortName(i))
+                        }
+                    }
+                }
+
+            }
+            HorizontalDivider(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
+
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -300,7 +340,7 @@ fun AddAlarmScreen(
 
     TimePickerDialogView(onEvent = onTimePickerDialogEvent, state = state.timePickerDialogState)
 
-    if (state.alertDialogState is AddAlarmAlertDialogDaysNotSelectedState) {
+    if (state.alertDialogState is AddAlarmAlertDialogTextState) {
         AlertDialog(
             onDismissRequest = { onEvent(AddAlarmAlertDialogCloseEvent()) },
             confirmButton = {
@@ -308,8 +348,8 @@ fun AddAlarmScreen(
                     Text(text = "Понятно")
                 }
             },
-            title = { Text(text = "Выберите дни") },
-            text = { Text(text = "Выберите дни недели, на которые будет установлен ${state.alarm.name}") },
+            title = { Text(text = state.alertDialogState.head) },
+            text = { Text(text =  state.alertDialogState.body) },
             icon = { Icon(imageVector = Icons.Filled.ErrorOutline, contentDescription = "Ошибка") }
         )
     }
@@ -327,14 +367,45 @@ fun AddAlarmScreen(
                     )
                 }
 
-                is AddAlarmSnackBarNothingToPastedState -> {
+                is AddAlarmSnackBarTextAlertState -> {
                     showSimpleSnackBar(
                         onEvent,
                         snackbarHostState,
-                        "Нет скопированного будильника"
+                        text
                     )
                 }
             }
+        }
+    }
+
+    if (state.datePickerState is AddAlarmDatePickerOnState) {
+        DatePickerDialog(
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
+            onDismissRequest = { onEvent(AddAlarmDatePickerCloseEvent()) },
+            confirmButton = {
+                TextButton(onClick = {
+                    onEvent(
+                        AddAlarmDatePickerSaveEvent(datePickerState.selectedDateMillis)
+                    )
+                }
+                ) {
+                    Text(text = "Сохранить")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    onEvent(
+                        AddAlarmDatePickerCloseEvent()
+                    )
+                }
+                ) {
+                    Text(text = "Отменить")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
         }
     }
 }
@@ -375,12 +446,15 @@ fun AddAlarmScreenPreview() {
             onEvent = {},
             state = AddAlarmState(
                 isNew = false,
-                alarm = AlarmData(),
+                alarm = AlarmData().also {
+                    it.activateDate = "01.01.2024"
+                },
                 timePickerDialogState = TimePickerDialogOffState(),
                 daysOfWeek = MutableList(7) { it == 3 },
                 alertDialogState = AddAlarmAlertDialogOffState(),
                 snackBarState = AddAlarmSnackBarOffState(),
-                selectedGamesList = listOf()
+                selectedGamesList = listOf(),
+                isOneTime = true
             ),
             onAlarmItemEvent = {},
             onTimePickerDialogEvent = {},

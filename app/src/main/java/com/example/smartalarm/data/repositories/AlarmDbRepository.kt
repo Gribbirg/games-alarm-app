@@ -34,8 +34,17 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
         }
 
     suspend fun getAlarmsList(): List<List<AlarmData>> = withContext(Dispatchers.IO) {
-        return@withContext List(7) { index ->
-            alarmsDao.getAlarmsByDay(index).map { alarm -> getAlarmWithGames(alarm.id) }
+        val byDays = List(7) { index ->
+            alarmsDao
+                .getAlarmsByDay(index % 7)
+                .map { alarm -> getAlarmWithGames(alarm.id) }
+        }
+        return@withContext List(700) { index ->
+            byDays[index % 7].filterNot {
+                it.activateDate != null && it.activateDate == CalendarRepository.getDateAhead(
+                    index
+                )
+            }
         }
     }
 
@@ -72,7 +81,7 @@ class AlarmDbRepository(private val alarmsDao: AlarmsDao) {
 
             for (i in 0..6) {
                 alarm = alarmsDao.getEarliestAlarm(i)
-                if (alarm == null || (alarm.activateDate == null || alarm.activateDate == currentDate[i]) && alarm.isOn)
+                if ((alarm.activateDate == null || alarm.activateDate == currentDate[i]) && alarm.isOn)
                     list.add(alarm)
                 else {
                     listDay = getAlarmsFromDbByDayOfWeek(i, currentDate[i])

@@ -12,18 +12,22 @@ data class AddAlarmState(
     val selectedGamesList: List<GameData>,
     val saveFinish: Boolean = false,
     val hasCopiedAlarm: Boolean = false,
+    val isOneTime: Boolean = false,
 
     val timePickerDialogState: TimePickerDialogState = TimePickerDialogOffState(),
     val alertDialogState: AddAlarmAlertDialogState = AddAlarmAlertDialogOffState(),
-    val snackBarState: AddAlarmSnackBarState = AddAlarmSnackBarOffState()
-) {}
+    val snackBarState: AddAlarmSnackBarState = AddAlarmSnackBarOffState(),
+    val datePickerState: AddAlarmDatePickerState = AddAlarmDatePickerOffState()
+)
 
 abstract class AddAlarmAlertDialogState
 
 class AddAlarmAlertDialogOffState : AddAlarmAlertDialogState()
 
-class AddAlarmAlertDialogDaysNotSelectedState : AddAlarmAlertDialogState()
-
+data class AddAlarmAlertDialogTextState(
+    val head: String,
+    val body: String
+) : AddAlarmAlertDialogState()
 
 abstract class AddAlarmSnackBarState
 
@@ -33,4 +37,13 @@ data class AddAlarmSnackBarPastedState(
     val alarm: AlarmData
 ) : AddAlarmSnackBarState()
 
-class AddAlarmSnackBarNothingToPastedState : AddAlarmSnackBarState()
+data class AddAlarmSnackBarTextAlertState (
+    val text: String
+) : AddAlarmSnackBarState()
+
+
+abstract class AddAlarmDatePickerState
+
+class AddAlarmDatePickerOnState : AddAlarmDatePickerState()
+
+class AddAlarmDatePickerOffState : AddAlarmDatePickerState()

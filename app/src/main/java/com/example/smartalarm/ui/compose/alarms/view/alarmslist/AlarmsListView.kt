@@ -69,7 +69,7 @@ fun AlarmsListView(
 
             HorizontalPager(state = pagerState) { index ->
 
-                val alarmsList = state.alarmsList[index % 7]
+                val alarmsList = state.alarmsList[index]
 
                 if (alarmsList.isNotEmpty()) {
                     LazyColumn(

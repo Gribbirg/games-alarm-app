@@ -172,8 +172,32 @@ class CalendarRepository {
             calendar.add(Calendar.DATE, count)
             return Date(calendar)
         }
+
+        fun getDateByMillis(dateByMillis: Long) =
+            Calendar.getInstance().apply {
+                timeInMillis = dateByMillis
+            }.toDateString()
+
+        fun getTodayInMillis() =
+            Calendar
+                .getInstance()
+                .also {
+                    it.set(Calendar.HOUR_OF_DAY, 0)
+                    it.set(Calendar.MINUTE, 0)
+                    it.set(Calendar.SECOND, 0)
+                    it.set(Calendar.MILLISECOND, 0)
+                }
+                .timeInMillis
+
+        fun getDateAhead(daysAhead: Int) =
+            Calendar.getInstance().also { it.add(Calendar.DATE, daysAhead) }.toDateString()
     }
 }
+
+fun Calendar.toDateString() =
+    "${this.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')}." +
+            "${(this.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}." +
+            "${this.get(Calendar.YEAR)}"
 
 enum class CalendarIsAhead {
     TODAY,
@@ -212,10 +236,7 @@ fun isAhead(date: String, hour: Int, minute: Int): Boolean {
 fun getToday(): Date = Date(Calendar.getInstance())
 
 fun getTodayDate(): String {
-    val currentCalendar = Calendar.getInstance()
-    return "${currentCalendar.get(Calendar.DAY_OF_MONTH)}." +
-            "${currentCalendar.get(Calendar.MONTH) + 1}." +
-            "${currentCalendar.get(Calendar.YEAR)}"
+    return Calendar.getInstance().toDateString()
 }
 
 fun getNearestDate(dayOfWeek: Int, timeMinute: Int, timeHours: Int): ArrayList<Int> {
