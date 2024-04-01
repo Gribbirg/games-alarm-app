@@ -31,7 +31,7 @@ class AddAlarmViewModel(application: Application) : AndroidViewModel(application
 
     var copiedAlarm: AlarmData? = null
         set(value) {
-            field = value
+            field = value?.also { it.id = 0L }
 
             _state.update { state ->
                 state.copy(
