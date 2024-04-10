@@ -10,12 +10,22 @@ import android.util.Log
 import com.example.smartalarm.data.data.AlarmData
 import com.example.smartalarm.services.AlarmReceiver
 
+/**
+ * On and off alarms
+ *
+ * @property context
+ */
 class AlarmCreateRepository(
     private val context: Context
 ) {
 
     private val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
 
+    /**
+     * Turn on Alarm
+     *
+     * @param alarm
+     */
     fun create(alarm: AlarmData) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("alarm id", alarm.id)
@@ -39,6 +49,11 @@ class AlarmCreateRepository(
         )
     }
 
+    /**
+     * Turn off alarm
+     *
+     * @param alarm
+     */
     fun cancel(alarm: AlarmData) {
         Log.i("alarm", "Alarm on delete!")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -62,6 +77,11 @@ class AlarmCreateRepository(
         }
     }
 
+    /**
+     * Update alarm data
+     *
+     * @param alarm
+     */
     fun update(alarm: AlarmData) {
         Log.i("alarm", "Alarm on update!")
         cancel(alarm)

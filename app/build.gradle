@@ -5,6 +5,8 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+apply plugin: "org.jetbrains.dokka"
+
 android {
     namespace 'com.example.smartalarm'
     compileSdk 33

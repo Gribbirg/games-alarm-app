@@ -5,6 +5,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import com.google.android.material.color.DynamicColors
 
+/**
+ * Application
+ *
+ */
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
