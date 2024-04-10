@@ -28,6 +28,12 @@
 Apk-файл доступен в <a href="https://github.com/Gribbirg/games-alarm-app/releases">последнем
 релизе</a>.
 
+Сборка проекта, используя терминал:
+
+```
+./gradlew build
+```
+
 # Alarm with games
 
 - Android application;
@@ -57,6 +63,12 @@ Apk-файл доступен в <a href="https://github.com/Gribbirg/games-alar
 
 Apk file is available via <a href="https://github.com/Gribbirg/games-alarm-app/releases">latest
 release</a>.
+
+Build project from command line:
+
+```
+./gradlew build
+```
 
 ## Скриншоты (Screenshots)
 
