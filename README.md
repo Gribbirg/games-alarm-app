@@ -159,6 +159,3 @@ dependencies {
 <a href="https://github.com/aviafaviaf">
   <img src="https://contrib.rocks/image?repo=aviafaviaf/weather" alt="contributor" />
 </a>
-<a href="https://github.com/IlyaPodkolzin">
-  <img src="https://contrib.rocks/image?repo=IlyaPodkolzin/DevelopmentOfClientPartsOfInternetResourses" alt="contributor" />
-</a>
