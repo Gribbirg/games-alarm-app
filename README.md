@@ -94,7 +94,48 @@ Build project from command line:
 6. Material design 3;
 7. Navigation;
 8. Google auth;
-9. Alarm Manager.
+9. Alarm Manager;
+10. Retrofit.
+
+## Зависимости (Dependencies)
+
+[Все здесь (all here)](./app/build.gradle)
+
+```groovy
+dependencies {
+  // Lifecycle
+  implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+  implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+  // Firebase
+  implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+  implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
+
+  // Google play auth
+  implementation 'com.google.android.gms:play-services-auth:20.5.0'
+  
+  // Room
+  def room_version = "2.5.1"
+  implementation "androidx.room:room-runtime:$room_version"
+  kapt "androidx.room:room-compiler:$room_version"
+  implementation "androidx.room:room-rxjava2:$room_version"
+
+  // Navigation
+  def nav_version = "2.5.3"
+  implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+  implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+  
+  // Material 3
+  implementation 'com.google.android.material:material:1.9.0'
+  implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+  
+  // Retrofit
+  implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+  implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+}
+```
 
 ## Разработчики (Сontributors)
 
