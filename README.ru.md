@@ -4,7 +4,8 @@
 [![ru](https://img.shields.io/badge/lang-ru-red.svg)](README.ru.md)
 
 - Андроид-приложение;
-- Будильник с играми.
+- Будильник с играми;
+- Выпускной проект трека "Мобильная разработка" образовательной программы "IT Академия Samsung".
 
 ### Фишки
 
@@ -125,7 +126,4 @@ dependencies {
 </a>
 <a href="https://github.com/aviafaviaf">
   <img src="https://contrib.rocks/image?repo=aviafaviaf/weather" alt="contributor" />
-</a>
-<a href="https://github.com/IlyaPodkolzin">
-  <img src="https://contrib.rocks/image?repo=IlyaPodkolzin/DevelopmentOfClientPartsOfInternetResourses" alt="contributor" />
 </a>
