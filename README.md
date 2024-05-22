@@ -37,6 +37,31 @@ Build project from command line:
 ./gradlew build
 ```
 
+Also you can build the apk using docker container. First launch docker and build image:
+
+```
+docker build . -t games-alarm-app
+```
+
+Then run a container:
+
+```
+docker run -d --name games-alarm-app games-alarm-app sleep infinity
+```
+
+Copy apk:
+
+```
+docker cp games-alarm-app:/opt/project/app/build/outputs/apk/debug/app-debug.apk /games-alarm-app-debug.apk
+```
+
+Stop and delete container:
+
+```
+docker stop games-alarm-app
+docker rm games-alarm-app
+```
+
 ## Screenshots
 
 <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/1a842c82-3be6-4812-a4ce-7ead381bdf88" width="240px" alt="Screenshot" />

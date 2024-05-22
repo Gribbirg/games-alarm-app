@@ -37,6 +37,31 @@ Apk-файл доступен в <a href="https://github.com/Gribbirg/games-alar
 ./gradlew build
 ```
 
+Также вы можете собрать apk используя docker контейнер. Для начала запустите docker и соберите образ:
+
+```
+docker build . -t games-alarm-app
+```
+
+Запустите контейнер:
+
+```
+docker run -d --name games-alarm-app games-alarm-app sleep infinity
+```
+
+Скопируйте apk:
+
+```
+docker cp games-alarm-app:/opt/project/app/build/outputs/apk/debug/app-debug.apk /games-alarm-app-debug.apk
+```
+
+Остановите и удалите контейнер:
+
+```
+docker stop games-alarm-app
+docker rm games-alarm-app
+```
+
 ## Скриншоты
 
 <img src="https://github.com/Gribbirg/games-alarm-app/assets/115590353/1a842c82-3be6-4812-a4ce-7ead381bdf88" width="240px" alt="Screenshot" />
