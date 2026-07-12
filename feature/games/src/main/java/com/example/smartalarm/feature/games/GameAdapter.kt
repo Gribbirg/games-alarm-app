@@ -46,7 +46,7 @@ class GameAdapter(var data: ArrayList<AlarmGameData>, private val listener: OnGa
                 MaterialColors.getColor(
                     root.context,
                     when (currentData.difficulty) {
-                        1 -> androidx.transition.R.attr.colorPrimary
+                        1 -> com.google.android.material.R.attr.colorPrimary
                         2 -> com.google.android.material.R.attr.colorSecondary
                         3 -> com.google.android.material.R.attr.colorTertiary
                         else -> com.google.android.material.R.attr.colorOnSurface
