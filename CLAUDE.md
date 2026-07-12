@@ -47,7 +47,8 @@ Module dependency direction is strictly `app → feature:* → core:* → (core:
 Each is `com.example.smartalarm.feature.<name>` with its own fragments, ViewModels (exposing `MutableLiveData`), adapters, layouts and menus; all use ViewBinding (binding classes are generated per module, e.g. `com.example.smartalarm.feature.alarms.databinding.*`):
 
 - **`:feature:alarms`** — alarms list (`AlarmsFragment`) and add/edit alarm (`AddAlarmFragment`).
-- **`:feature:games`** — game flow (`LoadGameFragment` → game fragment, e.g. `CalcGameFragment` → `GameResultFragment`) and per-alarm game selection (`GameChoiceFragment`); used from both nav graphs.
+- **`:feature:games`** — the game *flow hub*: loading (`LoadGameFragment` → game fragment → `GameResultFragment`) and per-alarm game selection (`GameChoiceFragment` + `GameAdapter`); used from both nav graphs. It contains no concrete games and has no code dependency on them — navigation to a game goes through the nav graphs by class name.
+- **`:feature:games:calc`** (`com.example.smartalarm.feature.games.calc`) — the arithmetic game (`CalcGameFragment`, `CalcGameViewModel`, `ArifData`). Each game lives in its own module nested under `:feature:games:*`; adding a game means a new module here, an entry in `ALL_GAMES` (`:core:data`) and destinations in both nav graphs (`:core:ui`).
 - **`:feature:records`** — local/online records (`RecordsFragment`).
 - **`:feature:profile`** — Google account profile (`ProfileFragment`, `ProfileOtherFragment`).
 - **`:feature:settings`** — `SettingsFragment`.
@@ -63,7 +64,7 @@ Alarm lifecycle end-to-end: alarm saved in Room → `AlarmCreateRepository.creat
 
 ## Gotchas
 
-- Both nav graphs reference `TaskGameFragment` (`com.example.smartalarm.feature.games.TaskGameFragment`), which has no source file — nav-graph class names are resolved at runtime, so the build passes, but navigating to that destination will crash. Don't treat it as an existing class.
+- Both nav graphs reference `TaskGameFragment` (`com.example.smartalarm.feature.games.task.TaskGameFragment`), which has no source file — nav-graph class names are resolved at runtime, so the build passes, but navigating to that destination will crash. Don't treat it as an existing class.
 - Room migrations are destructive; bumping the DB version deletes all user alarms/records.
 - Public classes/functions carry KDoc comments (Dokka is used to generate docs) — follow that style for new code in `core` modules.
 - New shared resources go to `:core:ui`; resources used by a single feature stay in that feature. The nav graphs live in `:core:ui`, so a new destination means editing the graph there and depending on the action ids via the feature's transitive `R`.

@@ -56,7 +56,7 @@
     </fragment>
     <fragment
         android:id="@+id/calcGameFragment2"
-        android:name="com.example.smartalarm.feature.games.CalcGameFragment"
+        android:name="com.example.smartalarm.feature.games.calc.CalcGameFragment"
         android:label="fragment_calc_game"
         tools:layout="@layout/fragment_calc_game" >
         <action
@@ -77,7 +77,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskGameFragment2"
-        android:name="com.example.smartalarm.feature.games.TaskGameFragment"
+        android:name="com.example.smartalarm.feature.games.task.TaskGameFragment"
         android:label="fragment_task_game"
         tools:layout="@layout/fragment_task_game" >
         <action

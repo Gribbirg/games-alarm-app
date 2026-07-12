@@ -61,6 +61,7 @@ dependencies {
     implementation project(':core:ui')
     implementation project(':feature:alarms')
     implementation project(':feature:games')
+    implementation project(':feature:games:calc')
     implementation project(':feature:records')
     implementation project(':feature:profile')
     implementation project(':feature:settings')

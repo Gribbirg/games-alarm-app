@@ -1,4 +1,4 @@
-package com.example.smartalarm.feature.games
+package com.example.smartalarm.feature.games.calc
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import com.example.smartalarm.feature.games.R
-import com.example.smartalarm.feature.games.databinding.FragmentCalcGameBinding
+import com.example.smartalarm.feature.games.calc.R
+import com.example.smartalarm.feature.games.calc.databinding.FragmentCalcGameBinding
 import com.example.smartalarm.core.alarm.AlarmMediaPlayer
-import com.example.smartalarm.feature.games.CalcGameViewModel
 
 class CalcGameFragment : Fragment() {
 

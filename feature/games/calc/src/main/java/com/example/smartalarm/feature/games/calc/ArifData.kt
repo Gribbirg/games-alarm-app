@@ -1,4 +1,4 @@
-package com.example.smartalarm.core.data.model
+package com.example.smartalarm.feature.games.calc
 
 data class ArifData(
     val sum: ArrayList<Int>,

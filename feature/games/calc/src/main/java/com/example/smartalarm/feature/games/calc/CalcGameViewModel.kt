@@ -1,4 +1,4 @@
-package com.example.smartalarm.feature.games
+package com.example.smartalarm.feature.games.calc
 
 import android.app.Application
 import android.os.Handler
@@ -8,7 +8,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smartalarm.core.data.model.AlarmData
-import com.example.smartalarm.core.data.model.ArifData
 import com.example.smartalarm.core.data.db.AlarmsDB
 import com.example.smartalarm.core.alarm.AlarmCreateRepository
 import com.example.smartalarm.core.data.repositories.AlarmDbRepository
