@@ -20,7 +20,7 @@ Requires an Android SDK (compileSdk 33) and JDK. Gradle wrapper is 8.2, AGP 8.2.
 ./gradlew dokkaHtml                # generate KDoc docs (Dokka plugin is applied per module)
 ```
 
-Rules for Claude live in `.claude/rules/` (auto-loaded): `ci.md` (wait for the `Build` workflow after pushing), `versioning.md` (version bump policy), `changelog.md` (per-PR changelog fragments).
+Rules for Claude live in `.claude/rules/` (auto-loaded): `ci.md` (wait for the `Build` workflow after pushing), `versioning.md` (version bump policy), `changelog.md` (per-PR changelog fragments), `games.md` (per-game modules, the game screen contract, the demo app and the new-game checklist).
 
 CI (GitHub Actions, `.github/workflows/`): `build.yml` builds a debug APK with a `<version>-SNAPSHOT-<sha>` version on every push to `master` and every PR; `release.yml` (manual `workflow_dispatch`, choose major/minor/patch) bumps `version.properties`, assembles the fragments from `changelogs/unreleased/` into a new `CHANGELOG.md` section (deleting the fragments), commits + tags `v<X.Y.Z>`, builds a release APK and publishes a GitHub Release whose body is that changelog section. The app version lives in `version.properties` (root) and is read by `app/build.gradle`; CI overrides it via `-PappVersionName`/`-PappVersionCode`. Release signing uses the `KEYSTORE_BASE64`/`KEYSTORE_PASSWORD`/`KEY_ALIAS`/`KEY_PASSWORD` secrets, falling back to the debug key when unset. The Dockerfile builds a debug APK in a container (`docker build . -t games-alarm-app`, see README.md for the copy-out steps).
 
@@ -48,7 +48,8 @@ Each is `com.example.smartalarm.feature.<name>` with its own fragments, ViewMode
 
 - **`:feature:alarms`** — alarms list (`AlarmsFragment`) and add/edit alarm (`AddAlarmFragment`).
 - **`:feature:games`** — the game *flow hub*: loading (`LoadGameFragment` → game fragment → `GameResultFragment`) and per-alarm game selection (`GameChoiceFragment` + `GameAdapter`); used from both nav graphs. It contains no concrete games and has no code dependency on them — navigation to a game goes through the nav graphs by class name.
-- **`:feature:games:calc`** (`com.example.smartalarm.feature.games.calc`) — the arithmetic game (`CalcGameFragment`, `CalcGameViewModel`, `ArifData`). Each game lives in its own module nested under `:feature:games:*`; adding a game means a new module here, an entry in `ALL_GAMES` (`:core:data`) and destinations in both nav graphs (`:core:ui`).
+- **`:feature:games:calc`** (`com.example.smartalarm.feature.games.calc`) — the arithmetic game (`CalcGameFragment`, `CalcGameViewModel`, `ArifData`). Each game lives in its own module nested under `:feature:games:*`; the full new-game checklist (ALL_GAMES, nav graphs, hub `when` branches, demo app) is in `.claude/rules/games.md`.
+- **`:feature:games:demo`** — a standalone demo *application* containing every mini-game with a difficulty picker, launchable without the alarm app: `./gradlew :feature:games:demo:installDebug`. Its nav graph re-declares game destinations under the same resource ids as the main graphs and redirects the games' actions to demo stub screens, so game code runs unchanged. Not part of the main APK; every new game must be added to it.
 - **`:feature:records`** — local/online records (`RecordsFragment`).
 - **`:feature:profile`** — Google account profile (`ProfileFragment`, `ProfileOtherFragment`).
 - **`:feature:settings`** — `SettingsFragment`.

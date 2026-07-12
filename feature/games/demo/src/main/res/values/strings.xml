@@ -1,0 +1,13 @@
+<resources>
+    <string name="demo_app_name">РазБудильник: игры</string>
+    <string name="demo_title">Мини-игры</string>
+    <string name="demo_difficulty">Сложность:</string>
+    <string name="demo_difficulty_easy">Легко</string>
+    <string name="demo_difficulty_medium">Средне</string>
+    <string name="demo_difficulty_hard">Сложно</string>
+    <string name="demo_game_calc">Арифметика</string>
+    <string name="demo_result_title">Игра пройдена!</string>
+    <string name="demo_result_score">Очки: %1$d</string>
+    <string name="demo_result_time">Время: %1$s</string>
+    <string name="demo_result_back">К списку игр</string>
+</resources>
