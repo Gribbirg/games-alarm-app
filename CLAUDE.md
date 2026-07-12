@@ -1,0 +1,51 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+"Alarm with games" (project name `SmartAlarm`) — an Android alarm clock app where the user must complete a mini-game to turn off the alarm. Single-module Gradle project (`:app`), Kotlin, package `com.example.smartalarm`. Graduation project of the Samsung IT Academy mobile development track; parts of the UI text are hardcoded in Russian.
+
+## Build and Test Commands
+
+Requires an Android SDK (compileSdk 33) and JDK. Gradle wrapper is 8.2, AGP 8.2.2, Kotlin 1.7.10.
+
+```bash
+./gradlew build                    # full build + unit tests + lint
+./gradlew assembleDebug            # debug APK -> app/build/outputs/apk/debug/app-debug.apk
+./gradlew test                     # JVM unit tests (app/src/test)
+./gradlew test --tests "com.example.smartalarm.ExampleUnitTest"   # single test class
+./gradlew connectedAndroidTest     # instrumented tests (needs device/emulator)
+./gradlew lint                     # Android lint
+./gradlew dokkaHtml                # generate KDoc docs (Dokka plugin is applied)
+```
+
+There is no CI. The Dockerfile builds a debug APK in a container (`docker build . -t games-alarm-app`, see README.md for the copy-out steps).
+
+Firebase config (`app/google-services.json`) is committed, so the `com.google.gms.google-services` plugin works out of the box.
+
+## Architecture
+
+MVVM with LiveData. The layers, all under `app/src/main/java/com/example/smartalarm/`:
+
+- **`ui/`** — two activities, each hosting its own Navigation graph:
+  - `MainActivity` + `res/navigation/nav_graph.xml`: main app (alarms list, add/edit alarm, records, profile, settings).
+  - `GamesActivity` + `res/navigation/nav_game_graph.xml`: launched when an alarm fires; hosts the game flow (`LoadGameFragment` → game fragment, e.g. `CalcGameFragment` → `GameResultFragment`).
+  - Fragments use ViewBinding and get state from `ui/viewmodels/*ViewModel` classes exposing `MutableLiveData`.
+- **`data/repositories/`** — plain classes (no DI framework), instantiated by ViewModels:
+  - `AlarmDbRepository` — Room access.
+  - `AlarmCreateRepository` — schedules/cancels system alarms via `AlarmManager.setExactAndAllowWhileIdle`, targeting `AlarmReceiver` with intent extras keyed by string literals ("alarm id", "alarm time", ...). Those same keys are read in `AlarmReceiver` and `GamesActivity` — keep them in sync.
+  - `AuthRepository` — Google sign-in (Play Services auth + Firebase Auth).
+  - `UsersRealtimeDatabaseRepository` — singleton `object` writing users/records/saved alarms to Firebase Realtime Database (the database URL is hardcoded there).
+  - `CalendarRepository` — week-based calendar logic for the alarms-by-day-of-week UI; holiday highlighting comes from the hardcoded `data/constants/Holidays.kt` (Russian holidays, 2024).
+- **`data/db/`** — Room database `AlarmsDB` (singleton, version 21, `fallbackToDestructiveMigration` — schema changes wipe user data). Entities: `AlarmSimpleData`, `AlarmInfoData`, `AlarmUserGamesData`, `GameData`, `RecordsData`; single DAO `AlarmsDao`. An `onOpen` callback seeds the games table from `data/constants/AllGamesData.kt` (`ALL_GAMES`) and resets all tables if the game list size changed — adding a new game means adding it to `ALL_GAMES`.
+- **`data/data/`** — non-persisted models (e.g. `AlarmData` aggregates the Room entities; `AccountData`, `RecordInternetData` are the Firebase payloads).
+- **`services/`** — `AlarmReceiver` (BroadcastReceiver: posts the full-screen notification, starts `GamesActivity`, kicks off sound) plus `AlarmMediaPlayer` and `AlarmVibrator` singletons that own playback/vibration state across the alarm flow.
+
+Alarm lifecycle end-to-end: alarm saved in Room → `AlarmCreateRepository.create()` registers it with `AlarmManager` → `AlarmReceiver.onReceive` fires at the scheduled time → notification + `GamesActivity` + `AlarmMediaPlayer.playAudio` → user finishes the game → result recorded (`RecordsData`, optionally Firebase) and sound stops.
+
+## Gotchas
+
+- Both nav graphs reference `TaskGameFragment`, which has no source file — nav-graph class names are resolved at runtime, so the build passes, but navigating to that destination will crash. Don't treat it as an existing class.
+- Room migrations are destructive; bumping the DB version deletes all user alarms/records.
+- Public classes/functions carry KDoc comments (Dokka is used to generate docs) — follow that style for new code in `data/` and `services/`.
