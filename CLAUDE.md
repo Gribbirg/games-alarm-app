@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build and Test Commands
 
-Requires an Android SDK (compileSdk 33) and JDK. Gradle wrapper is 8.2, AGP 8.2.2, Kotlin 1.7.10.
+Requires an Android SDK (compileSdk 37) and JDK 17+. Gradle wrapper is 9.6.1, AGP 9.2.0 with built-in Kotlin (KGP 2.3.10; the `org.jetbrains.kotlin.android` plugin is NOT applied), targetSdk 36. Room's annotation processor runs via KSP.
 
 ```bash
 ./gradlew build                    # full build + unit tests + lint
@@ -17,18 +17,18 @@ Requires an Android SDK (compileSdk 33) and JDK. Gradle wrapper is 8.2, AGP 8.2.
 ./gradlew test --tests "com.example.smartalarm.ExampleUnitTest"   # single test class
 ./gradlew connectedAndroidTest     # instrumented tests (needs device/emulator)
 ./gradlew lint                     # Android lint
-./gradlew dokkaHtml                # generate KDoc docs (Dokka plugin is applied per module)
+./gradlew dokkaGenerate            # generate KDoc docs (Dokka 2.x, applied per module; output in <module>/build/dokka/)
 ```
 
 Rules for Claude live in `.claude/rules/` (auto-loaded): `ci.md` (wait for the `Build` workflow after pushing), `versioning.md` (version bump policy), `changelog.md` (per-PR changelog fragments), `games.md` (per-game modules, the game screen contract, the demo app and the new-game checklist).
 
-CI (GitHub Actions, `.github/workflows/`): `build.yml` builds a debug APK with a `<version>-SNAPSHOT-<sha>` version on every push to `master` and every PR; `release.yml` (manual `workflow_dispatch`, choose major/minor/patch) bumps `version.properties`, assembles the fragments from `changelogs/unreleased/` into a new `CHANGELOG.md` section (deleting the fragments), commits + tags `v<X.Y.Z>`, builds a release APK and publishes a GitHub Release whose body is that changelog section. The app version lives in `version.properties` (root) and is read by `app/build.gradle`; CI overrides it via `-PappVersionName`/`-PappVersionCode`. Release signing uses the `KEYSTORE_BASE64`/`KEYSTORE_PASSWORD`/`KEY_ALIAS`/`KEY_PASSWORD` secrets, falling back to the debug key when unset. The Dockerfile builds a debug APK in a container (`docker build . -t games-alarm-app`, see README.md for the copy-out steps).
+CI (GitHub Actions, `.github/workflows/`): `build.yml` builds a debug APK with a `<version>-SNAPSHOT-<sha>` version on every push to `master` and every PR; `release.yml` (manual `workflow_dispatch`, choose major/minor/patch) bumps `version.properties`, assembles the fragments from `changelogs/unreleased/` into a new `CHANGELOG.md` section (deleting the fragments), commits + tags `v<X.Y.Z>`, builds a release APK and publishes a GitHub Release whose body is that changelog section. The app version lives in `version.properties` (root) and is read by `app/build.gradle.kts`; CI overrides it via `-PappVersionName`/`-PappVersionCode`. Release signing uses the `KEYSTORE_BASE64`/`KEYSTORE_PASSWORD`/`KEY_ALIAS`/`KEY_PASSWORD` secrets, falling back to the debug key when unset. The Dockerfile builds a debug APK in a container (`docker build . -t games-alarm-app`, see README.md for the copy-out steps).
 
 Firebase config (`app/google-services.json`) is committed, so the `com.google.gms.google-services` plugin works out of the box (applied only in `:app`).
 
 ## Architecture
 
-MVVM with LiveData, split into Gradle modules. Dependency versions live in `gradle/libs.versions.toml` (version catalog); Android settings shared by every module (compileSdk, minSdk, JVM target, kotlin-bom, core-ktx) are in `gradle/android-module-common.gradle`, applied via `apply from:` after each module's `android { namespace ... }` block. `android.nonTransitiveRClass=false` deliberately: feature code reaches shared resources (`:core:ui` strings/drawables/nav ids) through its own module `R`.
+MVVM with LiveData, split into Gradle modules. All build scripts are Kotlin DSL (`*.gradle.kts`). Dependency and plugin versions live in `gradle/libs.versions.toml` (version catalog, including a `[plugins]` section); Android settings shared by every module (compileSdk, minSdk, Java 17 compile options, the common core-ktx dependency) are configured centrally in the root `build.gradle.kts` inside a `subprojects { plugins.withId(...) }` block — module scripts contain only `namespace`, module-specific `buildFeatures` and dependencies. `android.nonTransitiveRClass=false` deliberately: feature code reaches shared resources (`:core:ui` strings/drawables/nav ids) through its own module `R`.
 
 Module dependency direction is strictly `app → feature:* → core:* → (core:data → core:common)`; features never depend on each other.
 
