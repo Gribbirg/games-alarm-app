@@ -20,7 +20,12 @@ Requires an Android SDK (compileSdk 33) and JDK. Gradle wrapper is 8.2, AGP 8.2.
 ./gradlew dokkaHtml                # generate KDoc docs (Dokka plugin is applied)
 ```
 
-There is no CI. The Dockerfile builds a debug APK in a container (`docker build . -t games-alarm-app`, see README.md for the copy-out steps).
+CI rules for Claude:
+
+- After pushing to a PR (or a branch that will become one), wait for the `Build` workflow run on that commit to finish and report its result — never hand work back to the user with the build still pending or failing.
+- Version bumps: `minor` is the default for regular releases, `patch` is for hotfixes only, `major` is reserved for breaking/disastrous changes.
+
+CI (GitHub Actions, `.github/workflows/`): `build.yml` builds a debug APK with a `<version>-SNAPSHOT-<sha>` version on every push to `master` and every PR; `release.yml` (manual `workflow_dispatch`, choose major/minor/patch) bumps `version.properties`, commits + tags `v<X.Y.Z>`, builds a release APK and publishes a GitHub Release. The app version lives in `version.properties` (root) and is read by `app/build.gradle`; CI overrides it via `-PappVersionName`/`-PappVersionCode`. Release signing uses the `KEYSTORE_BASE64`/`KEYSTORE_PASSWORD`/`KEY_ALIAS`/`KEY_PASSWORD` secrets, falling back to the debug key when unset. The Dockerfile builds a debug APK in a container (`docker build . -t games-alarm-app`, see README.md for the copy-out steps).
 
 Firebase config (`app/google-services.json`) is committed, so the `com.google.gms.google-services` plugin works out of the box.
 
