@@ -208,6 +208,66 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
                 bundle,
                 navOptions
             )
+
+            22 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_matrixGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            23 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_moleGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            24 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_patternGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            25 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_weekdayGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            26 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_percentGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            27 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_binaryGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            28 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_reverseGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            29 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_capitalsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            30 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_spellingGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            31 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_diceGameFragment2,
+                bundle,
+                navOptions
+            )
         }
     }
 }

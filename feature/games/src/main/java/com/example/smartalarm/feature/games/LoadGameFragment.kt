@@ -150,6 +150,56 @@ class LoadGameFragment : Fragment() {
                         R.id.action_loadGameFragment_to_targetsumGameFragment,
                         bundle
                     )
+
+                    22 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_matrixGameFragment,
+                        bundle
+                    )
+
+                    23 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_moleGameFragment,
+                        bundle
+                    )
+
+                    24 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_patternGameFragment,
+                        bundle
+                    )
+
+                    25 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_weekdayGameFragment,
+                        bundle
+                    )
+
+                    26 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_percentGameFragment,
+                        bundle
+                    )
+
+                    27 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_binaryGameFragment,
+                        bundle
+                    )
+
+                    28 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_reverseGameFragment,
+                        bundle
+                    )
+
+                    29 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_capitalsGameFragment,
+                        bundle
+                    )
+
+                    30 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_spellingGameFragment,
+                        bundle
+                    )
+
+                    31 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_diceGameFragment,
+                        bundle
+                    )
                 }
             }
         }

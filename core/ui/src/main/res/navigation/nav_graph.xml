@@ -110,6 +110,36 @@
         <action
             android:id="@+id/action_gameChoiceFragment_to_targetsumGameFragment2"
             app:destination="@id/targetsumGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_matrixGameFragment2"
+            app:destination="@id/matrixGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_moleGameFragment2"
+            app:destination="@id/moleGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_patternGameFragment2"
+            app:destination="@id/patternGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_weekdayGameFragment2"
+            app:destination="@id/weekdayGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_percentGameFragment2"
+            app:destination="@id/percentGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_binaryGameFragment2"
+            app:destination="@id/binaryGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_reverseGameFragment2"
+            app:destination="@id/reverseGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_capitalsGameFragment2"
+            app:destination="@id/capitalsGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_spellingGameFragment2"
+            app:destination="@id/spellingGameFragment2" />
+        <action
+            android:id="@+id/action_gameChoiceFragment_to_diceGameFragment2"
+            app:destination="@id/diceGameFragment2" />
     </fragment>
     <fragment
         android:id="@+id/calcGameFragment2"
@@ -350,6 +380,116 @@
             app:destination="@id/gameResultFragment2" />
         <action
             android:id="@+id/action_targetsumGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/matrixGameFragment2"
+        android:name="com.example.smartalarm.feature.games.matrix.MatrixGameFragment"
+        android:label="fragment_matrix_game" >
+        <action
+            android:id="@+id/action_matrixGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_matrixGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/moleGameFragment2"
+        android:name="com.example.smartalarm.feature.games.mole.MoleGameFragment"
+        android:label="fragment_mole_game" >
+        <action
+            android:id="@+id/action_moleGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_moleGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/patternGameFragment2"
+        android:name="com.example.smartalarm.feature.games.pattern.PatternGameFragment"
+        android:label="fragment_pattern_game" >
+        <action
+            android:id="@+id/action_patternGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_patternGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/weekdayGameFragment2"
+        android:name="com.example.smartalarm.feature.games.weekday.WeekdayGameFragment"
+        android:label="fragment_weekday_game" >
+        <action
+            android:id="@+id/action_weekdayGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_weekdayGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/percentGameFragment2"
+        android:name="com.example.smartalarm.feature.games.percent.PercentGameFragment"
+        android:label="fragment_percent_game" >
+        <action
+            android:id="@+id/action_percentGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_percentGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/binaryGameFragment2"
+        android:name="com.example.smartalarm.feature.games.binary.BinaryGameFragment"
+        android:label="fragment_binary_game" >
+        <action
+            android:id="@+id/action_binaryGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_binaryGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reverseGameFragment2"
+        android:name="com.example.smartalarm.feature.games.reverse.ReverseGameFragment"
+        android:label="fragment_reverse_game" >
+        <action
+            android:id="@+id/action_reverseGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_reverseGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/capitalsGameFragment2"
+        android:name="com.example.smartalarm.feature.games.capitals.CapitalsGameFragment"
+        android:label="fragment_capitals_game" >
+        <action
+            android:id="@+id/action_capitalsGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_capitalsGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/spellingGameFragment2"
+        android:name="com.example.smartalarm.feature.games.spelling.SpellingGameFragment"
+        android:label="fragment_spelling_game" >
+        <action
+            android:id="@+id/action_spellingGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_spellingGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/gameChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/diceGameFragment2"
+        android:name="com.example.smartalarm.feature.games.dice.DiceGameFragment"
+        android:label="fragment_dice_game" >
+        <action
+            android:id="@+id/action_diceGameFragment2_to_gameResultFragment2"
+            app:destination="@id/gameResultFragment2" />
+        <action
+            android:id="@+id/action_diceGameFragment2_to_gameChoiceFragment"
             app:destination="@id/gameChoiceFragment" />
     </fragment>
     <fragment

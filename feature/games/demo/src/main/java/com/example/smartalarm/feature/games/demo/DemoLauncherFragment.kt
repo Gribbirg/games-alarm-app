@@ -59,6 +59,16 @@ class DemoLauncherFragment : Fragment() {
             DemoGame(getString(R.string.demo_game_digits), R.id.action_demoLauncherFragment_to_digitsGameFragment2),
             DemoGame(getString(R.string.demo_game_hanoi), R.id.action_demoLauncherFragment_to_hanoiGameFragment2),
             DemoGame(getString(R.string.demo_game_targetsum), R.id.action_demoLauncherFragment_to_targetsumGameFragment2),
+            DemoGame(getString(R.string.demo_game_matrix), R.id.action_demoLauncherFragment_to_matrixGameFragment2),
+            DemoGame(getString(R.string.demo_game_mole), R.id.action_demoLauncherFragment_to_moleGameFragment2),
+            DemoGame(getString(R.string.demo_game_pattern), R.id.action_demoLauncherFragment_to_patternGameFragment2),
+            DemoGame(getString(R.string.demo_game_weekday), R.id.action_demoLauncherFragment_to_weekdayGameFragment2),
+            DemoGame(getString(R.string.demo_game_percent), R.id.action_demoLauncherFragment_to_percentGameFragment2),
+            DemoGame(getString(R.string.demo_game_binary), R.id.action_demoLauncherFragment_to_binaryGameFragment2),
+            DemoGame(getString(R.string.demo_game_reverse), R.id.action_demoLauncherFragment_to_reverseGameFragment2),
+            DemoGame(getString(R.string.demo_game_capitals), R.id.action_demoLauncherFragment_to_capitalsGameFragment2),
+            DemoGame(getString(R.string.demo_game_spelling), R.id.action_demoLauncherFragment_to_spellingGameFragment2),
+            DemoGame(getString(R.string.demo_game_dice), R.id.action_demoLauncherFragment_to_diceGameFragment2),
         )
 
         for (game in demoGames) {
