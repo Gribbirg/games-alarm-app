@@ -3,6 +3,8 @@ package com.example.smartalarm
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import com.example.smartalarm.core.alarm.AlarmScreenRouter
+import com.example.smartalarm.ui.activities.GamesActivity
 import com.google.android.material.color.DynamicColors
 
 /**
@@ -12,6 +14,7 @@ import com.google.android.material.color.DynamicColors
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        AlarmScreenRouter.alarmActivityClass = GamesActivity::class.java
         createNotificationChannel()
         DynamicColors.applyToActivitiesIfAvailable(this)
     }

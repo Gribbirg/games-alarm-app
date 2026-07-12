@@ -1,11 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.dokka'
 }
-
-apply plugin: "org.jetbrains.dokka"
 
 // Версия приложения хранится в version.properties (корень репозитория) и
 // бампится релизным CI. CI также может переопределить её через
@@ -17,16 +15,12 @@ def appVersionCode = (project.findProperty("appVersionCode") ?: versionProps.get
 
 android {
     namespace 'com.example.smartalarm'
-    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.smartalarm"
-        minSdk 26
         targetSdk 33
         versionCode appVersionCode
         versionName appVersionName
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -50,66 +44,40 @@ android {
             signingConfig System.getenv("KEYSTORE_FILE") ? signingConfigs.release : signingConfigs.debug
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
 
     buildFeatures {
         viewBinding true
     }
 }
 
+apply from: rootProject.file('gradle/android-module-common.gradle')
+
 dependencies {
 
-    // Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    // Модули приложения
+    implementation project(':core:common')
+    implementation project(':core:data')
+    implementation project(':core:alarm')
+    implementation project(':core:ui')
+    implementation project(':feature:alarms')
+    implementation project(':feature:games')
+    implementation project(':feature:games:calc')
+    implementation project(':feature:records')
+    implementation project(':feature:profile')
+    implementation project(':feature:settings')
 
-    // Firebase
-    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
-    implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
-    implementation 'com.google.firebase:firebase-auth:22.0.0'
-
-    // Google play auth
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
-
-    // Glide
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
-
-    // Room
-    def room_version = "2.5.1"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-
-    // Navigation
-    def nav_version = "2.5.3"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
-    // UI
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-
-    // Kotlin
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+    // UI и навигация хост-активностей
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.legacy.support.v4
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.material
 
     // Test
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    // Other
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 }

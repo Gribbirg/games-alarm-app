@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Разрешения объявлены в манифесте :app; здесь только компонент ресивера. -->
+    <application>
+        <receiver android:name="com.example.smartalarm.core.alarm.AlarmReceiver" />
+    </application>
+
+</manifest>
