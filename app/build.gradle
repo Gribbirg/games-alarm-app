@@ -7,6 +7,14 @@ plugins {
 
 apply plugin: "org.jetbrains.dokka"
 
+// Версия приложения хранится в version.properties (корень репозитория) и
+// бампится релизным CI. CI также может переопределить её через
+// -PappVersionName=... -PappVersionCode=... (снепшот-сборки).
+def versionProps = new Properties()
+rootProject.file("version.properties").withInputStream { versionProps.load(it) }
+def appVersionName = (project.findProperty("appVersionName") ?: versionProps.getProperty("VERSION_NAME")).toString()
+def appVersionCode = (project.findProperty("appVersionCode") ?: versionProps.getProperty("VERSION_CODE")).toString().toInteger()
+
 android {
     namespace 'com.example.smartalarm'
     compileSdk 33
@@ -15,16 +23,31 @@ android {
         applicationId "com.example.smartalarm"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode appVersionCode
+        versionName appVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        // Ключ подписи передаётся релизным CI через переменные окружения.
+        // Без них release-сборка подписывается debug-ключом, чтобы APK
+        // оставался устанавливаемым.
+        release {
+            if (System.getenv("KEYSTORE_FILE")) {
+                storeFile file(System.getenv("KEYSTORE_FILE"))
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig System.getenv("KEYSTORE_FILE") ? signingConfigs.release : signingConfigs.debug
         }
     }
     compileOptions {
