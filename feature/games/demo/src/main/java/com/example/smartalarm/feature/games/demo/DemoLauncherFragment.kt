@@ -49,6 +49,16 @@ class DemoLauncherFragment : Fragment() {
             DemoGame(getString(R.string.demo_game_maze), R.id.action_demoLauncherFragment_to_mazeGameFragment2),
             DemoGame(getString(R.string.demo_game_anagram), R.id.action_demoLauncherFragment_to_anagramGameFragment2),
             DemoGame(getString(R.string.demo_game_truefalse), R.id.action_demoLauncherFragment_to_truefalseGameFragment2),
+            DemoGame(getString(R.string.demo_game_reaction), R.id.action_demoLauncherFragment_to_reactionGameFragment2),
+            DemoGame(getString(R.string.demo_game_counter), R.id.action_demoLauncherFragment_to_counterGameFragment2),
+            DemoGame(getString(R.string.demo_game_lights), R.id.action_demoLauncherFragment_to_lightsGameFragment2),
+            DemoGame(getString(R.string.demo_game_fifteen), R.id.action_demoLauncherFragment_to_fifteenGameFragment2),
+            DemoGame(getString(R.string.demo_game_chain), R.id.action_demoLauncherFragment_to_chainGameFragment2),
+            DemoGame(getString(R.string.demo_game_roman), R.id.action_demoLauncherFragment_to_romanGameFragment2),
+            DemoGame(getString(R.string.demo_game_clock), R.id.action_demoLauncherFragment_to_clockGameFragment2),
+            DemoGame(getString(R.string.demo_game_digits), R.id.action_demoLauncherFragment_to_digitsGameFragment2),
+            DemoGame(getString(R.string.demo_game_hanoi), R.id.action_demoLauncherFragment_to_hanoiGameFragment2),
+            DemoGame(getString(R.string.demo_game_targetsum), R.id.action_demoLauncherFragment_to_targetsumGameFragment2),
         )
 
         for (game in demoGames) {

@@ -100,6 +100,56 @@ class LoadGameFragment : Fragment() {
                         R.id.action_loadGameFragment_to_truefalseGameFragment,
                         bundle
                     )
+
+                    12 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_reactionGameFragment,
+                        bundle
+                    )
+
+                    13 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_counterGameFragment,
+                        bundle
+                    )
+
+                    14 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_lightsGameFragment,
+                        bundle
+                    )
+
+                    15 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_fifteenGameFragment,
+                        bundle
+                    )
+
+                    16 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_chainGameFragment,
+                        bundle
+                    )
+
+                    17 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_romanGameFragment,
+                        bundle
+                    )
+
+                    18 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_clockGameFragment,
+                        bundle
+                    )
+
+                    19 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_digitsGameFragment,
+                        bundle
+                    )
+
+                    20 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_hanoiGameFragment,
+                        bundle
+                    )
+
+                    21 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_targetsumGameFragment,
+                        bundle
+                    )
                 }
             }
         }

@@ -34,6 +34,16 @@ dependencies {
     implementation(project(":feature:games:maze"))
     implementation(project(":feature:games:anagram"))
     implementation(project(":feature:games:truefalse"))
+    implementation(project(":feature:games:reaction"))
+    implementation(project(":feature:games:counter"))
+    implementation(project(":feature:games:lights"))
+    implementation(project(":feature:games:fifteen"))
+    implementation(project(":feature:games:chain"))
+    implementation(project(":feature:games:roman"))
+    implementation(project(":feature:games:clock"))
+    implementation(project(":feature:games:digits"))
+    implementation(project(":feature:games:hanoi"))
+    implementation(project(":feature:games:targetsum"))
 
     implementation(project(":core:ui"))
 

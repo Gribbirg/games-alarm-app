@@ -43,6 +43,36 @@
             android:id="@+id/action_loadGameFragment_to_truefalseGameFragment"
             app:destination="@id/truefalseGameFragment" />
         <action
+            android:id="@+id/action_loadGameFragment_to_reactionGameFragment"
+            app:destination="@id/reactionGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_counterGameFragment"
+            app:destination="@id/counterGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_lightsGameFragment"
+            app:destination="@id/lightsGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_fifteenGameFragment"
+            app:destination="@id/fifteenGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_chainGameFragment"
+            app:destination="@id/chainGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_romanGameFragment"
+            app:destination="@id/romanGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_clockGameFragment"
+            app:destination="@id/clockGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_digitsGameFragment"
+            app:destination="@id/digitsGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_hanoiGameFragment"
+            app:destination="@id/hanoiGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_targetsumGameFragment"
+            app:destination="@id/targetsumGameFragment" />
+        <action
             android:id="@+id/action_loadGameFragment_to_gameResultFragment"
             app:destination="@id/gameResultFragment" />
     </fragment>
@@ -133,6 +163,86 @@
         android:label="fragment_truefalse_game" >
         <action
             android:id="@+id/action_truefalseGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reactionGameFragment"
+        android:name="com.example.smartalarm.feature.games.reaction.ReactionGameFragment"
+        android:label="fragment_reaction_game" >
+        <action
+            android:id="@+id/action_reactionGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/counterGameFragment"
+        android:name="com.example.smartalarm.feature.games.counter.CounterGameFragment"
+        android:label="fragment_counter_game" >
+        <action
+            android:id="@+id/action_counterGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lightsGameFragment"
+        android:name="com.example.smartalarm.feature.games.lights.LightsGameFragment"
+        android:label="fragment_lights_game" >
+        <action
+            android:id="@+id/action_lightsGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fifteenGameFragment"
+        android:name="com.example.smartalarm.feature.games.fifteen.FifteenGameFragment"
+        android:label="fragment_fifteen_game" >
+        <action
+            android:id="@+id/action_fifteenGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chainGameFragment"
+        android:name="com.example.smartalarm.feature.games.chain.ChainGameFragment"
+        android:label="fragment_chain_game" >
+        <action
+            android:id="@+id/action_chainGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/romanGameFragment"
+        android:name="com.example.smartalarm.feature.games.roman.RomanGameFragment"
+        android:label="fragment_roman_game" >
+        <action
+            android:id="@+id/action_romanGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/clockGameFragment"
+        android:name="com.example.smartalarm.feature.games.clock.ClockGameFragment"
+        android:label="fragment_clock_game" >
+        <action
+            android:id="@+id/action_clockGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/digitsGameFragment"
+        android:name="com.example.smartalarm.feature.games.digits.DigitsGameFragment"
+        android:label="fragment_digits_game" >
+        <action
+            android:id="@+id/action_digitsGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hanoiGameFragment"
+        android:name="com.example.smartalarm.feature.games.hanoi.HanoiGameFragment"
+        android:label="fragment_hanoi_game" >
+        <action
+            android:id="@+id/action_hanoiGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/targetsumGameFragment"
+        android:name="com.example.smartalarm.feature.games.targetsum.TargetSumGameFragment"
+        android:label="fragment_targetsum_game" >
+        <action
+            android:id="@+id/action_targetsumGameFragment_to_gameResultFragment"
             app:destination="@id/gameResultFragment" />
     </fragment>
     <fragment

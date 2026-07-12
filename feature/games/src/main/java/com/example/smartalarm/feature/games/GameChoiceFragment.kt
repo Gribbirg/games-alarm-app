@@ -148,6 +148,66 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
                 bundle,
                 navOptions
             )
+
+            12 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_reactionGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            13 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_counterGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            14 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_lightsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            15 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_fifteenGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            16 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_chainGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            17 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_romanGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            18 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_clockGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            19 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_digitsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            20 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_hanoiGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            21 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_targetsumGameFragment2,
+                bundle,
+                navOptions
+            )
         }
     }
 }

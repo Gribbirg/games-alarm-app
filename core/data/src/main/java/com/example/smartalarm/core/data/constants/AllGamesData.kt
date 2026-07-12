@@ -13,5 +13,15 @@ val ALL_GAMES = listOf(
     GameData(8, "Найди лишнее"),
     GameData(9, "Лабиринт"),
     GameData(10, "Анаграммы"),
-    GameData(11, "Верно или нет")
+    GameData(11, "Верно или нет"),
+    GameData(12, "Поймай момент"),
+    GameData(13, "Сосчитай"),
+    GameData(14, "Погаси свет"),
+    GameData(15, "Пятнашки"),
+    GameData(16, "Цепочка"),
+    GameData(17, "Римские числа"),
+    GameData(18, "Который час"),
+    GameData(19, "Запомни число"),
+    GameData(20, "Ханойская башня"),
+    GameData(21, "Набери сумму")
 )

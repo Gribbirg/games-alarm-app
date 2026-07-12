@@ -16,6 +16,16 @@
     <string name="demo_game_maze">Лабиринт</string>
     <string name="demo_game_anagram">Анаграммы</string>
     <string name="demo_game_truefalse">Верно или нет</string>
+    <string name="demo_game_reaction">Поймай момент</string>
+    <string name="demo_game_counter">Сосчитай</string>
+    <string name="demo_game_lights">Погаси свет</string>
+    <string name="demo_game_fifteen">Пятнашки</string>
+    <string name="demo_game_chain">Цепочка</string>
+    <string name="demo_game_roman">Римские числа</string>
+    <string name="demo_game_clock">Который час</string>
+    <string name="demo_game_digits">Запомни число</string>
+    <string name="demo_game_hanoi">Ханойская башня</string>
+    <string name="demo_game_targetsum">Набери сумму</string>
     <string name="demo_result_title">Игра пройдена!</string>
     <string name="demo_result_score">Очки: %1$d</string>
     <string name="demo_result_time">Время: %1$s</string>
