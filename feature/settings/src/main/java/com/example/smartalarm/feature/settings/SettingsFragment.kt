@@ -11,9 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.smartalarm.feature.settings.R
 import com.example.smartalarm.feature.settings.databinding.FragmentSettingsBinding
 import com.example.smartalarm.feature.settings.SettingsFragmentViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.example.smartalarm.core.data.repositories.AuthRepository
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class SettingsFragment : Fragment() {
 
@@ -27,14 +26,7 @@ class SettingsFragment : Fragment() {
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[SettingsFragmentViewModel::class.java]
-        googleSignInClient = GoogleSignIn.getClient(
-            requireActivity(),
-            GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-        )
+        googleSignInClient = AuthRepository.getSignInClient(requireActivity())
 
         viewModel.loadResult.observe(viewLifecycleOwner) {
             if (it != null) {

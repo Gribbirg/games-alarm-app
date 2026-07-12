@@ -16,9 +16,9 @@ import com.example.smartalarm.core.data.model.AccountData
 import com.example.smartalarm.feature.profile.databinding.FragmentProfileBinding
 import com.example.smartalarm.core.ui.AllRecordsAdapter
 import com.example.smartalarm.feature.profile.ProfileFragmentViewModel
+import com.example.smartalarm.core.data.repositories.AuthRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener {
     private lateinit var binding: FragmentProfileBinding
@@ -31,14 +31,7 @@ class ProfileFragment : Fragment(), AllRecordsAdapter.OnWorldRecordClickListener
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[ProfileFragmentViewModel::class.java]
-        googleSignInClient = GoogleSignIn.getClient(
-            requireActivity(),
-            GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-        )
+        googleSignInClient = AuthRepository.getSignInClient(requireActivity())
 
         binding.authButton.setOnClickListener {
             singIn()
