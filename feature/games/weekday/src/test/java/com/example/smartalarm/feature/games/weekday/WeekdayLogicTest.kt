@@ -238,16 +238,18 @@ class WeekdayQuestionFactoryTest {
 
     @Test
     fun `недельная формулировка только на третьей сложности`() {
+        // Проверка по регулярному выражению «число + „недел“», а не по подстроке
+        // «недел»: иначе ловится «понедельник» в «Сегодня — понедельник…».
         for (difficulty in 1..2) {
             val random = Random(5)
             repeat(200) {
                 val question = WeekdayQuestionFactory.generate(difficulty, random)
-                assertFalse(question.text.contains("недел"))
+                assertFalse(WEEKS_SPAN_REGEX.containsMatchIn(question.text))
             }
         }
         val random = Random(5)
         val hasWeeks = (1..200).any {
-            WeekdayQuestionFactory.generate(3, random).text.contains("недел")
+            WEEKS_SPAN_REGEX.containsMatchIn(WeekdayQuestionFactory.generate(3, random).text)
         }
         assertTrue(hasWeeks)
     }
@@ -261,7 +263,7 @@ class WeekdayQuestionFactoryTest {
             text.startsWith("Сегодня — ${it.displayName}.")
         }
         val numbers = Regex("\\d+").findAll(text).map { it.value.toInt() }.toList()
-        val magnitude = if (text.contains("недел")) {
+        val magnitude = if (WEEKS_SPAN_REGEX.containsMatchIn(text)) {
             if (numbers.size == 2) numbers[0] * 7 + numbers[1] else numbers[0] * 7
         } else {
             assertEquals(1, numbers.size)
@@ -270,5 +272,13 @@ class WeekdayQuestionFactoryTest {
         val backwards = text.contains("назад")
         assertTrue(text.contains(if (backwards) "был" else "будет через"))
         return startDay.shifted(if (backwards) -magnitude else magnitude)
+    }
+
+    private companion object {
+        /**
+         * Недельная формулировка смещения («3 недели», «1 неделю») — именно
+         * число перед «недел», чтобы не совпадать с «понедельник».
+         */
+        val WEEKS_SPAN_REGEX = Regex("\\d+ недел")
     }
 }
