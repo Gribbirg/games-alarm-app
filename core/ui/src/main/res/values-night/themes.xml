@@ -58,5 +58,9 @@
 
     <item name="android:windowLightStatusBar">false</item>
 
+    <!-- Экраны свёрстаны без учёта edge-to-edge; отключаем принудительный
+         режим Android 15, где система его ещё уважает -->
+    <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+
 </style>
 </resources>

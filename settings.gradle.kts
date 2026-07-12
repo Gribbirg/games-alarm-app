@@ -13,15 +13,15 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "SmartAlarm"
-include ':app'
-include ':core:common'
-include ':core:data'
-include ':core:alarm'
-include ':core:ui'
-include ':feature:alarms'
-include ':feature:games'
-include ':feature:games:calc'
-include ':feature:games:demo'
-include ':feature:records'
-include ':feature:profile'
-include ':feature:settings'
+include(":app")
+include(":core:common")
+include(":core:data")
+include(":core:alarm")
+include(":core:ui")
+include(":feature:alarms")
+include(":feature:games")
+include(":feature:games:calc")
+include(":feature:games:demo")
+include(":feature:records")
+include(":feature:profile")
+include(":feature:settings")

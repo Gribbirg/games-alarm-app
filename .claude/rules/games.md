@@ -34,8 +34,8 @@
 
 ## Чеклист новой игры
 
-1. Модуль `:feature:games:<имя>`: `include` в `settings.gradle`,
-   `implementation project(...)` в `app/build.gradle`.
+1. Модуль `:feature:games:<имя>`: `include` в `settings.gradle.kts`,
+   `implementation(project(...))` в `app/build.gradle.kts`.
 2. Запись в `ALL_GAMES` (`:core:data`). ВНИМАНИЕ: изменение размера списка
    игр сбрасывает БД у пользователей при следующем открытии.
 3. Destination + action'ы в ОБОИХ nav-графах `:core:ui`
@@ -43,7 +43,7 @@
    по образцу калькулятора.
 4. Ветки для id игры в `LoadGameFragment` (`when (it[0])`) и
    `GameChoiceFragment` (`when (gameData.id)`) в `:feature:games`.
-5. Демо: зависимость в `feature/games/demo/build.gradle`, destination с
+5. Демо: зависимость в `feature/games/demo/build.gradle.kts`, destination с
    переиспользованными id в `nav_games_demo_graph.xml` (action'ы игры
    перенаправляются на экраны демо) и строка в `DEMO_GAMES`
    (`DemoLauncherFragment`).
