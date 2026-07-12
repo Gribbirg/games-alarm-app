@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.smartalarm.feature.games.pattern.PatternGameFragment">
+
+    <TextView
+        android:id="@+id/timeWordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Время:"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/patternTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timeWordTextView"
+        tools:text="0.00" />
+
+    <TextView
+        android:id="@+id/patternActionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Что будет дальше?"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/patternTimeTextView" />
+
+    <TextView
+        android:id="@+id/roundTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/patternActionTextView"
+        tools:text="Раунд 1 из 3" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/sequenceHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="16dp"
+        app:cardBackgroundColor="?attr/colorPrimaryContainer"
+        app:cardElevation="5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roundTextView">
+
+        <TextView
+            android:id="@+id/sequenceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="8sp"
+            android:padding="16dp"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textSize="32sp"
+            tools:text="🔵 🔺 🔵 🔺 🔵 → ?" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/option1Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="8dp"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/option2Button"
+        app:layout_constraintTop_toBottomOf="@id/sequenceHolder"
+        tools:text="🔵" />
+
+    <Button
+        android:id="@+id/option2Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="16dp"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toRightOf="@id/option1Button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sequenceHolder"
+        tools:text="🔺" />
+
+    <Button
+        android:id="@+id/option3Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/option4Button"
+        app:layout_constraintTop_toBottomOf="@id/option1Button"
+        tools:text="⭐" />
+
+    <Button
+        android:id="@+id/option4Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toRightOf="@id/option3Button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/option2Button"
+        tools:text="🍎" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/musicOffButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Выключить музыку"
+        android:textColor="?attr/colorOnError"
+        android:visibility="gone"
+        app:backgroundTint="?attr/colorError"
+        app:icon="@drawable/outline_music_off_24"
+        app:iconTint="?attr/colorOnError"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
