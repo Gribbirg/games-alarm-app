@@ -54,6 +54,36 @@ jobs:
           echo "Releasing v$NEW_VERSION (versionCode $NEW_CODE)"
           echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
+      - name: Collect changelog
+        id: changelog
+        run: |
+          NOTES="$RUNNER_TEMP/release-notes.md"
+          shopt -s nullglob
+          FILES=(changelogs/unreleased/*.md)
+          if [ ${#FILES[@]} -eq 0 ]; then
+            echo "Технический релиз без изменений, заметных пользователю." > "$NOTES"
+          else
+            for f in "${FILES[@]}"; do
+              cat "$f"
+              echo
+            done > "$NOTES"
+          fi
+          {
+            echo "# Changelog"
+            echo
+            echo "## v${{ steps.version.outputs.version }} — $(date -u +%Y-%m-%d)"
+            echo
+            cat "$NOTES"
+            echo
+            # старые разделы CHANGELOG.md без заголовка "# Changelog" и пустой строки
+            tail -n +3 CHANGELOG.md
+          } | cat -s > "$RUNNER_TEMP/changelog-full.md"
+          mv "$RUNNER_TEMP/changelog-full.md" CHANGELOG.md
+          if [ ${#FILES[@]} -gt 0 ]; then
+            git rm -q "${FILES[@]}"
+          fi
+          echo "notes_path=$NOTES" >> "$GITHUB_OUTPUT"
+
       - name: Prepare signing keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -84,7 +114,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Release v${{ steps.version.outputs.version }}"
+          git add version.properties CHANGELOG.md changelogs/unreleased
+          git commit -m "Release v${{ steps.version.outputs.version }}"
           git tag "v${{ steps.version.outputs.version }}"
           git push origin HEAD --follow-tags
 
@@ -93,5 +124,5 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.version }}
           name: v${{ steps.version.outputs.version }}
-          generate_release_notes: true
+          body_path: ${{ steps.changelog.outputs.notes_path }}
           files: app/build/outputs/apk/release/smartalarm-v${{ steps.version.outputs.version }}.apk
