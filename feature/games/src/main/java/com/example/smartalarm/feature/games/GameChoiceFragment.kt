@@ -81,17 +81,192 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
         bundle.putInt("difficulty", gameData.difficulty)
         bundle.putIntegerArrayList("games", viewModel.getDifficultiesList())
         val navController = Navigation.findNavController(binding.root)
+        val navOptions = NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
         when (gameData.id) {
             1 -> navController.navigate(
                 R.id.action_gameChoiceFragment_to_calcGameFragment2,
                 bundle,
-                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                navOptions
             )
 
             2 -> navController.navigate(
-                R.id.action_gameChoiceFragment_to_taskGameFragment2,
+                R.id.action_gameChoiceFragment_to_memoryGameFragment2,
                 bundle,
-                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                navOptions
+            )
+
+            3 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_equationGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            4 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_sortingGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            5 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_pairsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            6 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_sequenceGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            7 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_stroopGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            8 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_oddoneoutGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            9 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_mazeGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            10 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_anagramGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            11 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_truefalseGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            12 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_reactionGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            13 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_counterGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            14 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_lightsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            15 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_fifteenGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            16 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_chainGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            17 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_romanGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            18 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_clockGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            19 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_digitsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            20 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_hanoiGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            21 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_targetsumGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            22 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_matrixGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            23 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_moleGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            24 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_patternGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            25 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_weekdayGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            26 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_percentGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            27 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_binaryGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            28 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_reverseGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            29 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_capitalsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            30 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_spellingGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            31 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_diceGameFragment2,
+                bundle,
+                navOptions
             )
         }
     }

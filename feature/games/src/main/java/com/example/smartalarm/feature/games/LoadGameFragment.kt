@@ -52,7 +52,152 @@ class LoadGameFragment : Fragment() {
                     )
 
                     2 -> navController.navigate(
-                        R.id.action_loadGameFragment_to_taskGameFragment,
+                        R.id.action_loadGameFragment_to_memoryGameFragment,
+                        bundle
+                    )
+
+                    3 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_equationGameFragment,
+                        bundle
+                    )
+
+                    4 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_sortingGameFragment,
+                        bundle
+                    )
+
+                    5 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_pairsGameFragment,
+                        bundle
+                    )
+
+                    6 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_sequenceGameFragment,
+                        bundle
+                    )
+
+                    7 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_stroopGameFragment,
+                        bundle
+                    )
+
+                    8 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_oddoneoutGameFragment,
+                        bundle
+                    )
+
+                    9 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_mazeGameFragment,
+                        bundle
+                    )
+
+                    10 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_anagramGameFragment,
+                        bundle
+                    )
+
+                    11 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_truefalseGameFragment,
+                        bundle
+                    )
+
+                    12 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_reactionGameFragment,
+                        bundle
+                    )
+
+                    13 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_counterGameFragment,
+                        bundle
+                    )
+
+                    14 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_lightsGameFragment,
+                        bundle
+                    )
+
+                    15 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_fifteenGameFragment,
+                        bundle
+                    )
+
+                    16 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_chainGameFragment,
+                        bundle
+                    )
+
+                    17 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_romanGameFragment,
+                        bundle
+                    )
+
+                    18 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_clockGameFragment,
+                        bundle
+                    )
+
+                    19 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_digitsGameFragment,
+                        bundle
+                    )
+
+                    20 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_hanoiGameFragment,
+                        bundle
+                    )
+
+                    21 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_targetsumGameFragment,
+                        bundle
+                    )
+
+                    22 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_matrixGameFragment,
+                        bundle
+                    )
+
+                    23 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_moleGameFragment,
+                        bundle
+                    )
+
+                    24 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_patternGameFragment,
+                        bundle
+                    )
+
+                    25 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_weekdayGameFragment,
+                        bundle
+                    )
+
+                    26 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_percentGameFragment,
+                        bundle
+                    )
+
+                    27 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_binaryGameFragment,
+                        bundle
+                    )
+
+                    28 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_reverseGameFragment,
+                        bundle
+                    )
+
+                    29 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_capitalsGameFragment,
+                        bundle
+                    )
+
+                    30 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_spellingGameFragment,
+                        bundle
+                    )
+
+                    31 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_diceGameFragment,
                         bundle
                     )
                 }

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SequenceGameFragment">
+
+    <TextView
+        android:id="@+id/timeWordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:text="Время:"
+        android:textSize="30sp"
+        android:textColor="?attr/colorTertiary"/>
+
+    <TextView
+        android:id="@+id/sequenceTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timeWordTextView"
+        android:layout_marginTop="10dp"
+        tools:text="0.00"
+        android:textSize="30sp"
+        android:textColor="?attr/colorSecondary"/>
+
+    <TextView
+        android:id="@+id/sequenceProgressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sequenceActionTextView"
+        android:layout_marginBottom="10dp"
+        tools:text="Ряд 1 из 3"
+        android:textSize="20sp"
+        android:textColor="?attr/colorSecondary"/>
+
+    <TextView
+        android:id="@+id/sequenceActionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Продолжите ряд!"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sequenceHolder"
+        android:layout_marginBottom="20dp"
+        android:textSize="30sp"
+        android:textColor="?attr/colorPrimary"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/sequenceHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardBackgroundColor="?attr/colorPrimaryContainer"
+        app:cardElevation="5dp">
+
+        <TextView
+            android:id="@+id/sequenceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            tools:text="2, 5, 8, 11, ?"
+            android:textSize="26sp"
+            android:textColor="?attr/colorOnPrimaryContainer"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/option1Button"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/sequenceHolder"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/option2Button"
+        android:layout_marginTop="30dp"
+        tools:text="14"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/option2Button"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/option1Button"
+        app:layout_constraintLeft_toRightOf="@id/option1Button"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="15"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/option3Button"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/option1Button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/option4Button"
+        android:layout_marginTop="10dp"
+        tools:text="16"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/option4Button"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/option3Button"
+        app:layout_constraintLeft_toRightOf="@id/option3Button"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="17"
+        android:textSize="20sp"/>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/musicOffButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/option3Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:backgroundTint="?attr/colorError"
+        android:textColor="?attr/colorOnError"
+        app:iconTint="?attr/colorOnError"
+        android:text="Выключить музыку"
+        app:icon="@drawable/outline_music_off_24"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
