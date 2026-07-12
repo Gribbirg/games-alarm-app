@@ -6,6 +6,16 @@
     <string name="demo_difficulty_medium">Средне</string>
     <string name="demo_difficulty_hard">Сложно</string>
     <string name="demo_game_calc">Арифметика</string>
+    <string name="demo_game_memory">Повтори узор</string>
+    <string name="demo_game_equation">Уравнение</string>
+    <string name="demo_game_sorting">По порядку</string>
+    <string name="demo_game_pairs">Найди пару</string>
+    <string name="demo_game_sequence">Продолжи ряд</string>
+    <string name="demo_game_stroop">Цвет и слово</string>
+    <string name="demo_game_oddoneout">Найди лишнее</string>
+    <string name="demo_game_maze">Лабиринт</string>
+    <string name="demo_game_anagram">Анаграммы</string>
+    <string name="demo_game_truefalse">Верно или нет</string>
     <string name="demo_result_title">Игра пройдена!</string>
     <string name="demo_result_score">Очки: %1$d</string>
     <string name="demo_result_time">Время: %1$s</string>

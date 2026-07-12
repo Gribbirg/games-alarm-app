@@ -39,6 +39,16 @@ class DemoLauncherFragment : Fragment() {
 
         val demoGames = listOf(
             DemoGame(getString(R.string.demo_game_calc), R.id.action_demoLauncherFragment_to_calcGameFragment2),
+            DemoGame(getString(R.string.demo_game_memory), R.id.action_demoLauncherFragment_to_memoryGameFragment2),
+            DemoGame(getString(R.string.demo_game_equation), R.id.action_demoLauncherFragment_to_equationGameFragment2),
+            DemoGame(getString(R.string.demo_game_sorting), R.id.action_demoLauncherFragment_to_sortingGameFragment2),
+            DemoGame(getString(R.string.demo_game_pairs), R.id.action_demoLauncherFragment_to_pairsGameFragment2),
+            DemoGame(getString(R.string.demo_game_sequence), R.id.action_demoLauncherFragment_to_sequenceGameFragment2),
+            DemoGame(getString(R.string.demo_game_stroop), R.id.action_demoLauncherFragment_to_stroopGameFragment2),
+            DemoGame(getString(R.string.demo_game_oddoneout), R.id.action_demoLauncherFragment_to_oddoneoutGameFragment2),
+            DemoGame(getString(R.string.demo_game_maze), R.id.action_demoLauncherFragment_to_mazeGameFragment2),
+            DemoGame(getString(R.string.demo_game_anagram), R.id.action_demoLauncherFragment_to_anagramGameFragment2),
+            DemoGame(getString(R.string.demo_game_truefalse), R.id.action_demoLauncherFragment_to_truefalseGameFragment2),
         )
 
         for (game in demoGames) {

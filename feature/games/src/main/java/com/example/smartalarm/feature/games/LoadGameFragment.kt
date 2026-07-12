@@ -52,7 +52,52 @@ class LoadGameFragment : Fragment() {
                     )
 
                     2 -> navController.navigate(
-                        R.id.action_loadGameFragment_to_taskGameFragment,
+                        R.id.action_loadGameFragment_to_memoryGameFragment,
+                        bundle
+                    )
+
+                    3 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_equationGameFragment,
+                        bundle
+                    )
+
+                    4 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_sortingGameFragment,
+                        bundle
+                    )
+
+                    5 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_pairsGameFragment,
+                        bundle
+                    )
+
+                    6 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_sequenceGameFragment,
+                        bundle
+                    )
+
+                    7 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_stroopGameFragment,
+                        bundle
+                    )
+
+                    8 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_oddoneoutGameFragment,
+                        bundle
+                    )
+
+                    9 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_mazeGameFragment,
+                        bundle
+                    )
+
+                    10 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_anagramGameFragment,
+                        bundle
+                    )
+
+                    11 -> navController.navigate(
+                        R.id.action_loadGameFragment_to_truefalseGameFragment,
                         bundle
                     )
                 }

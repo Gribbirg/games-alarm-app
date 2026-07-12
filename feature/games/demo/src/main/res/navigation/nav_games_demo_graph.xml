@@ -17,6 +17,36 @@
         <action
             android:id="@+id/action_demoLauncherFragment_to_calcGameFragment2"
             app:destination="@id/calcGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_memoryGameFragment2"
+            app:destination="@id/memoryGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_equationGameFragment2"
+            app:destination="@id/equationGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_sortingGameFragment2"
+            app:destination="@id/sortingGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_pairsGameFragment2"
+            app:destination="@id/pairsGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_sequenceGameFragment2"
+            app:destination="@id/sequenceGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_stroopGameFragment2"
+            app:destination="@id/stroopGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_oddoneoutGameFragment2"
+            app:destination="@id/oddoneoutGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_mazeGameFragment2"
+            app:destination="@id/mazeGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_anagramGameFragment2"
+            app:destination="@id/anagramGameFragment2" />
+        <action
+            android:id="@+id/action_demoLauncherFragment_to_truefalseGameFragment2"
+            app:destination="@id/truefalseGameFragment2" />
     </fragment>
 
     <fragment
@@ -33,6 +63,136 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+    <fragment
+        android:id="@id/memoryGameFragment2"
+        android:name="com.example.smartalarm.feature.games.memory.MemoryGameFragment"
+        android:label="fragment_memory_game">
+        <action
+            android:id="@id/action_memoryGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_memoryGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/equationGameFragment2"
+        android:name="com.example.smartalarm.feature.games.equation.EquationGameFragment"
+        android:label="fragment_equation_game">
+        <action
+            android:id="@id/action_equationGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_equationGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/sortingGameFragment2"
+        android:name="com.example.smartalarm.feature.games.sorting.SortingGameFragment"
+        android:label="fragment_sorting_game">
+        <action
+            android:id="@id/action_sortingGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_sortingGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/pairsGameFragment2"
+        android:name="com.example.smartalarm.feature.games.pairs.PairsGameFragment"
+        android:label="fragment_pairs_game">
+        <action
+            android:id="@id/action_pairsGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_pairsGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/sequenceGameFragment2"
+        android:name="com.example.smartalarm.feature.games.sequence.SequenceGameFragment"
+        android:label="fragment_sequence_game">
+        <action
+            android:id="@id/action_sequenceGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_sequenceGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/stroopGameFragment2"
+        android:name="com.example.smartalarm.feature.games.stroop.StroopGameFragment"
+        android:label="fragment_stroop_game">
+        <action
+            android:id="@id/action_stroopGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_stroopGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/oddoneoutGameFragment2"
+        android:name="com.example.smartalarm.feature.games.oddoneout.OddOneOutGameFragment"
+        android:label="fragment_oddoneout_game">
+        <action
+            android:id="@id/action_oddoneoutGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_oddoneoutGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/mazeGameFragment2"
+        android:name="com.example.smartalarm.feature.games.maze.MazeGameFragment"
+        android:label="fragment_maze_game">
+        <action
+            android:id="@id/action_mazeGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_mazeGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/anagramGameFragment2"
+        android:name="com.example.smartalarm.feature.games.anagram.AnagramGameFragment"
+        android:label="fragment_anagram_game">
+        <action
+            android:id="@id/action_anagramGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_anagramGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@id/truefalseGameFragment2"
+        android:name="com.example.smartalarm.feature.games.truefalse.TrueFalseGameFragment"
+        android:label="fragment_truefalse_game">
+        <action
+            android:id="@id/action_truefalseGameFragment2_to_gameResultFragment2"
+            app:destination="@id/demoResultFragment" />
+        <action
+            android:id="@id/action_truefalseGameFragment2_to_gameChoiceFragment"
+            app:destination="@id/demoLauncherFragment"
+            app:popUpTo="@id/demoLauncherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/demoResultFragment"
         android:name="com.example.smartalarm.feature.games.demo.DemoResultFragment"

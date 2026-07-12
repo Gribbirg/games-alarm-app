@@ -13,8 +13,35 @@
             android:id="@+id/action_loadGameFragment_to_calcGameFragment"
             app:destination="@id/calcGameFragment" />
         <action
-            android:id="@+id/action_loadGameFragment_to_taskGameFragment"
-            app:destination="@id/taskGameFragment" />
+            android:id="@+id/action_loadGameFragment_to_memoryGameFragment"
+            app:destination="@id/memoryGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_equationGameFragment"
+            app:destination="@id/equationGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_sortingGameFragment"
+            app:destination="@id/sortingGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_pairsGameFragment"
+            app:destination="@id/pairsGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_sequenceGameFragment"
+            app:destination="@id/sequenceGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_stroopGameFragment"
+            app:destination="@id/stroopGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_oddoneoutGameFragment"
+            app:destination="@id/oddoneoutGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_mazeGameFragment"
+            app:destination="@id/mazeGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_anagramGameFragment"
+            app:destination="@id/anagramGameFragment" />
+        <action
+            android:id="@+id/action_loadGameFragment_to_truefalseGameFragment"
+            app:destination="@id/truefalseGameFragment" />
         <action
             android:id="@+id/action_loadGameFragment_to_gameResultFragment"
             app:destination="@id/gameResultFragment" />
@@ -29,12 +56,83 @@
             app:destination="@id/gameResultFragment" />
     </fragment>
     <fragment
-        android:id="@+id/taskGameFragment"
-        android:name="com.example.smartalarm.feature.games.task.TaskGameFragment"
-        android:label="fragment_task_game"
-        tools:layout="@layout/fragment_task_game" >
+        android:id="@+id/memoryGameFragment"
+        android:name="com.example.smartalarm.feature.games.memory.MemoryGameFragment"
+        android:label="fragment_memory_game" >
         <action
-            android:id="@+id/action_taskGameFragment_to_gameResultFragment"
+            android:id="@+id/action_memoryGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/equationGameFragment"
+        android:name="com.example.smartalarm.feature.games.equation.EquationGameFragment"
+        android:label="fragment_equation_game" >
+        <action
+            android:id="@+id/action_equationGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sortingGameFragment"
+        android:name="com.example.smartalarm.feature.games.sorting.SortingGameFragment"
+        android:label="fragment_sorting_game" >
+        <action
+            android:id="@+id/action_sortingGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pairsGameFragment"
+        android:name="com.example.smartalarm.feature.games.pairs.PairsGameFragment"
+        android:label="fragment_pairs_game" >
+        <action
+            android:id="@+id/action_pairsGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sequenceGameFragment"
+        android:name="com.example.smartalarm.feature.games.sequence.SequenceGameFragment"
+        android:label="fragment_sequence_game" >
+        <action
+            android:id="@+id/action_sequenceGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stroopGameFragment"
+        android:name="com.example.smartalarm.feature.games.stroop.StroopGameFragment"
+        android:label="fragment_stroop_game" >
+        <action
+            android:id="@+id/action_stroopGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/oddoneoutGameFragment"
+        android:name="com.example.smartalarm.feature.games.oddoneout.OddOneOutGameFragment"
+        android:label="fragment_oddoneout_game" >
+        <action
+            android:id="@+id/action_oddoneoutGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mazeGameFragment"
+        android:name="com.example.smartalarm.feature.games.maze.MazeGameFragment"
+        android:label="fragment_maze_game" >
+        <action
+            android:id="@+id/action_mazeGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/anagramGameFragment"
+        android:name="com.example.smartalarm.feature.games.anagram.AnagramGameFragment"
+        android:label="fragment_anagram_game" >
+        <action
+            android:id="@+id/action_anagramGameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/truefalseGameFragment"
+        android:name="com.example.smartalarm.feature.games.truefalse.TrueFalseGameFragment"
+        android:label="fragment_truefalse_game" >
+        <action
+            android:id="@+id/action_truefalseGameFragment_to_gameResultFragment"
             app:destination="@id/gameResultFragment" />
     </fragment>
     <fragment

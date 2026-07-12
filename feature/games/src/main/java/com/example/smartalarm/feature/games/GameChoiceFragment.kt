@@ -81,17 +81,72 @@ class GameChoiceFragment : Fragment(), GameAdapter.OnGameClickListener {
         bundle.putInt("difficulty", gameData.difficulty)
         bundle.putIntegerArrayList("games", viewModel.getDifficultiesList())
         val navController = Navigation.findNavController(binding.root)
+        val navOptions = NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
         when (gameData.id) {
             1 -> navController.navigate(
                 R.id.action_gameChoiceFragment_to_calcGameFragment2,
                 bundle,
-                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                navOptions
             )
 
             2 -> navController.navigate(
-                R.id.action_gameChoiceFragment_to_taskGameFragment2,
+                R.id.action_gameChoiceFragment_to_memoryGameFragment2,
                 bundle,
-                NavOptions.Builder().setPopUpTo(R.id.alarmsFragment, true).build()
+                navOptions
+            )
+
+            3 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_equationGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            4 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_sortingGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            5 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_pairsGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            6 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_sequenceGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            7 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_stroopGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            8 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_oddoneoutGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            9 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_mazeGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            10 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_anagramGameFragment2,
+                bundle,
+                navOptions
+            )
+
+            11 -> navController.navigate(
+                R.id.action_gameChoiceFragment_to_truefalseGameFragment2,
+                bundle,
+                navOptions
             )
         }
     }

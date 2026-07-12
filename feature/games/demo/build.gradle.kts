@@ -24,6 +24,16 @@ android {
 dependencies {
     // Все модули игр
     implementation(project(":feature:games:calc"))
+    implementation(project(":feature:games:memory"))
+    implementation(project(":feature:games:equation"))
+    implementation(project(":feature:games:sorting"))
+    implementation(project(":feature:games:pairs"))
+    implementation(project(":feature:games:sequence"))
+    implementation(project(":feature:games:stroop"))
+    implementation(project(":feature:games:oddoneout"))
+    implementation(project(":feature:games:maze"))
+    implementation(project(":feature:games:anagram"))
+    implementation(project(":feature:games:truefalse"))
 
     implementation(project(":core:ui"))
 

@@ -49,6 +49,7 @@ Each is `com.example.smartalarm.feature.<name>` with its own fragments, ViewMode
 - **`:feature:alarms`** — alarms list (`AlarmsFragment`) and add/edit alarm (`AddAlarmFragment`).
 - **`:feature:games`** — the game *flow hub*: loading (`LoadGameFragment` → game fragment → `GameResultFragment`) and per-alarm game selection (`GameChoiceFragment` + `GameAdapter`); used from both nav graphs. It contains no concrete games and has no code dependency on them — navigation to a game goes through the nav graphs by class name.
 - **`:feature:games:calc`** (`com.example.smartalarm.feature.games.calc`) — the arithmetic game (`CalcGameFragment`, `CalcGameViewModel`, `ArifData`). Each game lives in its own module nested under `:feature:games:*`; the full new-game checklist (ALL_GAMES, nav graphs, hub `when` branches, demo app) is in `.claude/rules/games.md`.
+- **`:feature:games:<name>`** — the other mini-games, one module each with the same structure as `calc` (fragment + ViewModel + pure-logic classes with unit tests + module README): `memory` («Повтори узор», id 2), `equation` («Уравнение», id 3), `sorting` («По порядку», id 4), `pairs` («Найди пару», id 5), `sequence` («Продолжи ряд», id 6), `stroop` («Цвет и слово», id 7), `oddoneout` («Найди лишнее», id 8), `maze` («Лабиринт», id 9), `anagram` («Анаграммы», id 10), `truefalse` («Верно или нет», id 11). Game ids must stay sequential 1..N — the hub indexes lists by `id - 1`.
 - **`:feature:games:demo`** — a standalone demo *application* containing every mini-game with a difficulty picker, launchable without the alarm app: `./gradlew :feature:games:demo:installDebug`. Its nav graph re-declares game destinations under the same resource ids as the main graphs and redirects the games' actions to demo stub screens, so game code runs unchanged. Not part of the main APK; every new game must be added to it.
 - **`:feature:records`** — local/online records (`RecordsFragment`).
 - **`:feature:profile`** — Google account profile (`ProfileFragment`, `ProfileOtherFragment`).
@@ -65,7 +66,6 @@ Alarm lifecycle end-to-end: alarm saved in Room → `AlarmCreateRepository.creat
 
 ## Gotchas
 
-- Both nav graphs reference `TaskGameFragment` (`com.example.smartalarm.feature.games.task.TaskGameFragment`), which has no source file — nav-graph class names are resolved at runtime, so the build passes, but navigating to that destination will crash. Don't treat it as an existing class.
 - Room migrations are destructive; bumping the DB version deletes all user alarms/records.
 - Public classes/functions carry KDoc comments (Dokka is used to generate docs) — follow that style for new code in `core` modules.
 - New shared resources go to `:core:ui`; resources used by a single feature stay in that feature. The nav graphs live in `:core:ui`, so a new destination means editing the graph there and depending on the action ids via the feature's transitive `R`.
