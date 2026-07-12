@@ -10,6 +10,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    # push уже проверяет каждый коммит этого репозитория; по событию
+    # pull_request запускаемся только для PR из форков, чтобы не дублировать
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Run unit tests
+        run: ./gradlew test
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: '**/build/reports/tests/'
+
   build:
     name: Snapshot APK
     runs-on: ubuntu-latest
@@ -36,9 +65,6 @@ jobs:
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "name=${BASE}-SNAPSHOT-${SHORT_SHA}" >> "$GITHUB_OUTPUT"
           echo "code=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
-
-      - name: Run unit tests
-        run: ./gradlew test
 
       - name: Build snapshot APK
         run: >
