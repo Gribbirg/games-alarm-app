@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       bump:
-        description: "Какую часть версии увеличить"
+        description: "Какую часть версии увеличить (minor — обычный релиз, patch — хотфикс, major — ломающие изменения)"
         type: choice
         options:
-          - patch
           - minor
+          - patch
           - major
-        default: patch
+        default: minor
         required: true
 
 permissions:
