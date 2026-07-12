@@ -2,7 +2,7 @@ package com.example.smartalarm.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.example.smartalarm.data.repositories.checkForHoliday
+import com.example.smartalarm.core.data.repositories.checkForHoliday
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 

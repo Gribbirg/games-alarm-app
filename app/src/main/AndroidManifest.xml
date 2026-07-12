@@ -48,8 +48,6 @@
             android:parentActivityName=".ui.activities.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
-
-        <receiver android:name=".services.AlarmReceiver" />
     </application>
 
 </manifest>

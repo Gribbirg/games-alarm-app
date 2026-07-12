@@ -1,0 +1,17 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.dokka'
+}
+
+android {
+    namespace 'com.example.smartalarm.core.alarm'
+}
+
+apply from: rootProject.file('gradle/android-module-common.gradle')
+
+dependencies {
+    // AlarmData — параметр публичного API AlarmCreateRepository
+    api project(':core:data')
+    implementation project(':core:common')
+}
